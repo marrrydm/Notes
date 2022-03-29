@@ -2,42 +2,43 @@
 //  Notes
 //  Created by Мария Ганеева on 27.03.2022.
 
-
 import UIKit
 
-class ViewController: UIViewController {
-
+class NoteViewController: UIViewController {
     private var rightBarButton = UIBarButtonItem()
     private var titleTextField = UITextField()
     private var textView = UITextView()
     private var conteiner = UIView()
 
-    private var isEditingMode = true
+    private var isEditingMode = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
         navigateTitle()
         setupTextField()
-        setupRightBarButton()  
+        setupRightBarButton()
         setupTextView()
     }
-    
-    private func navigateTitle(){
+
+    private func navigateTitle() {
         navigationItem.title = "Заметки"
     }
-    
+
     @objc private func didRightBarButtonTapped(_ sender: Any) {
         isEditingMode = !isEditingMode
         textView.isUserInteractionEnabled = isEditingMode
-        rightBarButton.title = "Готово"
-        textView.resignFirstResponder()
+        if isEditingMode {
+            rightBarButton.title = "Готово"
+            textView.endEditing(true)
+            titleTextField.endEditing(true)
+        }
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         textView.becomeFirstResponder()
     }
-    
-    private func setupTextField(){
+
+    private func setupTextField() {
         titleTextField.placeholder = "Заметка"
         titleTextField.font = UIFont.systemFont(ofSize: 22, weight: .bold)
         titleTextField.textColor = .black
@@ -61,8 +62,8 @@ class ViewController: UIViewController {
         view.addSubview(textView)
         constraintsTextView()
     }
-    
-    private func constraintsTextField(){
+
+    private func constraintsTextField() {
         let topConstraint = titleTextField.topAnchor.constraint(
             equalTo: view.safeAreaLayoutGuide.topAnchor,
             constant: 20
@@ -83,8 +84,8 @@ class ViewController: UIViewController {
                                      heightConstraint,
                                      widthConstraint])
     }
-    
-    private func constraintsTextView(){
+
+    private func constraintsTextView() {
         textView.isScrollEnabled = true
         let topConstraint = textView.topAnchor.constraint(
             equalTo: titleTextField.safeAreaLayoutGuide.bottomAnchor,

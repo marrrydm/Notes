@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		F83832F327F16C5500B78EB3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F83832F227F16C5500B78EB3 /* AppDelegate.swift */; };
 		F83832F527F16C5500B78EB3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F83832F427F16C5500B78EB3 /* SceneDelegate.swift */; };
-		F83832F727F16C5500B78EB3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F83832F627F16C5500B78EB3 /* ViewController.swift */; };
+		F83832F727F16C5500B78EB3 /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F83832F627F16C5500B78EB3 /* NoteViewController.swift */; };
 		F83832FA27F16C5500B78EB3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F83832F827F16C5500B78EB3 /* Main.storyboard */; };
 		F83832FC27F16C5500B78EB3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F83832FB27F16C5500B78EB3 /* Assets.xcassets */; };
 		F83832FF27F16C5500B78EB3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F83832FD27F16C5500B78EB3 /* LaunchScreen.storyboard */; };
@@ -19,7 +19,7 @@
 		F83832EF27F16C5500B78EB3 /* Notes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F83832F227F16C5500B78EB3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F83832F427F16C5500B78EB3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		F83832F627F16C5500B78EB3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		F83832F627F16C5500B78EB3 /* NoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewController.swift; sourceTree = "<group>"; };
 		F83832F927F16C5500B78EB3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		F83832FB27F16C5500B78EB3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F83832FE27F16C5500B78EB3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -58,7 +58,7 @@
 			children = (
 				F83832F227F16C5500B78EB3 /* AppDelegate.swift */,
 				F83832F427F16C5500B78EB3 /* SceneDelegate.swift */,
-				F83832F627F16C5500B78EB3 /* ViewController.swift */,
+				F83832F627F16C5500B78EB3 /* NoteViewController.swift */,
 				F83832F827F16C5500B78EB3 /* Main.storyboard */,
 				F83832FB27F16C5500B78EB3 /* Assets.xcassets */,
 				F83832FD27F16C5500B78EB3 /* LaunchScreen.storyboard */,
@@ -74,6 +74,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F838330327F16C5500B78EB3 /* Build configuration list for PBXNativeTarget "Notes" */;
 			buildPhases = (
+				F811014227F3AE66004D4E25 /* ShellScript */,
 				F83832EB27F16C5500B78EB3 /* Sources */,
 				F83832EC27F16C5500B78EB3 /* Frameworks */,
 				F83832ED27F16C5500B78EB3 /* Resources */,
@@ -133,12 +134,32 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		F811014227F3AE66004D4E25 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nexport PATH=\"$PATH:\"\nexport PATH+=~/\nexport PATH+=\"portable_swiftlint\"\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		F83832EB27F16C5500B78EB3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F83832F727F16C5500B78EB3 /* ViewController.swift in Sources */,
+				F83832F727F16C5500B78EB3 /* NoteViewController.swift in Sources */,
 				F83832F327F16C5500B78EB3 /* AppDelegate.swift in Sources */,
 				F83832F527F16C5500B78EB3 /* SceneDelegate.swift in Sources */,
 			);
@@ -289,6 +310,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Notes/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -317,6 +339,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Notes/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
