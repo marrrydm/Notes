@@ -18,7 +18,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         navigateTitle()
         setupTextField()
-        setupRightBarButton()
+        setupRightBarButton()  
         setupTextView()
     }
     
