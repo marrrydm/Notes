@@ -4,34 +4,33 @@
 
 import UIKit
 
-class NoteViewController: UIViewController {
+final class NoteViewController: UIViewController {
     private var rightBarButton = UIBarButtonItem()
     private var titleTextField = UITextField()
     private var textView = UITextView()
     private var conteiner = UIView()
 
-    private var isEditingMode = false
+    enum Constants {
+        static let navigationItemTitle = "Заметки"
+        static let rightBarButtonTitle = "Готово"
+        static let titleTextFieldPlaceholder = "Заметка"
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigateTitle()
+        configureTitle()
         setupTextField()
         setupRightBarButton()
         setupTextView()
     }
 
-    private func navigateTitle() {
-        navigationItem.title = "Заметки"
+    private func configureTitle() {
+        navigationItem.title = Constants.navigationItemTitle
     }
 
     @objc private func didRightBarButtonTapped(_ sender: Any) {
-        isEditingMode = !isEditingMode
-        textView.isUserInteractionEnabled = isEditingMode
-        if isEditingMode {
-            rightBarButton.title = "Готово"
-            textView.endEditing(true)
-            titleTextField.endEditing(true)
-        }
+        rightBarButton.title = Constants.rightBarButtonTitle
+        view.endEditing(true)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -39,7 +38,7 @@ class NoteViewController: UIViewController {
     }
 
     private func setupTextField() {
-        titleTextField.placeholder = "Заметка"
+        titleTextField.placeholder = Constants.titleTextFieldPlaceholder
         titleTextField.font = UIFont.systemFont(ofSize: 22, weight: .bold)
         titleTextField.textColor = .black
         titleTextField.isEnabled = true
@@ -49,14 +48,15 @@ class NoteViewController: UIViewController {
     }
 
     private func setupRightBarButton() {
-        rightBarButton.title = "Готово"
+        rightBarButton.title = Constants.rightBarButtonTitle
         rightBarButton.target = self
         rightBarButton.action = #selector(didRightBarButtonTapped(_:))
         navigationItem.rightBarButtonItem = rightBarButton
     }
 
     private func setupTextView() {
-        textView.isUserInteractionEnabled = isEditingMode
+        textView.isUserInteractionEnabled = true
+        textView.backgroundColor = .black.withAlphaComponent(0.1)
         textView.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         textView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(textView)
