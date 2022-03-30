@@ -56,7 +56,6 @@ final class NoteViewController: UIViewController {
 
     private func setupTextView() {
         textView.isUserInteractionEnabled = true
-        textView.backgroundColor = .black.withAlphaComponent(0.1)
         textView.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         textView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(textView)
