@@ -13,6 +13,7 @@
 		F83832FA27F16C5500B78EB3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F83832F827F16C5500B78EB3 /* Main.storyboard */; };
 		F83832FC27F16C5500B78EB3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F83832FB27F16C5500B78EB3 /* Assets.xcassets */; };
 		F83832FF27F16C5500B78EB3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F83832FD27F16C5500B78EB3 /* LaunchScreen.storyboard */; };
+		F8757BB327F8C125001BC003 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8757BB227F8C125001BC003 /* Model.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		F83832FB27F16C5500B78EB3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F83832FE27F16C5500B78EB3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F838330027F16C5500B78EB3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F8757BB227F8C125001BC003 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -40,6 +42,7 @@
 		F83832E627F16C5500B78EB3 = {
 			isa = PBXGroup;
 			children = (
+				F8757BB127F8C114001BC003 /* Model */,
 				F83832F127F16C5500B78EB3 /* Notes */,
 				F83832F027F16C5500B78EB3 /* Products */,
 			);
@@ -65,6 +68,14 @@
 				F838330027F16C5500B78EB3 /* Info.plist */,
 			);
 			path = Notes;
+			sourceTree = "<group>";
+		};
+		F8757BB127F8C114001BC003 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				F8757BB227F8C125001BC003 /* Model.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -162,6 +173,7 @@
 				F83832F727F16C5500B78EB3 /* NoteViewController.swift in Sources */,
 				F83832F327F16C5500B78EB3 /* AppDelegate.swift in Sources */,
 				F83832F527F16C5500B78EB3 /* SceneDelegate.swift in Sources */,
+				F8757BB327F8C125001BC003 /* Model.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
