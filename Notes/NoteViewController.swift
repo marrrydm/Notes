@@ -23,29 +23,30 @@ final class NoteViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureUI()
+        loadSave()
+        setupRightBarButton()
+    }
+
+    private func configureUI() {
         configureTitle()
         setupTextField()
         setupDateTextField()
         setupDatePicker()
         setupTextView()
-        loadSave()
-        setupRightBarButton()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        textView.becomeFirstResponder()
     }
 
     private func configureTitle() {
         navigationItem.title = Constants.navigationItemTitle
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        textView.becomeFirstResponder()
+    }
+
     @objc func dateChange() {
-        var dateText: String {
-            dateFormatter.dateFormat = Constants.dateFormat
-            return dateFormatter.string(from: dataPicker.date)
-        }
-        dateTextField.text = dateText
+        dateFormatter.dateFormat = Constants.dateFormat
+        dateTextField.text = dateFormatter.string(from: dataPicker.date)
     }
 
     private func saveAction() {
@@ -179,7 +180,7 @@ final class NoteViewController: UIViewController {
             equalTo: view.safeAreaLayoutGuide.trailingAnchor,
             constant: -20
         )
-        let heightConstraint = textView.heightAnchor.constraint(equalToConstant: 100)
+        let heightConstraint = textView.heightAnchor.constraint(equalToConstant: 600)
         NSLayoutConstraint.activate([topConstraint,
                                      trailingConstraint,
                                      leadingConstraint,
@@ -191,7 +192,7 @@ final class NoteViewController: UIViewController {
 extension NoteViewController {
     private func checkForEmpty() {
         let note = Note(content: textView.text)
-        if note.isEmpty == "" {
+        if note.isEmpty {
             showAlert()
         }
     }

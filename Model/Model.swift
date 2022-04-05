@@ -12,12 +12,7 @@ struct Note {
     var title: String?
     var content: String
     var date: Date?
-    var isEmpty: String {
-        get {
-            return content
-        }
-        set(newValue) {
-            content = newValue
-        }
+    var isEmpty: Bool {
+        return content.isEmpty ? true : false
     }
 }
