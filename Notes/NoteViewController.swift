@@ -10,9 +10,8 @@ final class NoteViewController: UIViewController {
     private var textView = UITextView()
     private var dateTextField = UITextField()
     private var dataPicker = UIDatePicker()
-    private var toolBar = UIToolbar()
-    private var doneToolBar = UIBarButtonItem()
     private let dateFormatter = DateFormatter()
+    private let userDefaults = UserDefaults.standard
 
     enum Constants {
         static let navigationItemTitle = "Заметки"
@@ -29,6 +28,7 @@ final class NoteViewController: UIViewController {
         setupDateTextField()
         setupDatePicker()
         setupTextView()
+        loadSave()
         setupRightBarButton()
     }
 
@@ -48,9 +48,28 @@ final class NoteViewController: UIViewController {
         dateTextField.text = dateText
     }
 
+    private func saveAction() {
+        userDefaults.setValue(titleTextField.text, forKey: "title")
+        userDefaults.setValue(textView.text, forKey: "content")
+        userDefaults.setValue(dateTextField.text, forKey: "date")
+    }
+
+    private func loadSave() {
+        if let name = userDefaults.object(forKey: "title") {
+            titleTextField.text = name as? String
+        }
+        if let cont = userDefaults.object(forKey: "content") {
+            textView.text = cont as? String
+        }
+        if let date = userDefaults.object(forKey: "date") {
+            dateTextField.text = date as? String
+        }
+    }
+
     @objc private func didRightBarButtonTapped(_ sender: Any) {
         rightBarButton.title = Constants.rightBarButtonTitle
         checkForEmpty()
+        saveAction()
         view.endEditing(true)
     }
 
