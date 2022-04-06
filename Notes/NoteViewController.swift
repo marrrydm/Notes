@@ -12,6 +12,7 @@ final class NoteViewController: UIViewController {
     private var dataPicker = UIDatePicker()
     private let dateFormatter = DateFormatter()
     private let userDefaults = UserDefaults.standard
+    private let locale = Locale(identifier: "rus")
 
     enum Constants {
         static let navigationItemTitle = "Заметки"
@@ -23,9 +24,8 @@ final class NoteViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureUI()
         loadSave()
-        setupRightBarButton()
+        configureUI()
     }
 
     private func configureUI() {
@@ -34,18 +34,24 @@ final class NoteViewController: UIViewController {
         setupDateTextField()
         setupDatePicker()
         setupTextView()
-    }
-
-    private func configureTitle() {
-        navigationItem.title = Constants.navigationItemTitle
+        setupRightBarButton()
     }
 
     override func viewDidAppear(_ animated: Bool) {
         textView.becomeFirstResponder()
     }
 
-    @objc func dateChange() {
+    private func configureTitle() {
+        navigationItem.title = Constants.navigationItemTitle
+    }
+
+    private func dateFormatterConfigure() {
         dateFormatter.dateFormat = Constants.dateFormat
+        dateFormatter.locale = locale
+    }
+
+    @objc func dateChange() {
+        dateFormatterConfigure()
         dateTextField.text = dateFormatter.string(from: dataPicker.date)
     }
 
@@ -91,7 +97,8 @@ final class NoteViewController: UIViewController {
     }
 
     private func setupDateTextField() {
-        dateTextField.placeholder = Constants.titleTextFieldDatePlaceholder
+        dateFormatterConfigure()
+        dateTextField.placeholder = dateFormatter.string(from: dataPicker.date)
         dateTextField.font = UIFont.systemFont(ofSize: 14, weight: .bold)
         dateTextField.textColor = .black
         dateTextField.isEnabled = true
@@ -105,6 +112,7 @@ final class NoteViewController: UIViewController {
         dataPicker.datePickerMode = .date
         dataPicker.addTarget(self, action: #selector(dateChange), for: .valueChanged)
         dateTextField.inputView = dataPicker
+        dataPicker.locale = locale
     }
 
     private func setupRightBarButton() {
