@@ -14,6 +14,8 @@
 		F83832FC27F16C5500B78EB3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F83832FB27F16C5500B78EB3 /* Assets.xcassets */; };
 		F83832FF27F16C5500B78EB3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F83832FD27F16C5500B78EB3 /* LaunchScreen.storyboard */; };
 		F8757BB327F8C125001BC003 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8757BB227F8C125001BC003 /* Model.swift */; };
+		F8A71F8A2802F15200907C0E /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A71F892802F15200907C0E /* ListViewController.swift */; };
+		F8A71F8C280482E700907C0E /* NoteCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A71F8B280482E700907C0E /* NoteCellView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +28,8 @@
 		F83832FE27F16C5500B78EB3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F838330027F16C5500B78EB3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F8757BB227F8C125001BC003 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		F8A71F892802F15200907C0E /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ListViewController.swift; sourceTree = "<group>"; };
+		F8A71F8B280482E700907C0E /* NoteCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteCellView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +66,8 @@
 				F83832F227F16C5500B78EB3 /* AppDelegate.swift */,
 				F83832F427F16C5500B78EB3 /* SceneDelegate.swift */,
 				F83832F627F16C5500B78EB3 /* NoteViewController.swift */,
+				F8A71F892802F15200907C0E /* ListViewController.swift */,
+				F8A71F8B280482E700907C0E /* NoteCellView.swift */,
 				F83832F827F16C5500B78EB3 /* Main.storyboard */,
 				F83832FB27F16C5500B78EB3 /* Assets.xcassets */,
 				F83832FD27F16C5500B78EB3 /* LaunchScreen.storyboard */,
@@ -173,6 +179,8 @@
 				F83832F727F16C5500B78EB3 /* NoteViewController.swift in Sources */,
 				F83832F327F16C5500B78EB3 /* AppDelegate.swift in Sources */,
 				F83832F527F16C5500B78EB3 /* SceneDelegate.swift in Sources */,
+				F8A71F8A2802F15200907C0E /* ListViewController.swift in Sources */,
+				F8A71F8C280482E700907C0E /* NoteCellView.swift in Sources */,
 				F8757BB327F8C125001BC003 /* Model.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
