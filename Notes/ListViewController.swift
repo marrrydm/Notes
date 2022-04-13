@@ -15,8 +15,10 @@ class ListViewController: UIViewController, NotesDelegate {
     private var rightBarButton = UIBarButtonItem()
     private var buttonPlus = UIButton(type: .custom)
     private var scrollView = UIScrollView()
+    var note: Note!
     private let stackView = UIStackView()
     var list = NoteViewCell()
+    weak var delegate: NotesDelegate?
 
     enum Constants {
         static let titleNB = "Заметки"
@@ -26,8 +28,10 @@ class ListViewController: UIViewController, NotesDelegate {
         super.viewDidLoad()
         view.backgroundColor = UIColor(red: 229, green: 229, blue: 229, alpha: 1)
         setupUI()
+        print(list)
         let gesture = UITapGestureRecognizer(target: self, action: #selector(plusTap))
         list.addGestureRecognizer(gesture)
+//        stackView.addArrangedSubview(list)
         }
 
     func updateNotes(note: Note) {
@@ -40,8 +44,8 @@ class ListViewController: UIViewController, NotesDelegate {
         print(list.content)
         list.date = note.date!
         print(list.date)
-        print("Данные переданы")
         stackView.addArrangedSubview(list)
+        print("Данные переданы")
     }
 
     private func setupUI() {

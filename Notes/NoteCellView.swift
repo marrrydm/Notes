@@ -20,6 +20,7 @@ class NoteViewCell: UIView {
     convenience init(note: Note?) {
         self.init()
         titleLabel.text = note?.title
+        print(titleLabel.text)
         contentLabel.text = note?.content
         dateLabel.text = note?.date?.formatted()
     }
@@ -67,7 +68,7 @@ class NoteViewCell: UIView {
                 constant: -62
             )
             let heightConstraint = titleLabel.heightAnchor.constraint(equalToConstant: 18)
-            let widthConstraint = titleLabel.heightAnchor.constraint(equalToConstant: 300)
+            let widthConstraint = titleLabel.heightAnchor.constraint(equalToConstant: 68)
             NSLayoutConstraint.activate([topConstraint,
                                          trailingConstraint,
                                          leadingConstraint,
@@ -94,7 +95,7 @@ class NoteViewCell: UIView {
                 constant: -44
             )
             let heightConstraint = contentLabel.heightAnchor.constraint(equalToConstant: 14)
-            let widthConstraint = contentLabel.heightAnchor.constraint(equalToConstant: 326)
+            let widthConstraint = contentLabel.heightAnchor.constraint(equalToConstant: 68)
             NSLayoutConstraint.activate([topConstraint,
                                          trailingConstraint,
                                          leadingConstraint,

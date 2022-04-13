@@ -21,6 +21,7 @@ final class NoteViewController: UIViewController {
         static let rightBarButtonTitle = "Готово"
         static let titleTextFieldPlaceholder = "Введите название"
         static let dateFormat = "dd.MM.yyyy EEEE HH:mm"
+        static let titleUpdate = ""
     }
 
     override func viewDidLoad() {
@@ -55,7 +56,7 @@ final class NoteViewController: UIViewController {
             contentInset.bottom = keyboardFrame.size.height
             textView.contentInset = contentInset
 
-            rightBarButton.title = "Готово"
+            rightBarButton.title = Constants.rightBarButtonTitle
         }
     }
 
@@ -64,7 +65,7 @@ final class NoteViewController: UIViewController {
             let contentInset: UIEdgeInsets = UIEdgeInsets()
             textView.contentInset = contentInset
 
-            rightBarButton.title = ""
+            rightBarButton.title = Constants.titleUpdate
         }
     }
 
@@ -100,6 +101,7 @@ final class NoteViewController: UIViewController {
         notes = Note(title: titleTextField.text!, content: textView.text, date: .now)
         let second = ListViewController()
         self.delegate = second
+        self.delegate?.updateNotes(note: notes)
     }
 
     private func showAlert() {
