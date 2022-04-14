@@ -13,21 +13,28 @@ class NoteViewCell: UIView {
     private var titleLabel = UILabel()
     private var contentLabel = UILabel()
     private var dateLabel = UILabel()
-    var title = ""
-    var content = ""
-    var date = Date()
 
-    convenience init(note: Note?) {
+    struct Model {
+        let title: String
+        let content: String
+        let date: Date
+    }
+
+    public func setModel(model: NoteViewCell.Model) {
+        titleLabel.text = model.title
+        contentLabel.text = model.content
+        dateLabel.text = model.date.formatted()
+    }
+
+    convenience init(note: NoteViewCell.Model) {
         self.init()
-        titleLabel.text = note?.title
-        print(titleLabel.text)
-        contentLabel.text = note?.content
-        dateLabel.text = note?.date?.formatted()
+        setModel(model: note)
+        print(note)
     }
 
     override init(frame: CGRect) {
-        super.init(frame: CGRect(x: 15, y: 10, width: 100, height: 100))
-        self.backgroundColor = .blue
+        super.init(frame: CGRect(x: 15, y: 10, width: 358, height: 90))
+        self.backgroundColor = .red
         self.layer.cornerRadius = 30
         self.layer.borderWidth = 0.2
         self.layer.borderColor = UIColor.white.cgColor
@@ -52,77 +59,67 @@ class NoteViewCell: UIView {
 
     private func constraintsTitleLabel() {
             let topConstraint = titleLabel.topAnchor.constraint(
-                equalTo: self.safeAreaLayoutGuide.topAnchor,
+                equalTo: self.topAnchor,
                 constant: 10
             )
             let trailingConstraint = titleLabel.leadingAnchor.constraint(
-                equalTo: self.safeAreaLayoutGuide.leadingAnchor,
+                equalTo: self.leadingAnchor,
                 constant: 16
             )
             let leadingConstraint = titleLabel.trailingAnchor.constraint(
-                equalTo: self.safeAreaLayoutGuide.trailingAnchor,
+                equalTo: self.trailingAnchor,
                 constant: -16
             )
-            let bottomConstraint = titleLabel.bottomAnchor.constraint(
-                equalTo: self.safeAreaLayoutGuide.bottomAnchor,
-                constant: -62
-            )
             let heightConstraint = titleLabel.heightAnchor.constraint(equalToConstant: 18)
-            let widthConstraint = titleLabel.heightAnchor.constraint(equalToConstant: 68)
+            let widthConstraint = titleLabel.widthAnchor.constraint(equalToConstant: 300)
             NSLayoutConstraint.activate([topConstraint,
                                          trailingConstraint,
                                          leadingConstraint,
-                                         bottomConstraint,
                                          heightConstraint,
                                          widthConstraint])
         }
 
     private func constraintsContentLabel() {
             let topConstraint = contentLabel.topAnchor.constraint(
-                equalTo: self.safeAreaLayoutGuide.topAnchor,
-                constant: 32
+                equalTo: titleLabel.bottomAnchor,
+                constant: 4
             )
             let trailingConstraint = contentLabel.leadingAnchor.constraint(
-                equalTo: self.safeAreaLayoutGuide.leadingAnchor,
+                equalTo: self.leadingAnchor,
                 constant: 16
             )
             let leadingConstraint = contentLabel.trailingAnchor.constraint(
-                equalTo: self.safeAreaLayoutGuide.trailingAnchor,
+                equalTo: self.trailingAnchor,
                 constant: -16
             )
-            let bottomConstraint = contentLabel.bottomAnchor.constraint(
-                equalTo: self.safeAreaLayoutGuide.bottomAnchor,
-                constant: -44
-            )
             let heightConstraint = contentLabel.heightAnchor.constraint(equalToConstant: 14)
-            let widthConstraint = contentLabel.heightAnchor.constraint(equalToConstant: 68)
+            let widthConstraint = contentLabel.widthAnchor.constraint(equalToConstant: 326)
             NSLayoutConstraint.activate([topConstraint,
                                          trailingConstraint,
                                          leadingConstraint,
-                                         bottomConstraint,
                                          heightConstraint,
                                          widthConstraint])
         }
 
     private func constraintsDateLabel() {
             let topConstraint = dateLabel.topAnchor.constraint(
-                equalTo: self.safeAreaLayoutGuide.topAnchor,
-                constant: 70
+                equalTo: contentLabel.topAnchor,
+                constant: 24
             )
             let trailingConstraint = dateLabel.leadingAnchor.constraint(
-                equalTo: self.safeAreaLayoutGuide.leadingAnchor,
+                equalTo: self.leadingAnchor,
                 constant: 16
             )
             let leadingConstraint = dateLabel.trailingAnchor.constraint(
-                equalTo: self.safeAreaLayoutGuide.trailingAnchor,
+                equalTo: self.trailingAnchor,
                 constant: -16
             )
             let bottomConstraint = dateLabel.bottomAnchor.constraint(
-                equalTo: self.safeAreaLayoutGuide.bottomAnchor,
-                constant: -5
+                equalTo: self.bottomAnchor,
+                constant: -10
             )
-            let heightConstraint = dateLabel.heightAnchor.constraint(equalToConstant: 25)
-            let widthConstraint = dateLabel.heightAnchor.constraint(equalToConstant: 68)
+            let heightConstraint = dateLabel.heightAnchor.constraint(equalToConstant: 10)
+            let widthConstraint = dateLabel.widthAnchor.constraint(equalToConstant: 68)
             NSLayoutConstraint.activate([topConstraint,
                                          trailingConstraint,
                                          leadingConstraint,

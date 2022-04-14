@@ -8,17 +8,15 @@
 import UIKit
 
 protocol NotesDelegate: AnyObject {
-    func updateNotes(note: Note)
+    func updateNotes(note: NoteViewCell.Model)
 }
 
 class ListViewController: UIViewController, NotesDelegate {
     private var rightBarButton = UIBarButtonItem()
     private var buttonPlus = UIButton(type: .custom)
     private var scrollView = UIScrollView()
-    var note: Note!
     private let stackView = UIStackView()
-    var list = NoteViewCell()
-    weak var delegate: NotesDelegate?
+    private var noteVC = NoteViewController()
 
     enum Constants {
         static let titleNB = "Заметки"
@@ -28,24 +26,14 @@ class ListViewController: UIViewController, NotesDelegate {
         super.viewDidLoad()
         view.backgroundColor = UIColor(red: 229, green: 229, blue: 229, alpha: 1)
         setupUI()
-        print(list)
-        let gesture = UITapGestureRecognizer(target: self, action: #selector(plusTap))
-        list.addGestureRecognizer(gesture)
-//        stackView.addArrangedSubview(list)
-        }
+    }
 
-    func updateNotes(note: Note) {
-        list = NoteViewCell(note: note)
+    func updateNotes(note: NoteViewCell.Model) {
+        let list = NoteViewCell(note: note)
+        stackView.addSubview(list)
         print(list)
-        scrollView.addSubview(list)
-        list.title = note.title!
-        print(list.title)
-        list.content = note.content
-        print(list.content)
-        list.date = note.date!
-        print(list.date)
+        print("Данные получены")
         stackView.addArrangedSubview(list)
-        print("Данные переданы")
     }
 
     private func setupUI() {
@@ -68,91 +56,59 @@ class ListViewController: UIViewController, NotesDelegate {
         buttonPlus.translatesAutoresizingMaskIntoConstraints = false
         buttonPlus.setTitle("+", for: .normal)
         buttonPlus.titleLabel?.font = .systemFont(ofSize: 40)
-        buttonPlus.layer.cornerRadius = 0.5 * 70
+        buttonPlus.layer.cornerRadius = 35
+        buttonPlus.layer.masksToBounds = true
         buttonPlus.clipsToBounds = true
         buttonPlus.addTarget(self, action: #selector(plusTap), for: .touchUpInside)
         buttonPlus.contentVerticalAlignment = .center
-        scrollView.addSubview(buttonPlus)
+        view.addSubview(buttonPlus)
         constraintsButtonPlus()
     }
 
     private func setupHeader() {
-        scrollView.backgroundColor = UIColor(red: 229, green: 229, blue: 229, alpha: 1)
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(scrollView)
-        constraintsScrollView()
-
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         stackView.backgroundColor = UIColor(red: 229, green: 229, blue: 229, alpha: 1)
         stackView.distribution = .equalSpacing
         stackView.alignment = .fill
         stackView.clipsToBounds = true
-        stackView.spacing = 5
-        scrollView.addSubview(stackView)
-//        stackView.addArrangedSubview(list)
+        stackView.spacing = 10
+        view.addSubview(stackView)
         constraintsStackView()
     }
 
     private func constraintsButtonPlus() {
     let topConstraint = buttonPlus.topAnchor.constraint(
-        equalTo: scrollView.safeAreaLayoutGuide.topAnchor,
-        constant: 621
-    )
-    let trailingConstraint = buttonPlus.leadingAnchor.constraint(
-        equalTo: scrollView.safeAreaLayoutGuide.leadingAnchor,
-        constant: 310
+        equalTo: view.safeAreaLayoutGuide.topAnchor,
+        constant: 641
     )
     let leadingConstraint = buttonPlus.trailingAnchor.constraint(
-        equalTo: scrollView.safeAreaLayoutGuide.trailingAnchor,
-        constant: -20
+        equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+        constant: -19
     )
     let heightConstraint = buttonPlus.heightAnchor.constraint(equalToConstant: 70)
-    let widthConstraint = buttonPlus.widthAnchor.constraint(equalTo: buttonPlus.widthAnchor)
+    let widthConstraint = buttonPlus.heightAnchor.constraint(equalTo: buttonPlus.widthAnchor)
     NSLayoutConstraint.activate([topConstraint,
-                                 trailingConstraint,
                                  leadingConstraint,
                                  heightConstraint,
                                  widthConstraint])
     }
 
-    private func constraintsScrollView() {
-        let topConstraint = scrollView.topAnchor.constraint(
+    private func constraintsStackView() {
+        let topConstraints = stackView.topAnchor.constraint(
             equalTo: view.safeAreaLayoutGuide.topAnchor,
             constant: 20
         )
-        let trailingConstraint = scrollView.leadingAnchor.constraint(
+        let trailingConstraints = stackView.leadingAnchor.constraint(
             equalTo: view.safeAreaLayoutGuide.leadingAnchor,
             constant: 16
         )
-        let leadingConstraint = scrollView.trailingAnchor.constraint(
+        let leadingConstraints = stackView.trailingAnchor.constraint(
             equalTo: view.safeAreaLayoutGuide.trailingAnchor,
             constant: -16
         )
-        let heightConstraint = scrollView.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor)
-        let widthConstraint = scrollView.heightAnchor.constraint(equalToConstant: 200)
-        NSLayoutConstraint.activate([topConstraint,
-                                     trailingConstraint,
-                                     leadingConstraint,
-                                     heightConstraint,
-                                     widthConstraint])
-    }
-
-    private func constraintsStackView() {
-        let topConstraints = stackView.topAnchor.constraint(
-            equalTo: scrollView.safeAreaLayoutGuide.topAnchor,
-            constant: 20
-        )
-        let trailingConstraints = stackView.leadingAnchor.constraint(
-            equalTo: scrollView.safeAreaLayoutGuide.leadingAnchor,
-            constant: 16
-        )
-        let leadingConstraints = stackView.trailingAnchor.constraint(
-            equalTo: scrollView.safeAreaLayoutGuide.trailingAnchor,
-            constant: -16
-        )
         let heightConstraints = stackView.heightAnchor.constraint(equalToConstant: 600)
-        let widthConstraints = stackView.widthAnchor.constraint(equalToConstant: 200)
+        let widthConstraints = stackView.widthAnchor.constraint(equalTo: stackView.widthAnchor)
         NSLayoutConstraint.activate([topConstraints,
                                      trailingConstraints,
                                      leadingConstraints,

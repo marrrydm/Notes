@@ -7,14 +7,14 @@ import UIKit
 final class NoteViewController: UIViewController {
     private var rightBarButton = UIBarButtonItem()
     private var titleTextField = UITextField()
-    var textLabel = UILabel()
+    private var textLabel = UILabel()
     private var textView = UITextView()
     private var dateTextField = UITextField()
     private var dataPicker = UIDatePicker()
     private let dateFormatter = DateFormatter()
     private let locale = Locale(identifier: "rus")
-    private var isEditingMode = false
-    private var notes: Note!
+    private let listViewController = ListViewController()
+    private var notes: NoteViewCell.Model!
     weak var delegate: NotesDelegate?
 
     enum Constants {
@@ -98,10 +98,9 @@ final class NoteViewController: UIViewController {
     }
 
     private func delegateData() {
-        notes = Note(title: titleTextField.text!, content: textView.text, date: .now)
-        let second = ListViewController()
-        self.delegate = second
-        self.delegate?.updateNotes(note: notes)
+        notes = NoteViewCell.Model(title: titleTextField.text!, content: textView.text, date: .now)
+        self.delegate = listViewController
+        delegate?.updateNotes(note: notes)
     }
 
     private func showAlert() {
