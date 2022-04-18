@@ -13,8 +13,6 @@ final class NoteViewController: UIViewController {
     private var dataPicker = UIDatePicker()
     private let dateFormatter = DateFormatter()
     private let locale = Locale(identifier: "rus")
-    private let listViewController = ListViewController()
-    private var notes: NoteViewCell.Model!
     weak var delegate: NotesDelegate?
 
     enum Constants {
@@ -22,11 +20,12 @@ final class NoteViewController: UIViewController {
         static let titleTextFieldPlaceholder = "Введите название"
         static let dateFormat = "dd.MM.yyyy EEEE HH:mm"
         static let titleUpdate = ""
+        static let outputDate = "dd.MM.yyyy"
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(red: 229, green: 229, blue: 229, alpha: 1)
+        view.backgroundColor = UIColor(red: 0.898, green: 0.898, blue: 0.898, alpha: 1)
         configureUI()
         keyboardUp()
     }
@@ -93,14 +92,23 @@ final class NoteViewController: UIViewController {
     @objc private func didRightBarButtonTapped(_ sender: Any) {
         rightBarButton.title = Constants.rightBarButtonTitle
         checkForEmpty()
-        delegateData()
+        updateData()
         view.endEditing(true)
     }
 
-    private func delegateData() {
-        notes = NoteViewCell.Model(title: titleTextField.text!, content: textView.text, date: .now)
-        self.delegate = listViewController
-        delegate?.updateNotes(note: notes)
+    private func updateData() {
+        _ = NoteViewCell.Model(
+            title: titleTextField.text!, content: textView.text, date: dateFormatter.string(from: dataPicker.date)
+        )
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        dateFormatter.dateFormat = Constants.outputDate
+        let notes = NoteViewCell.Model(
+            title: titleTextField.text!, content: textView.text, date: dateFormatter.string(from: dataPicker.date)
+            )
+        self.delegate?.updateNotes(note: notes)
     }
 
     private func showAlert() {
@@ -112,6 +120,7 @@ final class NoteViewController: UIViewController {
     private func setupTextField() {
         titleTextField.placeholder = Constants.titleTextFieldPlaceholder
         titleTextField.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        titleTextField.backgroundColor = UIColor(red: 0.898, green: 0.898, blue: 0.898, alpha: 1)
         titleTextField.textColor = .black
         titleTextField.isEnabled = true
         titleTextField.translatesAutoresizingMaskIntoConstraints = false
@@ -141,6 +150,7 @@ final class NoteViewController: UIViewController {
     private func setupTextView() {
         textView.isUserInteractionEnabled = true
         textView.font = .systemFont(ofSize: 16, weight: .regular)
+        textView.backgroundColor = UIColor(red: 0.898, green: 0.898, blue: 0.898, alpha: 1)
         textView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(textView)
         constraintsTextView()

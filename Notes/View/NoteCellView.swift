@@ -9,33 +9,31 @@ import Foundation
 import UIKit
 
 class NoteViewCell: UIView {
+    func updateNotes(note: Model) {
+        setModel(model: note)
+    }
     private var newView = UIView()
     private var titleLabel = UILabel()
     private var contentLabel = UILabel()
     private var dateLabel = UILabel()
 
     struct Model {
-        let title: String
-        let content: String
-        let date: Date
+        var title: String
+        var content: String
+        var date: String
     }
 
     public func setModel(model: NoteViewCell.Model) {
         titleLabel.text = model.title
         contentLabel.text = model.content
-        dateLabel.text = model.date.formatted()
-    }
-
-    convenience init(note: NoteViewCell.Model) {
-        self.init()
-        setModel(model: note)
-        print(note)
+        dateLabel.text = model.date
     }
 
     override init(frame: CGRect) {
-        super.init(frame: CGRect(x: 15, y: 10, width: 358, height: 90))
-        self.backgroundColor = .red
-        self.layer.cornerRadius = 30
+        super.init(frame: CGRect(x: 15, y: 10, width: 328, height: 90))
+        self.layer.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
+        self.layer.cornerRadius = 14
+        self.backgroundColor = .white
         self.layer.borderWidth = 0.2
         self.layer.borderColor = UIColor.white.cgColor
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -52,10 +50,14 @@ class NoteViewCell: UIView {
     }
 
     private func setupLabels() {
-            constraintsTitleLabel()
-            constraintsContentLabel()
-            constraintsDateLabel()
-        }
+        titleLabel.font = .systemFont(ofSize: 16, weight: .bold)
+        contentLabel.font = .systemFont(ofSize: 14, weight: .regular)
+        dateLabel.font = .systemFont(ofSize: 10, weight: .bold)
+        contentLabel.textColor = UIColor(red: 0.172, green: 0.172, blue: 0.172, alpha: 1)
+        constraintsTitleLabel()
+        constraintsContentLabel()
+        constraintsDateLabel()
+    }
 
     private func constraintsTitleLabel() {
             let topConstraint = titleLabel.topAnchor.constraint(
@@ -71,7 +73,7 @@ class NoteViewCell: UIView {
                 constant: -16
             )
             let heightConstraint = titleLabel.heightAnchor.constraint(equalToConstant: 18)
-            let widthConstraint = titleLabel.widthAnchor.constraint(equalToConstant: 300)
+        let widthConstraint = titleLabel.widthAnchor.constraint(equalTo: titleLabel.widthAnchor)
             NSLayoutConstraint.activate([topConstraint,
                                          trailingConstraint,
                                          leadingConstraint,
@@ -93,7 +95,7 @@ class NoteViewCell: UIView {
                 constant: -16
             )
             let heightConstraint = contentLabel.heightAnchor.constraint(equalToConstant: 14)
-            let widthConstraint = contentLabel.widthAnchor.constraint(equalToConstant: 326)
+        let widthConstraint = contentLabel.widthAnchor.constraint(equalTo: contentLabel.widthAnchor)
             NSLayoutConstraint.activate([topConstraint,
                                          trailingConstraint,
                                          leadingConstraint,
@@ -103,7 +105,7 @@ class NoteViewCell: UIView {
 
     private func constraintsDateLabel() {
             let topConstraint = dateLabel.topAnchor.constraint(
-                equalTo: contentLabel.topAnchor,
+                equalTo: contentLabel.bottomAnchor,
                 constant: 24
             )
             let trailingConstraint = dateLabel.leadingAnchor.constraint(

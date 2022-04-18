@@ -16,39 +16,61 @@ class ListViewController: UIViewController, NotesDelegate {
     private var buttonPlus = UIButton(type: .custom)
     private var scrollView = UIScrollView()
     private let stackView = UIStackView()
-    private var noteVC = NoteViewController()
+    var notes: [NoteViewCell.Model] = []
 
     enum Constants {
         static let titleNB = "Заметки"
+        static let titleBBT = ""
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(red: 229, green: 229, blue: 229, alpha: 1)
+        view.backgroundColor = UIColor(red: 0.898, green: 0.898, blue: 0.898, alpha: 1)
         setupUI()
+        tapViews()
     }
 
     func updateNotes(note: NoteViewCell.Model) {
-        let list = NoteViewCell(note: note)
-        stackView.addSubview(list)
-        print(list)
-        print("Данные получены")
-        stackView.addArrangedSubview(list)
+        let cell = NoteViewCell()
+        cell.setModel(model: note)
+        stackView.addArrangedSubview(cell)
+        saveNote(note: note)
+    }
+
+    private func tapViews() {
+        let tapButtonPlus = UITapGestureRecognizer(target: self, action: #selector(plusTap(sender:)))
+        self.buttonPlus.addGestureRecognizer(tapButtonPlus)
+
+        let tapStackView = UITapGestureRecognizer(target: self, action: #selector(viewTapped(sender:)))
+        self.stackView.addGestureRecognizer(tapStackView)
+    }
+
+    @objc private func plusTap(sender: UITapGestureRecognizer) {
+        let root = NoteViewController()
+        navigationController?.pushViewController(root, animated: true)
+        root.delegate = self
+    }
+
+    @objc private func viewTapped(sender: UITapGestureRecognizer) {
+        let noteViewController = NoteViewController()
+        self.navigationController?.pushViewController(noteViewController, animated: true)
+    }
+
+    func saveNote(note: NoteViewCell.Model) {
+        notes.append(note)
+        print(notes)
+        self.stackView.reloadInputViews()
     }
 
     private func setupUI() {
-        setupPlus()
         setupHeader()
+        setupPlus()
         setupNavItem()
-    }
-
-    @objc private func plusTap() {
-        let root = NoteViewController()
-        navigationController?.pushViewController(root, animated: true)
     }
 
     private func setupNavItem() {
         navigationItem.title = Constants.titleNB
+        navigationItem.backButtonTitle = Constants.titleBBT
     }
 
     private func setupPlus() {
@@ -68,11 +90,11 @@ class ListViewController: UIViewController, NotesDelegate {
     private func setupHeader() {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
-        stackView.backgroundColor = UIColor(red: 229, green: 229, blue: 229, alpha: 1)
-        stackView.distribution = .equalSpacing
+        stackView.backgroundColor = UIColor(red: 0.898, green: 0.898, blue: 0.898, alpha: 1)
+        stackView.distribution = .fill
         stackView.alignment = .fill
         stackView.clipsToBounds = true
-        stackView.spacing = 10
+        stackView.spacing = 4
         view.addSubview(stackView)
         constraintsStackView()
     }
@@ -107,7 +129,7 @@ class ListViewController: UIViewController, NotesDelegate {
             equalTo: view.safeAreaLayoutGuide.trailingAnchor,
             constant: -16
         )
-        let heightConstraints = stackView.heightAnchor.constraint(equalToConstant: 600)
+        let heightConstraints = stackView.heightAnchor.constraint(equalTo: stackView.heightAnchor)
         let widthConstraints = stackView.widthAnchor.constraint(equalTo: stackView.widthAnchor)
         NSLayoutConstraint.activate([topConstraints,
                                      trailingConstraints,

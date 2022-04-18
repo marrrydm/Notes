@@ -18,8 +18,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let listViewController = ListViewController()
         let navigation = UINavigationController(rootViewController: listViewController)
         window.rootViewController = navigation
-        self.window = window
         window.makeKeyAndVisible()
+        self.window = window
     }
 
     func sceneDidBecomeActive(_ scene: UIScene) {
