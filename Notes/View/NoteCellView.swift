@@ -21,6 +21,7 @@ class NoteViewCell: UIView {
         var title: String
         var content: String
         var date: String
+        var id: Int?
     }
 
     public func setModel(model: NoteViewCell.Model) {
@@ -30,7 +31,7 @@ class NoteViewCell: UIView {
     }
 
     override init(frame: CGRect) {
-        super.init(frame: CGRect(x: 15, y: 10, width: 328, height: 90))
+        super.init(frame: CGRect(x: 0, y: 0, width: 358, height: 90))
         self.layer.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
         self.layer.cornerRadius = 14
         self.backgroundColor = .white
@@ -73,7 +74,7 @@ class NoteViewCell: UIView {
                 constant: -16
             )
             let heightConstraint = titleLabel.heightAnchor.constraint(equalToConstant: 18)
-        let widthConstraint = titleLabel.widthAnchor.constraint(equalTo: titleLabel.widthAnchor)
+        let widthConstraint = titleLabel.widthAnchor.constraint(equalToConstant: 300)
             NSLayoutConstraint.activate([topConstraint,
                                          trailingConstraint,
                                          leadingConstraint,
@@ -95,7 +96,7 @@ class NoteViewCell: UIView {
                 constant: -16
             )
             let heightConstraint = contentLabel.heightAnchor.constraint(equalToConstant: 14)
-        let widthConstraint = contentLabel.widthAnchor.constraint(equalTo: contentLabel.widthAnchor)
+        let widthConstraint = contentLabel.widthAnchor.constraint(equalToConstant: 326)
             NSLayoutConstraint.activate([topConstraint,
                                          trailingConstraint,
                                          leadingConstraint,

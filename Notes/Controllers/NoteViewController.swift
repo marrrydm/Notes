@@ -14,6 +14,8 @@ final class NoteViewController: UIViewController {
     private let dateFormatter = DateFormatter()
     private let locale = Locale(identifier: "rus")
     weak var delegate: NotesDelegate?
+    var closure: ((NoteViewCell.Model) -> Void)?
+    var notes: NoteViewCell.Model?
 
     enum Constants {
         static let rightBarButtonTitle = "Готово"
@@ -28,6 +30,23 @@ final class NoteViewController: UIViewController {
         view.backgroundColor = UIColor(red: 0.898, green: 0.898, blue: 0.898, alpha: 1)
         configureUI()
         keyboardUp()
+    }
+
+    func updateNotePage(note: NoteViewCell.Model) {
+        titleTextField.text = note.title
+        textView.text = note.content
+        dateTextField.text = note.date
+        dateFormatter.dateFormat = Constants.dateFormat
+        dateTextField.text = dateFormatter.string(from: dataPicker.date)
+    }
+
+    func changeDateInList() {
+        dateFormatter.dateFormat = Constants.outputDate
+        closure?(NoteViewCell.Model(
+            title: titleTextField.text!,
+            content: textView.text,
+            date: dateFormatter.string(from: dataPicker.date)
+        ))
     }
 
     private func keyboardUp() {
@@ -92,23 +111,18 @@ final class NoteViewController: UIViewController {
     @objc private func didRightBarButtonTapped(_ sender: Any) {
         rightBarButton.title = Constants.rightBarButtonTitle
         checkForEmpty()
-        updateData()
+        changeDateInList()
         view.endEditing(true)
-    }
-
-    private func updateData() {
-        _ = NoteViewCell.Model(
-            title: titleTextField.text!, content: textView.text, date: dateFormatter.string(from: dataPicker.date)
-        )
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         dateFormatter.dateFormat = Constants.outputDate
-        let notes = NoteViewCell.Model(
+        notes = NoteViewCell.Model(
             title: titleTextField.text!, content: textView.text, date: dateFormatter.string(from: dataPicker.date)
-            )
-        self.delegate?.updateNotes(note: notes)
+        )
+        changeDateInList()
+        self.delegate?.updateNotes(note: notes!)
     }
 
     private func showAlert() {

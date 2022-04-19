@@ -11,12 +11,15 @@ protocol NotesDelegate: AnyObject {
     func updateNotes(note: NoteViewCell.Model)
 }
 
-class ListViewController: UIViewController, NotesDelegate {
+class ListViewController: UIViewController, NotesDelegate, UIGestureRecognizerDelegate {
     private var rightBarButton = UIBarButtonItem()
     private var buttonPlus = UIButton(type: .custom)
     private var scrollView = UIScrollView()
     private let stackView = UIStackView()
     var notes: [NoteViewCell.Model] = []
+    weak var delegate: NotesDelegate?
+    var cell: NoteViewCell!
+    let noteViewController = NoteViewController()
 
     enum Constants {
         static let titleNB = "Заметки"
@@ -31,18 +34,21 @@ class ListViewController: UIViewController, NotesDelegate {
     }
 
     func updateNotes(note: NoteViewCell.Model) {
-        let cell = NoteViewCell()
+        cell = NoteViewCell()
+        noteViewController.updateNotePage(note: note)
         cell.setModel(model: note)
         stackView.addArrangedSubview(cell)
         saveNote(note: note)
+
+        print(notes)
+
+        let tapStackView = UITapGestureRecognizer(target: self, action: #selector(viewTapped(sender:)))
+        cell.addGestureRecognizer(tapStackView)
     }
 
     private func tapViews() {
         let tapButtonPlus = UITapGestureRecognizer(target: self, action: #selector(plusTap(sender:)))
         self.buttonPlus.addGestureRecognizer(tapButtonPlus)
-
-        let tapStackView = UITapGestureRecognizer(target: self, action: #selector(viewTapped(sender:)))
-        self.stackView.addGestureRecognizer(tapStackView)
     }
 
     @objc private func plusTap(sender: UITapGestureRecognizer) {
@@ -51,14 +57,28 @@ class ListViewController: UIViewController, NotesDelegate {
         root.delegate = self
     }
 
+    //    func updateNote(note: NoteViewCell.Model) {
+    //        var currentIndex = 0
+    //        for noteArray in notes {
+    //            if (noteArray.title == note.title ) {
+    //                notes[currentIndex] = note
+    //                print(currentIndex)
+    //                break
+    //            }
+    //            currentIndex += 1
+    //            print(currentIndex)
+    //        }
+    //    }
+
     @objc private func viewTapped(sender: UITapGestureRecognizer) {
-        let noteViewController = NoteViewController()
-        self.navigationController?.pushViewController(noteViewController, animated: true)
+        noteViewController.closure = { [self] name in
+            cell.setModel(model: name)
+        }
+        navigationController?.pushViewController(noteViewController, animated: true)
     }
 
     func saveNote(note: NoteViewCell.Model) {
         notes.append(note)
-        print(notes)
         self.stackView.reloadInputViews()
     }
 
@@ -77,8 +97,8 @@ class ListViewController: UIViewController, NotesDelegate {
         buttonPlus.backgroundColor = UIColor(red: 0, green: 0.478, blue: 1, alpha: 1)
         buttonPlus.translatesAutoresizingMaskIntoConstraints = false
         buttonPlus.setTitle("+", for: .normal)
-        buttonPlus.titleLabel?.font = .systemFont(ofSize: 40)
-        buttonPlus.layer.cornerRadius = 35
+        buttonPlus.titleLabel?.font = .systemFont(ofSize: 35)
+        buttonPlus.layer.cornerRadius = 25
         buttonPlus.layer.masksToBounds = true
         buttonPlus.clipsToBounds = true
         buttonPlus.addTarget(self, action: #selector(plusTap), for: .touchUpInside)
@@ -108,7 +128,7 @@ class ListViewController: UIViewController, NotesDelegate {
         equalTo: view.safeAreaLayoutGuide.trailingAnchor,
         constant: -19
     )
-    let heightConstraint = buttonPlus.heightAnchor.constraint(equalToConstant: 70)
+    let heightConstraint = buttonPlus.heightAnchor.constraint(equalToConstant: 50)
     let widthConstraint = buttonPlus.heightAnchor.constraint(equalTo: buttonPlus.widthAnchor)
     NSLayoutConstraint.activate([topConstraint,
                                  leadingConstraint,
