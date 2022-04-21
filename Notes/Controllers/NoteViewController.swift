@@ -119,7 +119,9 @@ final class NoteViewController: UIViewController {
         super.viewDidDisappear(animated)
         dateFormatter.dateFormat = Constants.outputDate
         notes = NoteViewCell.Model(
-            title: titleTextField.text!, content: textView.text, date: dateFormatter.string(from: dataPicker.date)
+            title: titleTextField.text!,
+            content: textView.text,
+            date: dateFormatter.string(from: dataPicker.date)
         )
         changeDateInList()
         self.delegate?.updateNotes(note: notes!)

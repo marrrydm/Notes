@@ -11,15 +11,16 @@ protocol NotesDelegate: AnyObject {
     func updateNotes(note: NoteViewCell.Model)
 }
 
-class ListViewController: UIViewController, NotesDelegate, UIGestureRecognizerDelegate {
+final class ListViewController: UIViewController, NotesDelegate, UIGestureRecognizerDelegate {
     private var rightBarButton = UIBarButtonItem()
     private var buttonPlus = UIButton(type: .custom)
     private var scrollView = UIScrollView()
     private let stackView = UIStackView()
-    var notes: [NoteViewCell.Model] = []
     weak var delegate: NotesDelegate?
-    var cell: NoteViewCell!
-    let noteViewController = NoteViewController()
+    private let noteViewController = NoteViewController()
+    private var notes: [NoteViewCell.Model] = []
+    private var cells: [NoteViewCell] = []
+    private var cell: NoteViewCell?
 
     enum Constants {
         static let titleNB = "Заметки"
@@ -35,15 +36,14 @@ class ListViewController: UIViewController, NotesDelegate, UIGestureRecognizerDe
 
     func updateNotes(note: NoteViewCell.Model) {
         cell = NoteViewCell()
-        noteViewController.updateNotePage(note: note)
-        cell.setModel(model: note)
-        stackView.addArrangedSubview(cell)
-        saveNote(note: note)
+        cell?.setModel(model: note)
+        stackView.addArrangedSubview(cell!)
 
-        print(notes)
+        saveNote(note: note)
+        cells.append(cell!)
 
         let tapStackView = UITapGestureRecognizer(target: self, action: #selector(viewTapped(sender:)))
-        cell.addGestureRecognizer(tapStackView)
+        cell?.addGestureRecognizer(tapStackView)
     }
 
     private func tapViews() {
@@ -57,22 +57,16 @@ class ListViewController: UIViewController, NotesDelegate, UIGestureRecognizerDe
         root.delegate = self
     }
 
-    //    func updateNote(note: NoteViewCell.Model) {
-    //        var currentIndex = 0
-    //        for noteArray in notes {
-    //            if (noteArray.title == note.title ) {
-    //                notes[currentIndex] = note
-    //                print(currentIndex)
-    //                break
-    //            }
-    //            currentIndex += 1
-    //            print(currentIndex)
-    //        }
-    //    }
-
     @objc private func viewTapped(sender: UITapGestureRecognizer) {
-        noteViewController.closure = { [self] name in
-            cell.setModel(model: name)
+        if let index = stackView.arrangedSubviews.firstIndex(of: sender.view!) {
+            for (ind, value) in notes.enumerated() {
+                if index == ind {
+                    noteViewController.updateNotePage(note: value)
+                }
+            }
+            noteViewController.closure = { [self] name in
+                cells[index].setModel(model: name)
+            }
         }
         navigationController?.pushViewController(noteViewController, animated: true)
     }
@@ -109,6 +103,7 @@ class ListViewController: UIViewController, NotesDelegate, UIGestureRecognizerDe
 
     private func setupHeader() {
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.isUserInteractionEnabled = true
         stackView.axis = .vertical
         stackView.backgroundColor = UIColor(red: 0.898, green: 0.898, blue: 0.898, alpha: 1)
         stackView.distribution = .fill
@@ -120,20 +115,20 @@ class ListViewController: UIViewController, NotesDelegate, UIGestureRecognizerDe
     }
 
     private func constraintsButtonPlus() {
-    let topConstraint = buttonPlus.topAnchor.constraint(
-        equalTo: view.safeAreaLayoutGuide.topAnchor,
-        constant: 641
-    )
-    let leadingConstraint = buttonPlus.trailingAnchor.constraint(
-        equalTo: view.safeAreaLayoutGuide.trailingAnchor,
-        constant: -19
-    )
-    let heightConstraint = buttonPlus.heightAnchor.constraint(equalToConstant: 50)
-    let widthConstraint = buttonPlus.heightAnchor.constraint(equalTo: buttonPlus.widthAnchor)
-    NSLayoutConstraint.activate([topConstraint,
-                                 leadingConstraint,
-                                 heightConstraint,
-                                 widthConstraint])
+        let topConstraint = buttonPlus.topAnchor.constraint(
+            equalTo: view.safeAreaLayoutGuide.topAnchor,
+            constant: 641
+        )
+        let leadingConstraint = buttonPlus.trailingAnchor.constraint(
+            equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+            constant: -19
+        )
+        let heightConstraint = buttonPlus.heightAnchor.constraint(equalToConstant: 50)
+        let widthConstraint = buttonPlus.heightAnchor.constraint(equalTo: buttonPlus.widthAnchor)
+        NSLayoutConstraint.activate([topConstraint,
+                                     leadingConstraint,
+                                     heightConstraint,
+                                     widthConstraint])
     }
 
     private func constraintsStackView() {

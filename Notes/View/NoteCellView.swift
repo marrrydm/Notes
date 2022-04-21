@@ -5,7 +5,6 @@
 //  Created by Мария Ганеева on 11.04.2022.
 //
 
-import Foundation
 import UIKit
 
 class NoteViewCell: UIView {
@@ -61,73 +60,73 @@ class NoteViewCell: UIView {
     }
 
     private func constraintsTitleLabel() {
-            let topConstraint = titleLabel.topAnchor.constraint(
-                equalTo: self.topAnchor,
-                constant: 10
-            )
-            let trailingConstraint = titleLabel.leadingAnchor.constraint(
-                equalTo: self.leadingAnchor,
-                constant: 16
-            )
-            let leadingConstraint = titleLabel.trailingAnchor.constraint(
-                equalTo: self.trailingAnchor,
-                constant: -16
-            )
-            let heightConstraint = titleLabel.heightAnchor.constraint(equalToConstant: 18)
+        let topConstraint = titleLabel.topAnchor.constraint(
+            equalTo: self.topAnchor,
+            constant: 10
+        )
+        let trailingConstraint = titleLabel.leadingAnchor.constraint(
+            equalTo: self.leadingAnchor,
+            constant: 16
+        )
+        let leadingConstraint = titleLabel.trailingAnchor.constraint(
+            equalTo: self.trailingAnchor,
+            constant: -16
+        )
+        let heightConstraint = titleLabel.heightAnchor.constraint(equalToConstant: 18)
         let widthConstraint = titleLabel.widthAnchor.constraint(equalToConstant: 300)
-            NSLayoutConstraint.activate([topConstraint,
-                                         trailingConstraint,
-                                         leadingConstraint,
-                                         heightConstraint,
-                                         widthConstraint])
-        }
+        NSLayoutConstraint.activate([topConstraint,
+                                     trailingConstraint,
+                                     leadingConstraint,
+                                     heightConstraint,
+                                     widthConstraint])
+    }
 
     private func constraintsContentLabel() {
-            let topConstraint = contentLabel.topAnchor.constraint(
-                equalTo: titleLabel.bottomAnchor,
-                constant: 4
-            )
-            let trailingConstraint = contentLabel.leadingAnchor.constraint(
-                equalTo: self.leadingAnchor,
-                constant: 16
-            )
-            let leadingConstraint = contentLabel.trailingAnchor.constraint(
-                equalTo: self.trailingAnchor,
-                constant: -16
-            )
-            let heightConstraint = contentLabel.heightAnchor.constraint(equalToConstant: 14)
+        let topConstraint = contentLabel.topAnchor.constraint(
+            equalTo: titleLabel.bottomAnchor,
+            constant: 4
+        )
+        let trailingConstraint = contentLabel.leadingAnchor.constraint(
+            equalTo: self.leadingAnchor,
+            constant: 16
+        )
+        let leadingConstraint = contentLabel.trailingAnchor.constraint(
+            equalTo: self.trailingAnchor,
+            constant: -16
+        )
+        let heightConstraint = contentLabel.heightAnchor.constraint(equalToConstant: 14)
         let widthConstraint = contentLabel.widthAnchor.constraint(equalToConstant: 326)
-            NSLayoutConstraint.activate([topConstraint,
-                                         trailingConstraint,
-                                         leadingConstraint,
-                                         heightConstraint,
-                                         widthConstraint])
-        }
+        NSLayoutConstraint.activate([topConstraint,
+                                     trailingConstraint,
+                                     leadingConstraint,
+                                     heightConstraint,
+                                     widthConstraint])
+    }
 
     private func constraintsDateLabel() {
-            let topConstraint = dateLabel.topAnchor.constraint(
-                equalTo: contentLabel.bottomAnchor,
-                constant: 24
-            )
-            let trailingConstraint = dateLabel.leadingAnchor.constraint(
-                equalTo: self.leadingAnchor,
-                constant: 16
-            )
-            let leadingConstraint = dateLabel.trailingAnchor.constraint(
-                equalTo: self.trailingAnchor,
-                constant: -16
-            )
-            let bottomConstraint = dateLabel.bottomAnchor.constraint(
-                equalTo: self.bottomAnchor,
-                constant: -10
-            )
-            let heightConstraint = dateLabel.heightAnchor.constraint(equalToConstant: 10)
-            let widthConstraint = dateLabel.widthAnchor.constraint(equalToConstant: 68)
-            NSLayoutConstraint.activate([topConstraint,
-                                         trailingConstraint,
-                                         leadingConstraint,
-                                         bottomConstraint,
-                                         heightConstraint,
-                                         widthConstraint])
-        }
+        let topConstraint = dateLabel.topAnchor.constraint(
+            equalTo: contentLabel.bottomAnchor,
+            constant: 24
+        )
+        let trailingConstraint = dateLabel.leadingAnchor.constraint(
+            equalTo: self.leadingAnchor,
+            constant: 16
+        )
+        let leadingConstraint = dateLabel.trailingAnchor.constraint(
+            equalTo: self.trailingAnchor,
+            constant: -16
+        )
+        let bottomConstraint = dateLabel.bottomAnchor.constraint(
+            equalTo: self.bottomAnchor,
+            constant: -10
+        )
+        let heightConstraint = dateLabel.heightAnchor.constraint(equalToConstant: 10)
+        let widthConstraint = dateLabel.widthAnchor.constraint(equalToConstant: 68)
+        NSLayoutConstraint.activate([topConstraint,
+                                     trailingConstraint,
+                                     leadingConstraint,
+                                     bottomConstraint,
+                                     heightConstraint,
+                                     widthConstraint])
+    }
 }
