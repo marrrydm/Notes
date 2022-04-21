@@ -66,6 +66,7 @@ final class ListViewController: UIViewController, NotesDelegate, UIGestureRecogn
             }
             noteViewController.closure = { [self] name in
                 cells[index].setModel(model: name)
+                notes[index] = name
             }
         }
         navigationController?.pushViewController(noteViewController, animated: true)

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class NoteViewCell: UIView {
+final class NoteViewCell: UIView {
     func updateNotes(note: Model) {
         setModel(model: note)
     }
