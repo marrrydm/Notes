@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class NoteViewCell: UICollectionViewCell {
+final class NoteViewCell: UIView {
     func updateNotes(note: Model) {
         setModel(model: note)
     }
@@ -20,6 +20,7 @@ final class NoteViewCell: UICollectionViewCell {
         var title: String
         var content: String
         var date: String
+        var id: Int?
     }
 
     public func setModel(model: NoteViewCell.Model) {

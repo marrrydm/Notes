@@ -17,7 +17,7 @@ final class NoteViewController: UIViewController {
     var closure: ((NoteViewCell.Model) -> Void)?
     var notes: NoteViewCell.Model?
 
-    private enum Constants {
+    enum Constants {
         static let rightBarButtonTitle = "Готово"
         static let titleTextFieldPlaceholder = "Введите название"
         static let dateFormat = "dd.MM.yyyy EEEE HH:mm"
@@ -42,13 +42,11 @@ final class NoteViewController: UIViewController {
 
     func changeDateInList() {
         dateFormatter.dateFormat = Constants.outputDate
-        closure?(
-            NoteViewCell.Model(
-                title: titleTextField.text!,
-                content: textView.text,
-                date: dateFormatter.string(from: dataPicker.date)
-            )
-        )
+        closure?(NoteViewCell.Model(
+            title: titleTextField.text!,
+            content: textView.text,
+            date: dateFormatter.string(from: dataPicker.date)
+        ))
     }
 
     private func keyboardUp() {

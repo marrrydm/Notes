@@ -11,15 +11,18 @@ protocol NotesDelegate: AnyObject {
     func updateNotes(note: NoteViewCell.Model)
 }
 
-final class ListViewController: UIViewController, NotesDelegate {
+final class ListViewController: UIViewController, NotesDelegate, UIGestureRecognizerDelegate {
     private var rightBarButton = UIBarButtonItem()
     private var buttonPlus = UIButton(type: .custom)
+    private var scrollView = UIScrollView()
     private let stackView = UIStackView()
+    weak var delegate: NotesDelegate?
+    private let noteViewController = NoteViewController()
     private var notes: [NoteViewCell.Model] = []
     private var cells: [NoteViewCell] = []
     private var cell: NoteViewCell?
 
-    private enum Constants {
+    enum Constants {
         static let titleNB = "Заметки"
         static let titleBBT = ""
     }
@@ -55,10 +58,11 @@ final class ListViewController: UIViewController, NotesDelegate {
     }
 
     @objc private func viewTapped(sender: UITapGestureRecognizer) {
-        let noteViewController = NoteViewController()
         if let index = stackView.arrangedSubviews.firstIndex(of: sender.view!) {
-            for (ind, value) in notes.enumerated() where index == ind {
-                noteViewController.updateNotePage(note: value)
+            for (ind, value) in notes.enumerated() {
+                if index == ind {
+                    noteViewController.updateNotePage(note: value)
+                }
             }
             noteViewController.closure = { [self] name in
                 cells[index].setModel(model: name)
