@@ -7,42 +7,97 @@ import UIKit
 final class NoteViewController: UIViewController {
     private var rightBarButton = UIBarButtonItem()
     private var titleTextField = UITextField()
+    private var textLabel = UILabel()
     private var textView = UITextView()
     private var dateTextField = UITextField()
     private var dataPicker = UIDatePicker()
     private let dateFormatter = DateFormatter()
-    private let userDefaults = UserDefaults.standard
     private let locale = Locale(identifier: "rus")
+    weak var delegate: NotesDelegate?
+    var closure: ((NoteViewCell.Model) -> Void)?
+    var notes: NoteViewCell.Model?
 
-    enum Constants {
-        static let navigationItemTitle = "Заметки"
+    private enum Constants {
         static let rightBarButtonTitle = "Готово"
-        static let titleTextFieldPlaceholder = "Заметка"
-        static let titleTextFieldDatePlaceholder = "Дата"
-        static let dateFormat = "Дата: dd MMMM yyyy"
+        static let titleTextFieldPlaceholder = "Введите название"
+        static let dateFormat = "dd.MM.yyyy EEEE HH:mm"
+        static let titleUpdate = ""
+        static let outputDate = "dd.MM.yyyy"
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadSave()
+        view.backgroundColor = UIColor(red: 0.898, green: 0.898, blue: 0.898, alpha: 1)
         configureUI()
+        keyboardUp()
+    }
+
+    func updateNotePage(note: NoteViewCell.Model) {
+        titleTextField.text = note.title
+        textView.text = note.content
+        dateTextField.text = note.date
+        dateFormatter.dateFormat = Constants.dateFormat
+        dateTextField.text = dateFormatter.string(from: dataPicker.date)
+    }
+
+    func changeDateInList() {
+        dateFormatter.dateFormat = Constants.outputDate
+        closure?(
+            NoteViewCell.Model(
+                title: titleTextField.text ?? Constants.titleUpdate,
+                content: textView.text,
+                date: dateFormatter.string(from: dataPicker.date)
+            )
+        )
+    }
+
+    private func keyboardUp() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillHide),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
+    }
+
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if ((notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
+            let userInfo = notification.userInfo!
+            var keyboardFrame: CGRect = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)!.cgRectValue
+            keyboardFrame = view.convert(keyboardFrame, from: nil)
+
+            var contentInset: UIEdgeInsets = textView.contentInset
+            contentInset.bottom = keyboardFrame.size.height
+            textView.contentInset = contentInset
+
+            rightBarButton.title = Constants.rightBarButtonTitle
+        }
+    }
+
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if ((notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue) != nil {
+            let contentInset: UIEdgeInsets = UIEdgeInsets()
+            textView.contentInset = contentInset
+
+            rightBarButton.title = Constants.titleUpdate
+        }
     }
 
     private func configureUI() {
-        configureTitle()
-        setupTextField()
         setupDateTextField()
-        setupDatePicker()
+        setupTextField()
         setupTextView()
         setupRightBarButton()
     }
 
     override func viewDidAppear(_ animated: Bool) {
         textView.becomeFirstResponder()
-    }
-
-    private func configureTitle() {
-        navigationItem.title = Constants.navigationItemTitle
     }
 
     private func dateFormatterConfigure() {
@@ -55,29 +110,23 @@ final class NoteViewController: UIViewController {
         dateTextField.text = dateFormatter.string(from: dataPicker.date)
     }
 
-    private func saveAction() {
-        userDefaults.setValue(titleTextField.text, forKey: "title")
-        userDefaults.setValue(textView.text, forKey: "content")
-        userDefaults.setValue(dateTextField.text, forKey: "date")
-    }
-
-    private func loadSave() {
-        if let name = userDefaults.object(forKey: "title") {
-            titleTextField.text = name as? String
-        }
-        if let cont = userDefaults.object(forKey: "content") {
-            textView.text = cont as? String
-        }
-        if let date = userDefaults.object(forKey: "date") {
-            dateTextField.text = date as? String
-        }
-    }
-
     @objc private func didRightBarButtonTapped(_ sender: Any) {
         rightBarButton.title = Constants.rightBarButtonTitle
         checkForEmpty()
-        saveAction()
+        changeDateInList()
         view.endEditing(true)
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        dateFormatter.dateFormat = Constants.outputDate
+        notes = NoteViewCell.Model(
+            title: titleTextField.text!,
+            content: textView.text,
+            date: dateFormatter.string(from: dataPicker.date)
+        )
+        changeDateInList()
+        self.delegate?.updateNotes(note: notes!)
     }
 
     private func showAlert() {
@@ -88,7 +137,8 @@ final class NoteViewController: UIViewController {
 
     private func setupTextField() {
         titleTextField.placeholder = Constants.titleTextFieldPlaceholder
-        titleTextField.font = UIFont.systemFont(ofSize: 22, weight: .bold)
+        titleTextField.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        titleTextField.backgroundColor = UIColor(red: 0.898, green: 0.898, blue: 0.898, alpha: 1)
         titleTextField.textColor = .black
         titleTextField.isEnabled = true
         titleTextField.translatesAutoresizingMaskIntoConstraints = false
@@ -99,20 +149,13 @@ final class NoteViewController: UIViewController {
     private func setupDateTextField() {
         dateFormatterConfigure()
         dateTextField.placeholder = dateFormatter.string(from: dataPicker.date)
-        dateTextField.font = UIFont.systemFont(ofSize: 14, weight: .bold)
-        dateTextField.textColor = .black
+        dateTextField.font = .systemFont(ofSize: 14, weight: .bold)
+        dateTextField.textColor = UIColor(red: 0.172, green: 0.172, blue: 0.172, alpha: 1)
         dateTextField.isEnabled = true
+        dateTextField.textAlignment = .center
         dateTextField.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(dateTextField)
         constraintsDateTextField()
-    }
-
-    private func setupDatePicker() {
-        dataPicker.preferredDatePickerStyle = .wheels
-        dataPicker.datePickerMode = .date
-        dataPicker.addTarget(self, action: #selector(dateChange), for: .valueChanged)
-        dateTextField.inputView = dataPicker
-        dataPicker.locale = locale
     }
 
     private func setupRightBarButton() {
@@ -124,7 +167,8 @@ final class NoteViewController: UIViewController {
 
     private func setupTextView() {
         textView.isUserInteractionEnabled = true
-        textView.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        textView.font = .systemFont(ofSize: 16, weight: .regular)
+        textView.backgroundColor = UIColor(red: 0.898, green: 0.898, blue: 0.898, alpha: 1)
         textView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(textView)
         constraintsTextView()
@@ -132,8 +176,8 @@ final class NoteViewController: UIViewController {
 
     private func constraintsTextField() {
         let topConstraint = titleTextField.topAnchor.constraint(
-            equalTo: view.safeAreaLayoutGuide.topAnchor,
-            constant: 20
+            equalTo: dateTextField.safeAreaLayoutGuide.topAnchor,
+            constant: 28
         )
         let trailingConstraint = titleTextField.leadingAnchor.constraint(
             equalTo: view.safeAreaLayoutGuide.leadingAnchor,
@@ -143,7 +187,7 @@ final class NoteViewController: UIViewController {
             equalTo: view.safeAreaLayoutGuide.trailingAnchor,
             constant: -20
         )
-        let heightConstraint = view.heightAnchor.constraint(equalToConstant: 50)
+        let heightConstraint = view.heightAnchor.constraint(equalToConstant: 24)
         let widthConstraint = view.heightAnchor.constraint(equalTo: view.widthAnchor)
         NSLayoutConstraint.activate([topConstraint,
                                      trailingConstraint,
@@ -154,8 +198,8 @@ final class NoteViewController: UIViewController {
 
     private func constraintsDateTextField() {
         let topConstraint = dateTextField.topAnchor.constraint(
-            equalTo: titleTextField.safeAreaLayoutGuide.bottomAnchor,
-            constant: 20
+            equalTo: view.safeAreaLayoutGuide.topAnchor,
+            constant: 12
         )
         let trailingConstraint = dateTextField.leadingAnchor.constraint(
             equalTo: view.safeAreaLayoutGuide.leadingAnchor,
@@ -165,7 +209,7 @@ final class NoteViewController: UIViewController {
             equalTo: view.safeAreaLayoutGuide.trailingAnchor,
             constant: -20
         )
-        let heightConstraint = view.heightAnchor.constraint(equalToConstant: 50)
+        let heightConstraint = view.heightAnchor.constraint(equalToConstant: 40)
         let widthConstraint = view.heightAnchor.constraint(equalTo: view.widthAnchor)
         NSLayoutConstraint.activate([topConstraint,
                                      trailingConstraint,
@@ -177,8 +221,8 @@ final class NoteViewController: UIViewController {
     private func constraintsTextView() {
         textView.isScrollEnabled = true
         let topConstraint = textView.topAnchor.constraint(
-            equalTo: dateTextField.safeAreaLayoutGuide.bottomAnchor,
-            constant: 20
+            equalTo: titleTextField.safeAreaLayoutGuide.bottomAnchor,
+            constant: 28
         )
         let trailingConstraint = textView.leadingAnchor.constraint(
             equalTo: view.safeAreaLayoutGuide.leadingAnchor,
