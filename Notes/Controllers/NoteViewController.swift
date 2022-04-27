@@ -44,7 +44,7 @@ final class NoteViewController: UIViewController {
         dateFormatter.dateFormat = Constants.outputDate
         closure?(
             NoteViewCell.Model(
-                title: titleTextField.text!,
+                title: titleTextField.text ?? Constants.titleUpdate,
                 content: textView.text,
                 date: dateFormatter.string(from: dataPicker.date)
             )
