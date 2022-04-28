@@ -7,10 +7,20 @@
 
 import UIKit
 
-final class NoteViewCell: UIView {
+final class NoteViewCell: UITableViewCell {
+    static let id = "NotesTableViewCell"
     func updateNotes(note: Model) {
         setModel(model: note)
     }
+
+    var note : NoteViewCell.Model? {
+        didSet {
+            titleLabel.text = note?.title
+            contentLabel.text = note?.content
+            dateLabel.text = note?.date
+        }
+    }
+
     private var newView = UIView()
     private var titleLabel = UILabel()
     private var contentLabel = UILabel()
@@ -20,7 +30,6 @@ final class NoteViewCell: UIView {
         var title: String
         var content: String
         var date: String
-        var id: Int?
     }
 
     public func setModel(model: NoteViewCell.Model) {
@@ -29,8 +38,9 @@ final class NoteViewCell: UIView {
         dateLabel.text = model.date
     }
 
-    override init(frame: CGRect) {
-        super.init(frame: CGRect(x: 0, y: 0, width: 358, height: 90))
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: .default, reuseIdentifier: reuseIdentifier)
+        self.frame = CGRect(x: 0, y: 0, width: 358, height: 90)
         self.layer.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
         self.layer.cornerRadius = 14
         self.backgroundColor = .white

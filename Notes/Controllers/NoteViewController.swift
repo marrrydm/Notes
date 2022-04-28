@@ -15,7 +15,7 @@ final class NoteViewController: UIViewController {
     private let locale = Locale(identifier: "rus")
     weak var delegate: NotesDelegate?
     var closure: ((NoteViewCell.Model) -> Void)?
-    var notes: NoteViewCell.Model?
+    var notes = NoteViewCell.Model(title: "", content: "", date: "")
 
     private enum Constants {
         static let rightBarButtonTitle = "Готово"
@@ -121,12 +121,12 @@ final class NoteViewController: UIViewController {
         super.viewDidDisappear(animated)
         dateFormatter.dateFormat = Constants.outputDate
         notes = NoteViewCell.Model(
-            title: titleTextField.text!,
+            title: titleTextField.text ?? Constants.titleUpdate,
             content: textView.text,
             date: dateFormatter.string(from: dataPicker.date)
         )
         changeDateInList()
-        self.delegate?.updateNotes(note: notes!)
+        self.delegate?.updateNotes(note: notes)
     }
 
     private func showAlert() {
