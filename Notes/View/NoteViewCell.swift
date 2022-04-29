@@ -7,56 +7,62 @@
 
 import UIKit
 
-final class NoteViewCell: UITableViewCell {
-    static let id = "NotesTableViewCell"
-    func updateNotes(note: Model) {
-        setModel(model: note)
-    }
+struct NoteViewModel {
+    var title: String
+    var content: String
+    var date: String
+}
 
-    var note : NoteViewCell.Model? {
-        didSet {
-            titleLabel.text = note?.title
-            contentLabel.text = note?.content
-            dateLabel.text = note?.date
-        }
-    }
+final class NoteViewCell: UITableViewCell {
+// MARK: - Private Properties
 
     private var newView = UIView()
     private var titleLabel = UILabel()
     private var contentLabel = UILabel()
     private var dateLabel = UILabel()
 
-    struct Model {
-        var title: String
-        var content: String
-        var date: String
+// MARK: - Init
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
-    public func setModel(model: NoteViewCell.Model) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: .default, reuseIdentifier: reuseIdentifier)
+        configureUI()
+    }
+
+// MARK: - Methods
+
+    func updateNotes(note: NoteViewModel) {
+        setModel(model: note)
+    }
+
+    func setModel(model: NoteViewModel) {
         titleLabel.text = model.title
         contentLabel.text = model.content
         dateLabel.text = model.date
     }
 
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: .default, reuseIdentifier: reuseIdentifier)
-        self.frame = CGRect(x: 0, y: 0, width: 358, height: 90)
-        self.layer.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
-        self.layer.cornerRadius = 14
-        self.backgroundColor = .white
-        self.layer.borderWidth = 0.2
-        self.layer.borderColor = UIColor.white.cgColor
+// MARK: - Private Methods
+
+    private func configureUI() {
+        frame = CGRect(x: 0, y: 0, width: 358, height: 90)
+        layer.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
+        layer.cornerRadius = 14
+        layer.borderWidth = 0.2
+        layer.borderColor = UIColor.white.cgColor
+        backgroundColor = .white
+
+        addSubview(titleLabel)
+        addSubview(contentLabel)
+        addSubview(dateLabel)
+
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         contentLabel.translatesAutoresizingMaskIntoConstraints = false
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(titleLabel)
-        self.addSubview(contentLabel)
-        self.addSubview(dateLabel)
-        setupLabels()
-    }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        setupLabels()
     }
 
     private func setupLabels() {
@@ -64,6 +70,7 @@ final class NoteViewCell: UITableViewCell {
         contentLabel.font = .systemFont(ofSize: 14, weight: .regular)
         dateLabel.font = .systemFont(ofSize: 10, weight: .bold)
         contentLabel.textColor = UIColor(red: 0.172, green: 0.172, blue: 0.172, alpha: 1)
+
         constraintsTitleLabel()
         constraintsContentLabel()
         constraintsDateLabel()
@@ -84,11 +91,13 @@ final class NoteViewCell: UITableViewCell {
         )
         let heightConstraint = titleLabel.heightAnchor.constraint(equalToConstant: 18)
         let widthConstraint = titleLabel.widthAnchor.constraint(equalToConstant: 300)
-        NSLayoutConstraint.activate([topConstraint,
-                                     trailingConstraint,
-                                     leadingConstraint,
-                                     heightConstraint,
-                                     widthConstraint])
+        NSLayoutConstraint.activate([
+            topConstraint,
+            trailingConstraint,
+            leadingConstraint,
+            heightConstraint,
+            widthConstraint
+        ])
     }
 
     private func constraintsContentLabel() {
@@ -106,11 +115,13 @@ final class NoteViewCell: UITableViewCell {
         )
         let heightConstraint = contentLabel.heightAnchor.constraint(equalToConstant: 14)
         let widthConstraint = contentLabel.widthAnchor.constraint(equalToConstant: 326)
-        NSLayoutConstraint.activate([topConstraint,
-                                     trailingConstraint,
-                                     leadingConstraint,
-                                     heightConstraint,
-                                     widthConstraint])
+        NSLayoutConstraint.activate([
+            topConstraint,
+            trailingConstraint,
+            leadingConstraint,
+            heightConstraint,
+            widthConstraint
+        ])
     }
 
     private func constraintsDateLabel() {
@@ -132,11 +143,20 @@ final class NoteViewCell: UITableViewCell {
         )
         let heightConstraint = dateLabel.heightAnchor.constraint(equalToConstant: 10)
         let widthConstraint = dateLabel.widthAnchor.constraint(equalToConstant: 68)
-        NSLayoutConstraint.activate([topConstraint,
-                                     trailingConstraint,
-                                     leadingConstraint,
-                                     bottomConstraint,
-                                     heightConstraint,
-                                     widthConstraint])
+        NSLayoutConstraint.activate([
+            topConstraint,
+            trailingConstraint,
+            leadingConstraint,
+            bottomConstraint,
+            heightConstraint,
+            widthConstraint
+        ])
+    }
+
+// MARK: - Constants
+
+    enum Constants {
+        static let id = "Cell"
+        static let titleBBT = ""
     }
 }
