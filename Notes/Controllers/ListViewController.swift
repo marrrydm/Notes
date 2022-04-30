@@ -18,7 +18,7 @@ final class ListViewController: UIViewController {
 
     private var rightBarButton = UIBarButtonItem()
     private var buttonPlus = UIButton(type: .custom)
-    private let tableView = UITableView(frame: .zero, style: .grouped)
+    private let tableView = UITableView(frame: .zero, style: .plain)
     private var notes: [NoteViewModel] = []
     private var cells: [NoteViewCell] = []
     private var cell: NoteViewCell?
@@ -81,7 +81,6 @@ final class ListViewController: UIViewController {
         tableView.isUserInteractionEnabled = true
         tableView.backgroundColor = Constants.backgroundColor
         tableView.separatorStyle = .none
-        tableView.estimatedRowHeight = 44
         view.addSubview(tableView)
         constraintsTableView()
     }
@@ -118,7 +117,7 @@ final class ListViewController: UIViewController {
             equalTo: view.safeAreaLayoutGuide.trailingAnchor,
             constant: -16
         )
-        let heightConstraints = tableView.heightAnchor.constraint(equalTo: view.heightAnchor)
+        let heightConstraints = tableView.heightAnchor.constraint(equalToConstant: 700)
         let widthConstraints = tableView.widthAnchor.constraint(equalToConstant: 500)
         NSLayoutConstraint.activate([
             topConstraints,
