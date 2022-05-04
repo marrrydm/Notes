@@ -330,8 +330,8 @@
             filePath = "Notes/View/NoteCellView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "11"
-            endingLineNumber = "11"
+            startingLineNumber = "32"
+            endingLineNumber = "32"
             landmarkName = "updateNotes(note:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -346,73 +346,9 @@
             filePath = "Notes/Controllers/NoteViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "115"
-            endingLineNumber = "115"
+            startingLineNumber = "242"
+            endingLineNumber = "242"
             landmarkName = "didRightBarButtonTapped(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "97265B45-349C-4845-94AE-C1D34B825D66"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Notes/Controllers/NoteViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "8"
-            endingLineNumber = "8"
-            landmarkName = "NoteViewController"
-            landmarkType = "3">
-            <Locations>
-               <Location
-                  uuid = "97265B45-349C-4845-94AE-C1D34B825D66 - 8f78e600cf7f647a"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Notes.NoteViewController.init(nibName: Swift.Optional&lt;Swift.String&gt;, bundle: Swift.Optional&lt;__C.NSBundle&gt;) -&gt; Notes.NoteViewController"
-                  moduleName = "Notes"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mariaganeeva/Desktop/Notes/Notes/Controllers/NoteViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "8"
-                  endingLineNumber = "8"
-                  offsetFromSymbolStart = "168">
-               </Location>
-               <Location
-                  uuid = "97265B45-349C-4845-94AE-C1D34B825D66 - 7c56101245704a3e"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Notes.NoteViewController.init(coder: __C.NSCoder) -&gt; Swift.Optional&lt;Notes.NoteViewController&gt;"
-                  moduleName = "Notes"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mariaganeeva/Desktop/Notes/Notes/Controllers/NoteViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "8"
-                  endingLineNumber = "8"
-                  offsetFromSymbolStart = "136">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "9BC85BC6-5D3A-4E48-843C-18829BA4114A"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Notes/Controllers/NoteViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "32"
-            endingLineNumber = "32"
-            landmarkName = "viewDidLoad()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -426,25 +362,9 @@
             filePath = "Notes/Controllers/NoteViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "43"
-            endingLineNumber = "43"
+            startingLineNumber = "181"
+            endingLineNumber = "181"
             landmarkName = "changeDateInList()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "6EDBA6A4-C3E5-4AF4-A2F7-79978E9598D9"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Notes/Controllers/NoteViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "122"
-            endingLineNumber = "122"
-            landmarkName = "viewDidDisappear(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -458,150 +378,10 @@
             filePath = "Notes/Controllers/NoteViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "42"
-            endingLineNumber = "42"
+            startingLineNumber = "178"
+            endingLineNumber = "178"
             landmarkName = "NoteViewController"
             landmarkType = "3">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "BF6399BF-2731-486C-910F-7E4847442CB5"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Notes/Controllers/NoteViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "125"
-            endingLineNumber = "125"
-            landmarkName = "viewDidDisappear(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "2914D765-352E-4140-9DED-1722C0854A65"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Notes/Controllers/NoteViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "17"
-            endingLineNumber = "17"
-            landmarkName = "NoteViewController"
-            landmarkType = "3">
-            <Locations>
-               <Location
-                  uuid = "2914D765-352E-4140-9DED-1722C0854A65 - 4d026da8283fc2ee"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Notes.NoteViewController.closure.getter : Swift.Optional&lt;(Notes.NoteViewCell.Model) -&gt; ()&gt;"
-                  moduleName = "Notes"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mariaganeeva/Desktop/Notes/Notes/Controllers/NoteViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "25"
-                  endingLineNumber = "25"
-                  offsetFromSymbolStart = "100">
-               </Location>
-               <Location
-                  uuid = "2914D765-352E-4140-9DED-1722C0854A65 - 2525ad184070a2e2"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Notes.NoteViewController.closure.setter : Swift.Optional&lt;(Notes.NoteViewCell.Model) -&gt; ()&gt;"
-                  moduleName = "Notes"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mariaganeeva/Desktop/Notes/Notes/Controllers/NoteViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "25"
-                  endingLineNumber = "25"
-                  offsetFromSymbolStart = "136">
-               </Location>
-               <Location
-                  uuid = "2914D765-352E-4140-9DED-1722C0854A65 - 902aa152fbbd7aed"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Notes.NoteViewController.closure.modify : Swift.Optional&lt;(Notes.NoteViewCell.Model) -&gt; ()&gt;"
-                  moduleName = "Notes"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mariaganeeva/Desktop/Notes/Notes/Controllers/NoteViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "25"
-                  endingLineNumber = "25"
-                  offsetFromSymbolStart = "0">
-               </Location>
-               <Location
-                  uuid = "2914D765-352E-4140-9DED-1722C0854A65 - f5d4b50193b8dc45"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Notes.NoteViewController.closure.modify : Swift.Optional&lt;(Notes.NoteViewCell.Model) -&gt; ()&gt; with unmangled suffix &quot;.resume.0&quot;"
-                  moduleName = "Notes"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mariaganeeva/Desktop/Notes/Notes/Controllers/NoteViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "25"
-                  endingLineNumber = "25"
-                  offsetFromSymbolStart = "16">
-               </Location>
-               <Location
-                  uuid = "2914D765-352E-4140-9DED-1722C0854A65 - 8f78e600cf7f664b"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Notes.NoteViewController.init(nibName: Swift.Optional&lt;Swift.String&gt;, bundle: Swift.Optional&lt;__C.NSBundle&gt;) -&gt; Notes.NoteViewController"
-                  moduleName = "Notes"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mariaganeeva/Desktop/Notes/Notes/Controllers/NoteViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "25"
-                  endingLineNumber = "25"
-                  offsetFromSymbolStart = "620">
-               </Location>
-               <Location
-                  uuid = "2914D765-352E-4140-9DED-1722C0854A65 - 7c5610124570480f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Notes.NoteViewController.init(coder: __C.NSCoder) -&gt; Swift.Optional&lt;Notes.NoteViewController&gt;"
-                  moduleName = "Notes"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mariaganeeva/Desktop/Notes/Notes/Controllers/NoteViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "25"
-                  endingLineNumber = "25"
-                  offsetFromSymbolStart = "588">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "3764311E-0228-4CCE-AA3E-BB561FC10BBB"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Notes/Controllers/NoteViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "123"
-            endingLineNumber = "123"
-            landmarkName = "viewDidDisappear(_:)"
-            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -614,9 +394,25 @@
             filePath = "Notes/Controllers/NoteViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "35"
-            endingLineNumber = "35"
+            startingLineNumber = "171"
+            endingLineNumber = "171"
             landmarkName = "updateNotePage(note:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "53AF1C3E-0C01-4421-B5F0-CB8FAEEDF439"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Notes/Controllers/ListViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "108"
+            endingLineNumber = "108"
+            landmarkName = "constraintsTableView()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

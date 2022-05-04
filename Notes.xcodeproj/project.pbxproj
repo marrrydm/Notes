@@ -14,7 +14,7 @@
 		F83CA19E280882CB008A54DC /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F83CA19D280882CB008A54DC /* NoteViewController.swift */; };
 		F8757BB327F8C125001BC003 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8757BB227F8C125001BC003 /* Model.swift */; };
 		F8A71F8A2802F15200907C0E /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A71F892802F15200907C0E /* ListViewController.swift */; };
-		F8A71F8C280482E700907C0E /* NoteCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A71F8B280482E700907C0E /* NoteCellView.swift */; };
+		F8A71F8C280482E700907C0E /* NoteViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A71F8B280482E700907C0E /* NoteViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +27,7 @@
 		F83CA19D280882CB008A54DC /* NoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewController.swift; sourceTree = "<group>"; };
 		F8757BB227F8C125001BC003 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		F8A71F892802F15200907C0E /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ListViewController.swift; sourceTree = "<group>"; };
-		F8A71F8B280482E700907C0E /* NoteCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteCellView.swift; sourceTree = "<group>"; };
+		F8A71F8B280482E700907C0E /* NoteViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,7 +83,7 @@
 		F83CA1A2280885BF008A54DC /* View */ = {
 			isa = PBXGroup;
 			children = (
-				F8A71F8B280482E700907C0E /* NoteCellView.swift */,
+				F8A71F8B280482E700907C0E /* NoteViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -200,7 +200,7 @@
 				F83832F327F16C5500B78EB3 /* AppDelegate.swift in Sources */,
 				F83832F527F16C5500B78EB3 /* SceneDelegate.swift in Sources */,
 				F8A71F8A2802F15200907C0E /* ListViewController.swift in Sources */,
-				F8A71F8C280482E700907C0E /* NoteCellView.swift in Sources */,
+				F8A71F8C280482E700907C0E /* NoteViewCell.swift in Sources */,
 				F83CA19E280882CB008A54DC /* NoteViewController.swift in Sources */,
 				F8757BB327F8C125001BC003 /* Model.swift in Sources */,
 			);
