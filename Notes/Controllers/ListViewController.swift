@@ -60,7 +60,7 @@ final class ListViewController: UIViewController {
 
     private func setupNavItem() {
         navigationItem.title = Constants.titleNB
-        navigationItem.backButtonTitle = Constants.titleBBT
+        navigationItem.backButtonTitle = Constants.titleNull
     }
 
     private func setupPlus() {
@@ -127,14 +127,15 @@ final class ListViewController: UIViewController {
             widthConstraints
         ])
     }
-}
 
-// MARK: - Constants
+    // MARK: - Constants
 
-private enum Constants {
-    static let titleNB = "Заметки"
-    static let titleBBT = ""
-    static let backgroundColor = UIColor(red: 0.898, green: 0.898, blue: 0.898, alpha: 1)
+    private enum Constants {
+        static let titleNB = "Заметки"
+        static let titleFinally = "Готово"
+        static let titleNull = ""
+        static let backgroundColor = UIColor(red: 0.898, green: 0.898, blue: 0.898, alpha: 1)
+    }
 }
 
 // MARK: - NotesDelegate
@@ -187,7 +188,7 @@ extension ListViewController: UITableViewDataSource {
 extension ListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let noteViewController = NoteViewController()
-        guard let index = tableView.indexPathForSelectedRow?.row as? Int else {
+        guard let index = tableView.indexPathForSelectedRow?.row else {
             return
         }
         for (ind, value) in notes.enumerated() where index == ind {

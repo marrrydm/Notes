@@ -249,16 +249,16 @@ final class NoteViewController: UIViewController {
         alertError.addAction(UIAlertAction(title: "ОК", style: .default))
         self.present(alertError, animated: true)
     }
-}
 
-// MARK: - Constants
+    // MARK: - Constants
 
-private enum Constants {
-    static let rightBarButtonTitle = "Готово"
-    static let titleTextFieldPlaceholder = "Введите название"
-    static let dateFormat = "dd.MM.yyyy EEEE HH:mm"
-    static let titleUpdate = ""
-    static let outputDate = "dd.MM.yyyy"
+    private enum Constants {
+        static let rightBarButtonTitle = "Готово"
+        static let titleTextFieldPlaceholder = "Введите название"
+        static let dateFormat = "dd.MM.yyyy EEEE HH:mm"
+        static let titleUpdate = ""
+        static let outputDate = "dd.MM.yyyy"
+    }
 }
 
 // MARK: - CheckForEmptyAlert
