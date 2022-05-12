@@ -20,6 +20,7 @@ final class NoteViewCell: UITableViewCell {
     private var titleLabel = UILabel()
     private var contentLabel = UILabel()
     private var dateLabel = UILabel()
+    private var checkbox = CheckBox()
 
 // MARK: - Init
 
@@ -57,10 +58,12 @@ final class NoteViewCell: UITableViewCell {
         addSubview(titleLabel)
         addSubview(contentLabel)
         addSubview(dateLabel)
+        addSubview(checkbox)
 
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         contentLabel.translatesAutoresizingMaskIntoConstraints = false
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
+        checkbox.translatesAutoresizingMaskIntoConstraints = false
 
         setupLabels()
     }
@@ -74,6 +77,38 @@ final class NoteViewCell: UITableViewCell {
         constraintsTitleLabel()
         constraintsContentLabel()
         constraintsDateLabel()
+    }
+
+    private func setupCheckBox() {
+        checkbox.backgroundColor = .blue
+        checkbox.layer.cornerRadius = 8
+        checkbox.layer.masksToBounds = true
+        checkbox.clipsToBounds = true
+        constraintsCheck()
+    }
+
+    private func constraintsCheck() {
+        let topConstraint = checkbox.topAnchor.constraint(
+            equalTo: self.topAnchor,
+            constant: 37
+        )
+        let trailingConstraint = checkbox.leadingAnchor.constraint(
+            equalTo: self.leadingAnchor,
+            constant: 10
+        )
+        let leadingConstraint = checkbox.trailingAnchor.constraint(
+            equalTo: self.trailingAnchor,
+            constant: -318
+        )
+        let heightConstraint = checkbox.heightAnchor.constraint(equalToConstant: 16)
+        let widthConstraint = checkbox.heightAnchor.constraint(equalTo: checkbox.widthAnchor)
+        NSLayoutConstraint.activate([
+            topConstraint,
+            trailingConstraint,
+            leadingConstraint,
+            heightConstraint,
+            widthConstraint
+        ])
     }
 
     private func constraintsTitleLabel() {

@@ -16,12 +16,14 @@ protocol NotesDelegate: AnyObject {
 final class ListViewController: UIViewController {
 // MARK: - Private Properties
 
-    private var rightBarButton = UIBarButtonItem()
+    private var rightBarButtonSelect = UIBarButtonItem()
+    private var rightBarButtonOk = UIBarButtonItem()
     private var buttonPlus = UIButton(type: .custom)
     private let tableView = UITableView(frame: .zero, style: .plain)
     private var notes: [NoteViewModel] = []
     private var cells: [NoteViewCell] = []
     private var cell: NoteViewCell?
+    private var isEdit = false
 
 // MARK: - Inheritance
 
@@ -33,6 +35,8 @@ final class ListViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(NoteViewCell.self, forCellReuseIdentifier: NoteViewCell.Constants.id)
+        tableView.allowsMultipleSelection = false
+        tableView.allowsMultipleSelectionDuringEditing = true
     }
 
 // MARK: - Private Methods
@@ -43,9 +47,18 @@ final class ListViewController: UIViewController {
     }
 
     @objc private func plusTap(sender: UITapGestureRecognizer) {
-        let root = NoteViewController()
-        navigationController?.pushViewController(root, animated: true)
-        root.delegate = self
+        if !tableView.isEditing {
+            let root = NoteViewController()
+            navigationController?.pushViewController(root, animated: true)
+            root.delegate = self
+        } else {
+            if let indexPath = tableView.indexPathForSelectedRow {
+                notes.remove(at: indexPath.row)
+                tableView.reloadData()
+                tableView.setEditing(false, animated: true)
+                setupRightBarButton()
+            }
+        }
     }
 
     private func saveNote(note: NoteViewModel) {
@@ -56,6 +69,35 @@ final class ListViewController: UIViewController {
         setupHeader()
         setupPlus()
         setupNavItem()
+        setupRightBarButton()
+    }
+
+    private func setupRightBarButton() {
+        rightBarButtonSelect.title = Constants.titleSelect
+        rightBarButtonSelect.target = self
+        rightBarButtonSelect.action = #selector(deleteNotesMode)
+        navigationItem.rightBarButtonItem = rightBarButtonSelect
+    }
+
+    private func deleteNote(at indexPath: IndexPath) {
+        _ = notes.remove(at: indexPath.row)
+        tableView.deleteRows(at: [indexPath], with: .left)
+    }
+
+    @objc private func doneDeletingNotes() {
+        setupRightBarButton()
+        tableView.setEditing(false, animated: false)
+        buttonPlus.setImage(UIImage(named: "Image"), for: .normal)
+    }
+
+    @objc private func deleteNotesMode(_ sender: UIButton) {
+        rightBarButtonOk.title = Constants.titleFinally
+        rightBarButtonOk.target = self
+        rightBarButtonOk.action = #selector(doneDeletingNotes)
+        navigationItem.rightBarButtonItem = rightBarButtonOk
+        buttonPlus.setImage(UIImage(named: "Vector"), for: .normal)
+        tableView.setEditing(true, animated: true)
+        tableView.reloadData()
     }
 
     private func setupNavItem() {
@@ -81,6 +123,7 @@ final class ListViewController: UIViewController {
         tableView.isUserInteractionEnabled = true
         tableView.backgroundColor = Constants.backgroundColor
         tableView.separatorStyle = .none
+        tableView.allowsSelectionDuringEditing = true
         view.addSubview(tableView)
         constraintsTableView()
     }
@@ -132,6 +175,7 @@ final class ListViewController: UIViewController {
 
     private enum Constants {
         static let titleNB = "Заметки"
+        static let titleSelect = "Выбрать"
         static let titleFinally = "Готово"
         static let titleNull = ""
         static let backgroundColor = UIColor(red: 0.898, green: 0.898, blue: 0.898, alpha: 1)
@@ -191,14 +235,16 @@ extension ListViewController: UITableViewDelegate {
         guard let index = tableView.indexPathForSelectedRow?.row else {
             return
         }
-        for (ind, value) in notes.enumerated() where index == ind {
-            noteViewController.updateNotePage(note: value)
+        if !tableView.isEditing {
+            for (ind, value) in notes.enumerated() where index == ind {
+                noteViewController.updateNotePage(note: value)
+            }
+            noteViewController.closure = { [self] name in
+                cells[index].setModel(model: name)
+                notes[index] = name
+                tableView.reloadData()
+            }
+            navigationController?.pushViewController(noteViewController, animated: true)
         }
-        noteViewController.closure = { [self] name in
-            cells[index].setModel(model: name)
-            notes[index] = name
-            tableView.reloadData()
-        }
-        navigationController?.pushViewController(noteViewController, animated: true)
     }
 }
