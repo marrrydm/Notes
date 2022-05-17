@@ -25,7 +25,7 @@ final class ListViewController: UIViewController {
     private var cellFirst: NoteViewCell?
     private var indexArr = [NoteViewModel]()
     private var indexPathArray = [IndexPath]()
-    var paths: [IndexPath]?
+    private var paths: [IndexPath]?
 
 // MARK: - Inheritance
 
