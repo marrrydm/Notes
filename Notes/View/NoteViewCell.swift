@@ -7,20 +7,20 @@
 
 import UIKit
 
-struct NoteViewModel {
+struct NoteViewModel: Equatable {
     var title: String
     var content: String
     var date: String
+    var id = UUID()
 }
 
 final class NoteViewCell: UITableViewCell {
 // MARK: - Private Properties
 
-    private var newView = UIView()
     private var titleLabel = UILabel()
     private var contentLabel = UILabel()
     private var dateLabel = UILabel()
-    private var checkbox = CheckBox()
+    private let checkboxfield = Checkbox(frame: CGRect(x: 24, y: 37, width: 16, height: 16))
 
 // MARK: - Init
 
@@ -45,6 +45,31 @@ final class NoteViewCell: UITableViewCell {
         dateLabel.text = model.date
     }
 
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        if selected == true {
+            if self.isEditing == false {
+                checkboxfield.isHidden = true
+            } else {
+                checkboxfield.isHidden = false
+            }
+        } else {
+            checkboxfield.isHidden = true
+        }
+    }
+
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: true)
+        if editing == true {
+            setupUpdate()
+            checkboxfield.isHidden = true
+            setupSelected()
+            setupCheckbox()
+        } else {
+            checkboxfield.isHidden = true
+        }
+    }
+
 // MARK: - Private Methods
 
     private func configureUI() {
@@ -55,17 +80,41 @@ final class NoteViewCell: UITableViewCell {
         layer.borderColor = UIColor.white.cgColor
         backgroundColor = .white
 
-        addSubview(titleLabel)
-        addSubview(contentLabel)
-        addSubview(dateLabel)
-        addSubview(checkbox)
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(contentLabel)
+        contentView.addSubview(dateLabel)
 
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         contentLabel.translatesAutoresizingMaskIntoConstraints = false
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
-        checkbox.translatesAutoresizingMaskIntoConstraints = false
 
         setupLabels()
+    }
+
+    private func setupUpdate() {
+        contentView.layer.cornerRadius = 14
+        contentView.layer.borderWidth = 0.2
+        contentView.layer.borderColor = UIColor.white.cgColor
+        contentView.backgroundColor = .white
+        layer.cornerRadius = 14
+        layer.borderWidth = 0.2
+        layer.borderColor = UIColor.white.cgColor
+        backgroundColor = .white
+    }
+
+    private func setupCheckbox() {
+        checkboxfield.backgroundColor = .systemBlue
+        checkboxfield.layer.cornerRadius = 8
+        addSubview(checkboxfield)
+    }
+
+    private func setupSelected() {
+        let backgroundView = UIView()
+        backgroundView.layer.cornerRadius = 14
+        backgroundView.layer.borderWidth = 0.2
+        backgroundView.layer.borderColor = UIColor.white.cgColor
+        backgroundView.backgroundColor = UIColor.white
+        selectedBackgroundView = backgroundView
     }
 
     private func setupLabels() {
@@ -79,49 +128,17 @@ final class NoteViewCell: UITableViewCell {
         constraintsDateLabel()
     }
 
-    private func setupCheckBox() {
-        checkbox.backgroundColor = .blue
-        checkbox.layer.cornerRadius = 8
-        checkbox.layer.masksToBounds = true
-        checkbox.clipsToBounds = true
-        constraintsCheck()
-    }
-
-    private func constraintsCheck() {
-        let topConstraint = checkbox.topAnchor.constraint(
-            equalTo: self.topAnchor,
-            constant: 37
-        )
-        let trailingConstraint = checkbox.leadingAnchor.constraint(
-            equalTo: self.leadingAnchor,
-            constant: 10
-        )
-        let leadingConstraint = checkbox.trailingAnchor.constraint(
-            equalTo: self.trailingAnchor,
-            constant: -318
-        )
-        let heightConstraint = checkbox.heightAnchor.constraint(equalToConstant: 16)
-        let widthConstraint = checkbox.heightAnchor.constraint(equalTo: checkbox.widthAnchor)
-        NSLayoutConstraint.activate([
-            topConstraint,
-            trailingConstraint,
-            leadingConstraint,
-            heightConstraint,
-            widthConstraint
-        ])
-    }
-
     private func constraintsTitleLabel() {
         let topConstraint = titleLabel.topAnchor.constraint(
-            equalTo: self.topAnchor,
+            equalTo: self.contentView.topAnchor,
             constant: 10
         )
         let trailingConstraint = titleLabel.leadingAnchor.constraint(
-            equalTo: self.leadingAnchor,
+            equalTo: self.contentView.leadingAnchor,
             constant: 16
         )
         let leadingConstraint = titleLabel.trailingAnchor.constraint(
-            equalTo: self.trailingAnchor,
+            equalTo: self.contentView.trailingAnchor,
             constant: -16
         )
         let heightConstraint = titleLabel.heightAnchor.constraint(equalToConstant: 18)
@@ -141,11 +158,11 @@ final class NoteViewCell: UITableViewCell {
             constant: 4
         )
         let trailingConstraint = contentLabel.leadingAnchor.constraint(
-            equalTo: self.leadingAnchor,
+            equalTo: self.contentView.leadingAnchor,
             constant: 16
         )
         let leadingConstraint = contentLabel.trailingAnchor.constraint(
-            equalTo: self.trailingAnchor,
+            equalTo: self.contentView.trailingAnchor,
             constant: -16
         )
         let heightConstraint = contentLabel.heightAnchor.constraint(equalToConstant: 14)
@@ -165,15 +182,15 @@ final class NoteViewCell: UITableViewCell {
             constant: 24
         )
         let trailingConstraint = dateLabel.leadingAnchor.constraint(
-            equalTo: self.leadingAnchor,
+            equalTo: self.contentView.leadingAnchor,
             constant: 16
         )
         let leadingConstraint = dateLabel.trailingAnchor.constraint(
-            equalTo: self.trailingAnchor,
+            equalTo: self.contentView.trailingAnchor,
             constant: -16
         )
         let bottomConstraint = dateLabel.bottomAnchor.constraint(
-            equalTo: self.bottomAnchor,
+            equalTo: self.contentView.bottomAnchor,
             constant: -10
         )
         let heightConstraint = dateLabel.heightAnchor.constraint(equalToConstant: 10)
