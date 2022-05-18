@@ -41,7 +41,6 @@ final class ListViewController: UIViewController {
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        setupPlus()
         btnAnimateOpen()
     }
 
@@ -99,9 +98,9 @@ final class ListViewController: UIViewController {
 
     private func setupUI() {
         setupHeader()
-//        setupPlus()
         setupNavItem()
         setupRightBarButton()
+        setupPlus()
     }
 
     private func setupRightBarButton() {
@@ -293,52 +292,51 @@ extension ListViewController: UITableViewDelegate {
 // MARK: - Animations
 extension ListViewController {
     private func btnAnimateOpen() {
-        buttonPlus.isHidden = false
-        UIView.animate(
-            withDuration: 0,
+        UIView.animateKeyframes(
+            withDuration: 1,
             delay: 0,
+            options: [],
             animations: {
+                self.openKeyFrames()
             },
             completion: {_ in
+                self.buttonPlus.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
                 UIView.animate(
-                    withDuration: 0.01,
+                    withDuration: 1,
                     delay: 0,
-                    animations: {
-                        self.buttonPlus.layer.position.y += 110
-                    },
-                    completion: {_ in
-                        UIView.animate(
-                            withDuration: 1,
-                            delay: 0,
-                            animations: {
-                                self.buttonPlus.layer.position.y -= 110
-                            },
-                            completion: {_ in
-                                self.buttonPlus.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
-                                UIView.animate(
-                                    withDuration: 1,
-                                    delay: 0,
-                                    usingSpringWithDamping: 0.3,
-                                    initialSpringVelocity: 0.3,
-                                    options: .curveEaseOut,
-                                    animations: { [self] in
-                                        self.buttonPlus.transform = CGAffineTransform(scaleX: 1, y: 1)
-                                    }
-                                )
-                            }
-                        )
+                    usingSpringWithDamping: 0.3,
+                    initialSpringVelocity: 0.3,
+                    options: .curveEaseOut,
+                    animations: { [self] in
+                        self.buttonPlus.transform = CGAffineTransform(scaleX: 1, y: 1)
                     }
                 )
             }
         )
     }
 
+    private func openKeyFrames() {
+        UIView.addKeyframe(
+            withRelativeStartTime: 0,
+            relativeDuration: 0.0001
+        ) {
+            self.buttonPlus.layer.position.y += 120
+        }
+        UIView.addKeyframe(
+            withRelativeStartTime: 0.5,
+            relativeDuration: 0.5
+        ) {
+            self.buttonPlus.layer.position.y -= 120
+        }
+    }
+
     private func btnAnimateGo() {
-        UIView.animate(
-            withDuration: 0.8,
+        UIView.animateKeyframes(
+            withDuration: 0.7,
             delay: 0,
+            options: [],
             animations: {
-                self.buttonPlus.layer.position.y -= 50
+                self.goKeyFrames()
             },
             completion: {_ in
                 UIView.animate(
@@ -348,17 +346,16 @@ extension ListViewController {
                     initialSpringVelocity: 0.8,
                     options: .curveEaseOut,
                     animations: {
-                        self.buttonPlus.layer.position.y += 200
-                    },
-                    completion: {_ in
                         let root = NoteViewController()
                         self.navigationController?.pushViewController(root, animated: true)
                         root.delegate = self
+                    },
+                    completion: { _ in
                         UIView.animate(
-                            withDuration: 0.8,
-                            delay: 1,
+                            withDuration: 0.001,
+                            delay: 0,
+                            options: [],
                             animations: {
-                                self.buttonPlus.isHidden = true
                                 self.buttonPlus.layer.position.y -= 150
                             }
                         )
@@ -366,5 +363,20 @@ extension ListViewController {
                 )
             }
         )
+    }
+
+    private func goKeyFrames() {
+        UIView.addKeyframe(
+            withRelativeStartTime: 0,
+            relativeDuration: 0.5
+        ) {
+            self.buttonPlus.layer.position.y -= 50
+        }
+        UIView.addKeyframe(
+            withRelativeStartTime: 0.5,
+            relativeDuration: 0.5
+        ) {
+            self.buttonPlus.layer.position.y += 200
+        }
     }
 }
