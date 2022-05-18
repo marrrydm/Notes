@@ -20,7 +20,6 @@ final class NoteViewCell: UITableViewCell {
     private var titleLabel = UILabel()
     private var contentLabel = UILabel()
     private var dateLabel = UILabel()
-    private let checkboxfield = UIButton(frame: CGRect(x: 24, y: 37, width: 16, height: 16))
 
 // MARK: - Init
 
@@ -45,28 +44,11 @@ final class NoteViewCell: UITableViewCell {
         dateLabel.text = model.date
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        if selected == true {
-            if self.isEditing == false {
-                checkboxfield.isHidden = true
-            } else {
-                checkboxfield.isHidden = false
-            }
-        } else {
-            checkboxfield.isHidden = true
-        }
-    }
-
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: true)
         if editing == true {
             setupUpdate()
-            checkboxfield.isHidden = true
             setupSelected()
-            setupCheckbox()
-        } else {
-            checkboxfield.isHidden = true
         }
     }
 
@@ -100,14 +82,6 @@ final class NoteViewCell: UITableViewCell {
         layer.borderWidth = 0.2
         layer.borderColor = UIColor.white.cgColor
         backgroundColor = .white
-    }
-
-    private func setupCheckbox() {
-        checkboxfield.backgroundColor = Constants.backgroundColorCheckBox
-        checkboxfield.layer.cornerRadius = 8
-        checkboxfield.layer.borderWidth = 1
-        checkboxfield.layer.borderColor = Constants.borderColorCheckBox
-        addSubview(checkboxfield)
     }
 
     private func setupSelected() {
@@ -214,7 +188,5 @@ final class NoteViewCell: UITableViewCell {
         static let titleBBT = ""
         static let backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
         static let contentLabelBackgroundColor = UIColor(red: 0.172, green: 0.172, blue: 0.172, alpha: 1)
-        static let backgroundColorCheckBox = UIColor(red: 0, green: 0.478, blue: 1, alpha: 1)
-        static let borderColorCheckBox = UIColor(red: 0, green: 0.478, blue: 1, alpha: 1).cgColor
     }
 }

@@ -206,6 +206,7 @@ final class ListViewController: UIViewController {
         static let titleNull = ""
         static let buttonBackgroundColor = UIColor(red: 0, green: 0.478, blue: 1, alpha: 1)
         static let backgroundColor = UIColor(red: 0.898, green: 0.898, blue: 0.898, alpha: 1)
+        static let backgroundColorCheckBox = UIColor(red: 0, green: 0.478, blue: 1, alpha: 1)
     }
 }
 
@@ -236,7 +237,7 @@ extension ListViewController: UITableViewDataSource {
             fatalError("failed to get value cell")
         }
         cell.updateNotes(note: notes[indexPath.row])
-        cell.tintColor = .white
+        cell.tintColor = Constants.backgroundColorCheckBox
         return cell
     }
 
@@ -289,7 +290,7 @@ extension ListViewController: UITableViewDelegate {
 extension ListViewController {
     private func btnAnimateOpen() {
         UIView.animateKeyframes(
-            withDuration: 1,
+            withDuration: 0.6,
             delay: 0,
             options: [],
             animations: {

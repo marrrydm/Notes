@@ -442,8 +442,8 @@
             filePath = "Notes/Controllers/ListViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "261"
-            endingLineNumber = "261"
+            startingLineNumber = "262"
+            endingLineNumber = "262"
             landmarkName = "ListViewController"
             landmarkType = "21">
          </BreakpointContent>
@@ -490,10 +490,10 @@
             filePath = "Notes/Controllers/ListViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "262"
-            endingLineNumber = "262"
-            landmarkName = "ListViewController"
-            landmarkType = "21">
+            startingLineNumber = "263"
+            endingLineNumber = "263"
+            landmarkName = "tableView(_:didSelectRowAt:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -506,25 +506,9 @@
             filePath = "Notes/Controllers/ListViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "232"
-            endingLineNumber = "232"
+            startingLineNumber = "233"
+            endingLineNumber = "233"
             landmarkName = "tableView(_:cellForRowAt:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "0CA4F762-037A-4DB2-AFE7-8F2B248B22F2"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Notes/View/NoteViewCell.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "48"
-            endingLineNumber = "48"
-            landmarkName = "setSelected(_:animated:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -538,8 +522,8 @@
             filePath = "Notes/Controllers/ListViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "277"
-            endingLineNumber = "277"
+            startingLineNumber = "278"
+            endingLineNumber = "278"
             landmarkName = "tableView(_:didSelectRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -554,8 +538,8 @@
             filePath = "Notes/Controllers/ListViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "215"
-            endingLineNumber = "215"
+            startingLineNumber = "216"
+            endingLineNumber = "216"
             landmarkName = "updateNotes(note:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -570,8 +554,8 @@
             filePath = "Notes/View/NoteViewCell.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "61"
-            endingLineNumber = "61"
+            startingLineNumber = "47"
+            endingLineNumber = "47"
             landmarkName = "setEditing(_:animated:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -586,8 +570,8 @@
             filePath = "Notes/View/NoteViewCell.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "63"
-            endingLineNumber = "63"
+            startingLineNumber = "49"
+            endingLineNumber = "49"
             landmarkName = "setEditing(_:animated:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -618,8 +602,8 @@
             filePath = "Notes/View/NoteViewCell.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "38"
-            endingLineNumber = "38"
+            startingLineNumber = "37"
+            endingLineNumber = "37"
             landmarkName = "updateNotes(note:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -634,8 +618,8 @@
             filePath = "Notes/Controllers/ListViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "278"
-            endingLineNumber = "278"
+            startingLineNumber = "279"
+            endingLineNumber = "279"
             landmarkName = "tableView(_:didSelectRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
