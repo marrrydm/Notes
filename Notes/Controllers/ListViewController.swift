@@ -23,9 +23,8 @@ final class ListViewController: UIViewController {
     private var notes: [NoteViewModel] = []
     private var cells: [NoteViewCell] = []
     private var cellFirst: NoteViewCell?
-    private var indexArr = [NoteViewModel]()
-    private var indexPathArray = [IndexPath]()
-    private var paths: [IndexPath]?
+    private var indexArr: [NoteViewModel] = []
+    private var indexPathArray: [IndexPath] = []
 
 // MARK: - Inheritance
 
@@ -42,6 +41,7 @@ final class ListViewController: UIViewController {
     }
 
     override func viewDidAppear(_ animated: Bool) {
+        setupPlus()
         btnAnimateOpen()
     }
 
@@ -62,8 +62,9 @@ final class ListViewController: UIViewController {
                 tableView.beginUpdates()
                 for val in indexArr {
                     for (ind, value) in notes.enumerated() where val == value {
-                        notes.remove(at: ind)
                         tableView.deleteRows(at: indexPathArray, with: .left)
+                        notes.remove(at: ind)
+                        indexPathArray.removeAll()
                     }
                 }
                 tableView.endUpdates()
@@ -98,7 +99,7 @@ final class ListViewController: UIViewController {
 
     private func setupUI() {
         setupHeader()
-        setupPlus()
+//        setupPlus()
         setupNavItem()
         setupRightBarButton()
     }
@@ -240,8 +241,7 @@ extension ListViewController: UITableViewDataSource {
             fatalError("failed to get value cell")
         }
         cell.updateNotes(note: notes[indexPath.row])
-        cell.layer.cornerRadius = 14
-        cell.layer.masksToBounds = true
+        cell.tintColor = .white
         return cell
     }
 
@@ -266,10 +266,9 @@ extension ListViewController: UITableViewDataSource {
 extension ListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let noteViewController = NoteViewController()
-        paths = tableView.indexPathsForSelectedRows
-        guard let index = tableView.indexPathForSelectedRow?.row else {
-            return
-        }
+        guard let paths = tableView.indexPathsForSelectedRows,
+        let index = tableView.indexPathForSelectedRow?.row
+        else { return }
         if !tableView.isEditing {
             for (ind, value) in notes.enumerated() where index == ind {
                 noteViewController.updateNotePage(note: value)
@@ -281,7 +280,7 @@ extension ListViewController: UITableViewDelegate {
             }
             navigationController?.pushViewController(noteViewController, animated: true)
         } else {
-            for path in paths! {
+            for path in paths {
                 for (ind, value) in notes.enumerated() where path.row == ind {
                     indexArr.append(value)
                     indexPathArray.append(path)

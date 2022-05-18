@@ -20,7 +20,7 @@ final class NoteViewCell: UITableViewCell {
     private var titleLabel = UILabel()
     private var contentLabel = UILabel()
     private var dateLabel = UILabel()
-    private let checkboxfield = Checkbox(frame: CGRect(x: 24, y: 37, width: 16, height: 16))
+    private let checkboxfield = UIButton(frame: CGRect(x: 24, y: 37, width: 16, height: 16))
 
 // MARK: - Init
 
