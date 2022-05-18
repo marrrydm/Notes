@@ -132,7 +132,7 @@ final class ListViewController: UIViewController {
     }
 
     private func setupPlus() {
-        buttonPlus.backgroundColor = UIColor(red: 0, green: 0.478, blue: 1, alpha: 1)
+        buttonPlus.backgroundColor = Constants.buttonBackgroundColor
         buttonPlus.translatesAutoresizingMaskIntoConstraints = false
         buttonPlus.setImage(UIImage(named: "Image"), for: .normal)
         buttonPlus.titleLabel?.textAlignment = .center
@@ -204,12 +204,8 @@ final class ListViewController: UIViewController {
         static let titleSelect = "Выбрать"
         static let titleFinally = "Готово"
         static let titleNull = ""
-        static let backgroundColor = UIColor(
-            red: 0.898,
-            green: 0.898,
-            blue: 0.898,
-            alpha: 1
-        )
+        static let buttonBackgroundColor = UIColor(red: 0, green: 0.478, blue: 1, alpha: 1)
+        static let backgroundColor = UIColor(red: 0.898, green: 0.898, blue: 0.898, alpha: 1)
     }
 }
 

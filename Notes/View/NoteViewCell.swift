@@ -74,7 +74,7 @@ final class NoteViewCell: UITableViewCell {
 
     private func configureUI() {
         frame = CGRect(x: 0, y: 0, width: 358, height: 90)
-        layer.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
+        layer.backgroundColor = Constants.backgroundColor
         layer.cornerRadius = 14
         layer.borderWidth = 0.2
         layer.borderColor = UIColor.white.cgColor
@@ -103,8 +103,10 @@ final class NoteViewCell: UITableViewCell {
     }
 
     private func setupCheckbox() {
-        checkboxfield.backgroundColor = .systemBlue
+        checkboxfield.backgroundColor = Constants.backgroundColorCheckBox
         checkboxfield.layer.cornerRadius = 8
+        checkboxfield.layer.borderWidth = 1
+        checkboxfield.layer.borderColor = Constants.borderColorCheckBox
         addSubview(checkboxfield)
     }
 
@@ -121,7 +123,7 @@ final class NoteViewCell: UITableViewCell {
         titleLabel.font = .systemFont(ofSize: 16, weight: .bold)
         contentLabel.font = .systemFont(ofSize: 14, weight: .regular)
         dateLabel.font = .systemFont(ofSize: 10, weight: .bold)
-        contentLabel.textColor = UIColor(red: 0.172, green: 0.172, blue: 0.172, alpha: 1)
+        contentLabel.textColor = Constants.contentLabelBackgroundColor
 
         constraintsTitleLabel()
         constraintsContentLabel()
@@ -210,5 +212,9 @@ final class NoteViewCell: UITableViewCell {
     enum Constants {
         static let id = "Cell"
         static let titleBBT = ""
+        static let backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
+        static let contentLabelBackgroundColor = UIColor(red: 0.172, green: 0.172, blue: 0.172, alpha: 1)
+        static let backgroundColorCheckBox = UIColor(red: 0, green: 0.478, blue: 1, alpha: 1)
+        static let borderColorCheckBox = UIColor(red: 0, green: 0.478, blue: 1, alpha: 1).cgColor
     }
 }
