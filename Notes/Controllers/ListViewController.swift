@@ -121,9 +121,8 @@ final class ListViewController: UIViewController {
         rightBarButtonOk.target = self
         rightBarButtonOk.action = #selector(doneDeletingNotes)
         navigationItem.rightBarButtonItem = rightBarButtonOk
-        buttonPlus.setImage(UIImage(named: "Vector"), for: .normal)
         tableView.setEditing(true, animated: true)
-        tableView.reloadData()
+        buttonPlus.setImage(UIImage(named: "Vector"), for: .normal)
     }
 
     private func setupNavItem() {
@@ -266,6 +265,7 @@ extension ListViewController: UITableViewDelegate {
         let index = tableView.indexPathForSelectedRow?.row
         else { return }
         if !tableView.isEditing {
+            tapViewsKeyGo()
             for (ind, value) in notes.enumerated() where index == ind {
                 noteViewController.updateNotePage(note: value)
             }
@@ -315,7 +315,7 @@ extension ListViewController {
     private func openKeyFrames() {
         UIView.addKeyframe(
             withRelativeStartTime: 0,
-            relativeDuration: 0.0001
+            relativeDuration: 0
         ) {
             self.buttonPlus.layer.position.y += 120
         }
@@ -323,6 +323,7 @@ extension ListViewController {
             withRelativeStartTime: 0.5,
             relativeDuration: 0.5
         ) {
+            self.buttonPlus.isHidden = false
             self.buttonPlus.layer.position.y -= 120
         }
     }
@@ -353,6 +354,7 @@ extension ListViewController {
                             delay: 0,
                             options: [],
                             animations: {
+                                self.buttonPlus.isHidden = true
                                 self.buttonPlus.layer.position.y -= 150
                             }
                         )
@@ -363,6 +365,53 @@ extension ListViewController {
     }
 
     private func goKeyFrames() {
+        self.buttonPlus.isHidden = false
+        UIView.addKeyframe(
+            withRelativeStartTime: 0,
+            relativeDuration: 0.5
+        ) {
+            self.buttonPlus.layer.position.y -= 50
+        }
+        UIView.addKeyframe(
+            withRelativeStartTime: 0.5,
+            relativeDuration: 0.5
+        ) {
+            self.buttonPlus.layer.position.y += 200
+        }
+    }
+
+    private func tapViewsKeyGo() {
+        UIView.animateKeyframes(
+            withDuration: 0.7,
+            delay: 0,
+            options: [],
+            animations: {
+                self.tapViewsKey()
+            },
+            completion: {_ in
+                UIView.animate(
+                    withDuration: 0.5,
+                    delay: 0,
+                    usingSpringWithDamping: 0.8,
+                    initialSpringVelocity: 0.8,
+                    options: .curveEaseOut,
+                    animations: {
+                        UIView.animate(
+                            withDuration: 0.001,
+                            delay: 0,
+                            options: [],
+                            animations: {
+                                self.buttonPlus.isHidden = true
+                                self.buttonPlus.layer.position.y -= 150
+                            }
+                        )
+                    }
+                )
+            }
+        )
+    }
+
+    private func tapViewsKey() {
         UIView.addKeyframe(
             withRelativeStartTime: 0,
             relativeDuration: 0.5
