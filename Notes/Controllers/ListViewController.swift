@@ -114,6 +114,8 @@ final class ListViewController: UIViewController {
         setupRightBarButton()
         tableView.setEditing(false, animated: true)
         buttonPlus.setImage(UIImage(named: "Image"), for: .normal)
+        indexArr.removeAll()
+        indexPathArray.removeAll()
     }
 
     @objc private func deleteNotesMode(_ sender: UIButton) {
