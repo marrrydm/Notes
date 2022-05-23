@@ -7,12 +7,18 @@
 
 import UIKit
 
-struct NoteViewModel: Equatable {
-    var title: String
-    var content: String
+struct NoteViewModel: Equatable, Decodable {
+    var header: String
+    var text: String
     var date: String
     var id = UUID()
 }
+
+//enum CodingKeys: String, CodingKey {
+//    case header
+//    case text
+//    case date
+//}
 
 final class NoteViewCell: UITableViewCell {
 // MARK: - Private Properties
@@ -39,8 +45,8 @@ final class NoteViewCell: UITableViewCell {
     }
 
     func setModel(model: NoteViewModel) {
-        titleLabel.text = model.title
-        contentLabel.text = model.content
+        titleLabel.text = model.header
+        contentLabel.text = model.text
         dateLabel.text = model.date
     }
 

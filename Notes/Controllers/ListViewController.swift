@@ -25,6 +25,9 @@ final class ListViewController: UIViewController {
     private var cellFirst: NoteViewCell?
     private var indexArr: [NoteViewModel] = []
     private var indexPathArray: [IndexPath] = []
+    let session = URLSession(configuration: .default)
+    let blog = Worker()
+//    var blogPosts: [Worker.Note] = []
 
 // MARK: - Inheritance
 
@@ -33,11 +36,8 @@ final class ListViewController: UIViewController {
         view.backgroundColor = Constants.backgroundColor
         setupUI()
         tapViews()
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(NoteViewCell.self, forCellReuseIdentifier: NoteViewCell.Constants.id)
-        tableView.setEditing(false, animated: true)
-        tableView.allowsMultipleSelectionDuringEditing = true
+        tableConfig()
+        blog.func2()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -45,6 +45,14 @@ final class ListViewController: UIViewController {
     }
 
 // MARK: - Private Methods
+
+    private func tableConfig() {
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(NoteViewCell.self, forCellReuseIdentifier: NoteViewCell.Constants.id)
+        tableView.setEditing(false, animated: true)
+        tableView.allowsMultipleSelectionDuringEditing = true
+    }
 
     private func tapViews() {
         let tapButtonPlus = UITapGestureRecognizer(target: self, action: #selector(plusTap(sender:)))
