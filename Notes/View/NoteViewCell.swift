@@ -11,7 +11,13 @@ struct NoteViewModel: Equatable, Decodable {
     var header: String
     var text: String
     var date: Date
-    var id: UUID?
+    var id = UUID()
+
+    enum CodingKeys: CodingKey {
+        case header
+        case text
+        case date
+    }
 }
 
 final class NoteViewCell: UITableViewCell {
