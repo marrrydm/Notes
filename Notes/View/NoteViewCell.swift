@@ -7,11 +7,17 @@
 
 import UIKit
 
-struct NoteViewModel: Equatable {
-    var title: String
-    var content: String
-    var date: String
+struct NoteViewModel: Equatable, Decodable {
+    var header: String
+    var text: String
+    var date: Date
     var id = UUID()
+
+    enum CodingKeys: CodingKey {
+        case header
+        case text
+        case date
+    }
 }
 
 final class NoteViewCell: UITableViewCell {
@@ -20,6 +26,7 @@ final class NoteViewCell: UITableViewCell {
     private var titleLabel = UILabel()
     private var contentLabel = UILabel()
     private var dateLabel = UILabel()
+    private let dateFormatter = DateFormatter()
 
 // MARK: - Init
 
@@ -39,9 +46,10 @@ final class NoteViewCell: UITableViewCell {
     }
 
     func setModel(model: NoteViewModel) {
-        titleLabel.text = model.title
-        contentLabel.text = model.content
-        dateLabel.text = model.date
+        dateFormatter.dateFormat = Constants.outputDate
+        titleLabel.text = model.header
+        contentLabel.text = model.text
+        dateLabel.text = dateFormatter.string(from: model.date)
     }
 
     override func setEditing(_ editing: Bool, animated: Bool) {
@@ -188,5 +196,6 @@ final class NoteViewCell: UITableViewCell {
         static let titleBBT = ""
         static let backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
         static let contentLabelBackgroundColor = UIColor(red: 0.172, green: 0.172, blue: 0.172, alpha: 1)
+        static let outputDate = "dd.MM.yyyy"
     }
 }

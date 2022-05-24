@@ -25,6 +25,7 @@ final class ListViewController: UIViewController {
     private var cellFirst: NoteViewCell?
     private var indexArr: [NoteViewModel] = []
     private var indexPathArray: [IndexPath] = []
+    private let workNotes = Worker()
 
 // MARK: - Inheritance
 
@@ -33,11 +34,8 @@ final class ListViewController: UIViewController {
         view.backgroundColor = Constants.backgroundColor
         setupUI()
         tapViews()
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(NoteViewCell.self, forCellReuseIdentifier: NoteViewCell.Constants.id)
-        tableView.setEditing(false, animated: true)
-        tableView.allowsMultipleSelectionDuringEditing = true
+        tableConfig()
+        loadNotes()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -45,6 +43,24 @@ final class ListViewController: UIViewController {
     }
 
 // MARK: - Private Methods
+
+    private func loadNotes() {
+        workNotes.getJSON()
+        workNotes.closureNotes = { [self] name in
+            DispatchQueue.main.async {
+                self.updateNotes(note: name)
+                print(name)
+            }
+        }
+    }
+
+    private func tableConfig() {
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(NoteViewCell.self, forCellReuseIdentifier: NoteViewCell.Constants.id)
+        tableView.setEditing(false, animated: true)
+        tableView.allowsMultipleSelectionDuringEditing = true
+    }
 
     private func tapViews() {
         let tapButtonPlus = UITapGestureRecognizer(target: self, action: #selector(plusTap(sender:)))
