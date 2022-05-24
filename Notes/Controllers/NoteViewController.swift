@@ -20,7 +20,7 @@ final class NoteViewController: UIViewController {
     private var dataPicker = UIDatePicker()
     private let dateFormatter = DateFormatter()
     private let locale = Locale(identifier: "rus")
-    private var notes = NoteViewModel(header: "", text: "", date: "")
+    private var notes = NoteViewModel(header: "", text: "", date: .now)
 
 // MARK: - UI Properties
 
@@ -160,7 +160,7 @@ final class NoteViewController: UIViewController {
         notes = NoteViewModel(
             header: titleTextField.text ?? Constants.titleUpdate,
             text: textView.text,
-            date: dateFormatter.string(from: dataPicker.date)
+            date: dataPicker.date
         )
         changeDateInList()
         self.delegate?.updateNotes(note: notes)
@@ -171,7 +171,7 @@ final class NoteViewController: UIViewController {
     func updateNotePage(note: NoteViewModel) {
         titleTextField.text = note.header
         textView.text = note.text
-        dateTextField.text = note.date
+        dateTextField.text = note.date.formatted()
         dateFormatter.dateFormat = Constants.dateFormat
         dateTextField.text = dateFormatter.string(from: dataPicker.date)
     }
@@ -184,7 +184,7 @@ final class NoteViewController: UIViewController {
             NoteViewModel(
                 header: titleTextField.text ?? Constants.titleUpdate,
                 text: textView.text,
-                date: dateFormatter.string(from: dataPicker.date)
+                date: dataPicker.date
             )
         )
     }
@@ -265,7 +265,7 @@ final class NoteViewController: UIViewController {
 
 extension NoteViewController {
     private func checkForEmpty() {
-        let note = Worker.Note(text: textView.text)
+        let note = Note(text: textView.text)
         if note.isEmpty {
             showAlert()
         }

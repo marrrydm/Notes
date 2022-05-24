@@ -25,9 +25,7 @@ final class ListViewController: UIViewController {
     private var cellFirst: NoteViewCell?
     private var indexArr: [NoteViewModel] = []
     private var indexPathArray: [IndexPath] = []
-    let session = URLSession(configuration: .default)
-    let blog = Worker()
-//    var blogPosts: [Worker.Note] = []
+    private let workNotes = Worker()
 
 // MARK: - Inheritance
 
@@ -37,7 +35,7 @@ final class ListViewController: UIViewController {
         setupUI()
         tapViews()
         tableConfig()
-        blog.func2()
+        loadNotes()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -45,6 +43,16 @@ final class ListViewController: UIViewController {
     }
 
 // MARK: - Private Methods
+
+    private func loadNotes() {
+        workNotes.getJSON()
+        workNotes.closureNotes = { [self] name in
+            DispatchQueue.main.async {
+                self.updateNotes(note: name)
+                print(name)
+            }
+        }
+    }
 
     private func tableConfig() {
         tableView.delegate = self
