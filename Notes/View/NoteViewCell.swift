@@ -57,8 +57,8 @@ final class NoteViewCell: UITableViewCell {
     private func configureUI() {
         frame = CGRect(x: 0, y: 0, width: 358, height: 90)
         layer.backgroundColor = Constants.backgroundColor
-        layer.cornerRadius = 14
-        layer.borderWidth = 0.2
+        layer.cornerRadius = CGFloat(Constants.cornerRadius)
+        layer.borderWidth = Constants.borderWidth
         layer.borderColor = UIColor.white.cgColor
         backgroundColor = .white
 
@@ -74,20 +74,20 @@ final class NoteViewCell: UITableViewCell {
     }
 
     private func setupUpdate() {
-        contentView.layer.cornerRadius = 14
-        contentView.layer.borderWidth = 0.2
+        contentView.layer.cornerRadius = CGFloat(Constants.cornerRadius)
+        contentView.layer.borderWidth = Constants.borderWidth
         contentView.layer.borderColor = UIColor.white.cgColor
         contentView.backgroundColor = .white
         layer.cornerRadius = 14
-        layer.borderWidth = 0.2
+        layer.borderWidth = Constants.borderWidth
         layer.borderColor = UIColor.white.cgColor
         backgroundColor = .white
     }
 
     private func setupSelected() {
         let backgroundView = UIView()
-        backgroundView.layer.cornerRadius = 14
-        backgroundView.layer.borderWidth = 0.2
+        backgroundView.layer.cornerRadius = CGFloat(Constants.cornerRadius)
+        backgroundView.layer.borderWidth = Constants.borderWidth
         backgroundView.layer.borderColor = UIColor.white.cgColor
         backgroundView.backgroundColor = UIColor.white
         selectedBackgroundView = backgroundView
@@ -188,5 +188,7 @@ final class NoteViewCell: UITableViewCell {
         static let titleBBT = ""
         static let backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
         static let contentLabelBackgroundColor = UIColor(red: 0.172, green: 0.172, blue: 0.172, alpha: 1)
+        static let cornerRadius = 14
+        static let borderWidth = 0.2
     }
 }
