@@ -1,21 +1,11 @@
 //
-//  Model.swift
+//  Worker.swift
 //  Notes
 //
-//  Created by Мария Ганеева on 02.04.2022.
-//
+//  Created by Мария Ганеева on 26.05.2022.
 //
 
-import Foundation
-
-struct Note {
-    var date: Date?
-    var header: String?
-    var text: String
-    var isEmpty: Bool {
-        return text.isEmpty ? true : false
-    }
-}
+import UIKit
 
 final class Worker {
 // MARK: - Properties
@@ -28,7 +18,9 @@ final class Worker {
 // MARK: - Methods
     func getJSON() {
         guard let url = URL(
-            string: "https://firebasestorage.googleapis.com/v0/b/ios-test-ce687.appspot.com/o/Empty.json?alt=media&token=d07f7d4a-141e-4ac5-a2d2-cc936d4e6f18"
+            string: "https://firebasestorage.googleapis.com/v0/b/" +
+            "ios-test-ce687.appspot.com/o/Empty"
+            + ".json?alt=media&token=d07f7d4a-141e-4ac5-a2d2-cc936d4e6f18"
         ) else { return }
         session.dataTask(with: url) { (data, _, error) in
             guard let data = data else {

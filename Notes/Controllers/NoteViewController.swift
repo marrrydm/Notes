@@ -265,7 +265,7 @@ final class NoteViewController: UIViewController {
 
 extension NoteViewController {
     private func checkForEmpty() {
-        let note = Note(text: textView.text)
+        let note = NoteViewModel(header: Constants.titleUpdate, text: textView.text, date: .now)
         if note.isEmpty {
             showAlert()
         }

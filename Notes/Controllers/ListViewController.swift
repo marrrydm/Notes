@@ -49,7 +49,6 @@ final class ListViewController: UIViewController {
         workNotes.closureNotes = { [self] name in
             DispatchQueue.main.async {
                 self.updateNotes(note: name)
-                print(name)
             }
         }
     }
@@ -86,7 +85,7 @@ final class ListViewController: UIViewController {
                 tableView.reloadData()
                 tableView.setEditing(false, animated: true)
                 setupRightBarButton()
-                buttonPlus.setImage(UIImage(named: "Image"), for: .normal)
+                buttonPlus.setImage(UIImage(named: "plusImg"), for: .normal)
             }
         }
     }
@@ -105,7 +104,7 @@ final class ListViewController: UIViewController {
             preferredStyle: .alert
         )
         alertError.addAction(UIAlertAction(title: "ОК", style: .default))
-        self.present(alertError, animated: true)
+        present(alertError, animated: true)
     }
 
     private func saveNote(note: NoteViewModel) {
@@ -129,7 +128,7 @@ final class ListViewController: UIViewController {
     @objc private func doneDeletingNotes() {
         setupRightBarButton()
         tableView.setEditing(false, animated: true)
-        buttonPlus.setImage(UIImage(named: "Image"), for: .normal)
+        buttonPlus.setImage(UIImage(named: "plusImg"), for: .normal)
         indexArr.removeAll()
         indexPathArray.removeAll()
     }
@@ -140,7 +139,7 @@ final class ListViewController: UIViewController {
         rightBarButtonOk.action = #selector(doneDeletingNotes)
         navigationItem.rightBarButtonItem = rightBarButtonOk
         tableView.setEditing(true, animated: true)
-        buttonPlus.setImage(UIImage(named: "Vector"), for: .normal)
+        buttonPlus.setImage(UIImage(named: "deleteImg"), for: .normal)
     }
 
     private func setupNavItem() {
@@ -151,7 +150,7 @@ final class ListViewController: UIViewController {
     private func setupPlus() {
         buttonPlus.backgroundColor = Constants.buttonBackgroundColor
         buttonPlus.translatesAutoresizingMaskIntoConstraints = false
-        buttonPlus.setImage(UIImage(named: "Image"), for: .normal)
+        buttonPlus.setImage(UIImage(named: "plusImg"), for: .normal)
         buttonPlus.titleLabel?.textAlignment = .center
         buttonPlus.layer.cornerRadius = 25
         buttonPlus.layer.masksToBounds = true
