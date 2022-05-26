@@ -7,16 +7,16 @@
 
 import UIKit
 
-struct NoteViewModel {
+struct NoteViewModel: Equatable {
     var title: String
     var content: String
     var date: String
+    var id = UUID()
 }
 
 final class NoteViewCell: UITableViewCell {
 // MARK: - Private Properties
 
-    private var newView = UIView()
     private var titleLabel = UILabel()
     private var contentLabel = UILabel()
     private var dateLabel = UILabel()
@@ -44,19 +44,27 @@ final class NoteViewCell: UITableViewCell {
         dateLabel.text = model.date
     }
 
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: true)
+        if editing == true {
+            setupUpdate()
+            setupSelected()
+        }
+    }
+
 // MARK: - Private Methods
 
     private func configureUI() {
         frame = CGRect(x: 0, y: 0, width: 358, height: 90)
-        layer.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
-        layer.cornerRadius = 14
-        layer.borderWidth = 0.2
+        layer.backgroundColor = Constants.backgroundColor
+        layer.cornerRadius = CGFloat(Constants.cornerRadius)
+        layer.borderWidth = Constants.borderWidth
         layer.borderColor = UIColor.white.cgColor
         backgroundColor = .white
 
-        addSubview(titleLabel)
-        addSubview(contentLabel)
-        addSubview(dateLabel)
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(contentLabel)
+        contentView.addSubview(dateLabel)
 
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         contentLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -65,11 +73,31 @@ final class NoteViewCell: UITableViewCell {
         setupLabels()
     }
 
+    private func setupUpdate() {
+        contentView.layer.cornerRadius = CGFloat(Constants.cornerRadius)
+        contentView.layer.borderWidth = Constants.borderWidth
+        contentView.layer.borderColor = UIColor.white.cgColor
+        contentView.backgroundColor = .white
+        layer.cornerRadius = 14
+        layer.borderWidth = Constants.borderWidth
+        layer.borderColor = UIColor.white.cgColor
+        backgroundColor = .white
+    }
+
+    private func setupSelected() {
+        let backgroundView = UIView()
+        backgroundView.layer.cornerRadius = CGFloat(Constants.cornerRadius)
+        backgroundView.layer.borderWidth = Constants.borderWidth
+        backgroundView.layer.borderColor = UIColor.white.cgColor
+        backgroundView.backgroundColor = UIColor.white
+        selectedBackgroundView = backgroundView
+    }
+
     private func setupLabels() {
         titleLabel.font = .systemFont(ofSize: 16, weight: .bold)
         contentLabel.font = .systemFont(ofSize: 14, weight: .regular)
         dateLabel.font = .systemFont(ofSize: 10, weight: .bold)
-        contentLabel.textColor = UIColor(red: 0.172, green: 0.172, blue: 0.172, alpha: 1)
+        contentLabel.textColor = Constants.contentLabelBackgroundColor
 
         constraintsTitleLabel()
         constraintsContentLabel()
@@ -78,15 +106,15 @@ final class NoteViewCell: UITableViewCell {
 
     private func constraintsTitleLabel() {
         let topConstraint = titleLabel.topAnchor.constraint(
-            equalTo: self.topAnchor,
+            equalTo: self.contentView.topAnchor,
             constant: 10
         )
         let trailingConstraint = titleLabel.leadingAnchor.constraint(
-            equalTo: self.leadingAnchor,
+            equalTo: self.contentView.leadingAnchor,
             constant: 16
         )
         let leadingConstraint = titleLabel.trailingAnchor.constraint(
-            equalTo: self.trailingAnchor,
+            equalTo: self.contentView.trailingAnchor,
             constant: -16
         )
         let heightConstraint = titleLabel.heightAnchor.constraint(equalToConstant: 18)
@@ -106,11 +134,11 @@ final class NoteViewCell: UITableViewCell {
             constant: 4
         )
         let trailingConstraint = contentLabel.leadingAnchor.constraint(
-            equalTo: self.leadingAnchor,
+            equalTo: self.contentView.leadingAnchor,
             constant: 16
         )
         let leadingConstraint = contentLabel.trailingAnchor.constraint(
-            equalTo: self.trailingAnchor,
+            equalTo: self.contentView.trailingAnchor,
             constant: -16
         )
         let heightConstraint = contentLabel.heightAnchor.constraint(equalToConstant: 14)
@@ -130,15 +158,15 @@ final class NoteViewCell: UITableViewCell {
             constant: 24
         )
         let trailingConstraint = dateLabel.leadingAnchor.constraint(
-            equalTo: self.leadingAnchor,
+            equalTo: self.contentView.leadingAnchor,
             constant: 16
         )
         let leadingConstraint = dateLabel.trailingAnchor.constraint(
-            equalTo: self.trailingAnchor,
+            equalTo: self.contentView.trailingAnchor,
             constant: -16
         )
         let bottomConstraint = dateLabel.bottomAnchor.constraint(
-            equalTo: self.bottomAnchor,
+            equalTo: self.contentView.bottomAnchor,
             constant: -10
         )
         let heightConstraint = dateLabel.heightAnchor.constraint(equalToConstant: 10)
@@ -158,5 +186,9 @@ final class NoteViewCell: UITableViewCell {
     enum Constants {
         static let id = "Cell"
         static let titleBBT = ""
+        static let backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
+        static let contentLabelBackgroundColor = UIColor(red: 0.172, green: 0.172, blue: 0.172, alpha: 1)
+        static let cornerRadius = 14
+        static let borderWidth = 0.2
     }
 }

@@ -16,12 +16,15 @@ protocol NotesDelegate: AnyObject {
 final class ListViewController: UIViewController {
 // MARK: - Private Properties
 
-    private var rightBarButton = UIBarButtonItem()
+    private var rightBarButtonSelect = UIBarButtonItem()
+    private var rightBarButtonOk = UIBarButtonItem()
     private var buttonPlus = UIButton(type: .custom)
     private let tableView = UITableView(frame: .zero, style: .plain)
     private var notes: [NoteViewModel] = []
     private var cells: [NoteViewCell] = []
-    private var cell: NoteViewCell?
+    private var cellFirst: NoteViewCell?
+    private var indexArr: [NoteViewModel] = []
+    private var indexPathArray: [IndexPath] = []
 
 // MARK: - Inheritance
 
@@ -33,6 +36,12 @@ final class ListViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(NoteViewCell.self, forCellReuseIdentifier: NoteViewCell.Constants.id)
+        tableView.setEditing(false, animated: true)
+        tableView.allowsMultipleSelectionDuringEditing = true
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        btnAnimateOpen()
     }
 
 // MARK: - Private Methods
@@ -43,9 +52,44 @@ final class ListViewController: UIViewController {
     }
 
     @objc private func plusTap(sender: UITapGestureRecognizer) {
-        let root = NoteViewController()
-        navigationController?.pushViewController(root, animated: true)
-        root.delegate = self
+        if !tableView.isEditing {
+            btnAnimateGo()
+        } else {
+            if tableView.indexPathsForSelectedRows == nil {
+                showAlert()
+            } else {
+                tableView.beginUpdates()
+                for val in indexArr {
+                    for (ind, value) in notes.enumerated() where val == value {
+                        tableView.deleteRows(at: indexPathArray, with: .left)
+                        notes.remove(at: ind)
+                        indexPathArray.removeAll()
+                    }
+                }
+                tableView.endUpdates()
+                tableView.reloadData()
+                tableView.setEditing(false, animated: true)
+                setupRightBarButton()
+                buttonPlus.setImage(UIImage(named: "Image"), for: .normal)
+            }
+        }
+    }
+
+    func tableView(
+        _ tableView: UITableView,
+        editingStyleForRowAt indexPath: IndexPath
+    ) -> UITableViewCell.EditingStyle {
+        return .none
+    }
+
+    private func showAlert() {
+        let alertError = UIAlertController(
+            title: "Ошибка!",
+            message: "Вы не выбрали ни одной заметки!",
+            preferredStyle: .alert
+        )
+        alertError.addAction(UIAlertAction(title: "ОК", style: .default))
+        self.present(alertError, animated: true)
     }
 
     private func saveNote(note: NoteViewModel) {
@@ -54,8 +98,33 @@ final class ListViewController: UIViewController {
 
     private func setupUI() {
         setupHeader()
-        setupPlus()
         setupNavItem()
+        setupRightBarButton()
+        setupPlus()
+    }
+
+    private func setupRightBarButton() {
+        rightBarButtonSelect.title = Constants.titleSelect
+        rightBarButtonSelect.target = self
+        rightBarButtonSelect.action = #selector(deleteNotesMode)
+        navigationItem.rightBarButtonItem = rightBarButtonSelect
+    }
+
+    @objc private func doneDeletingNotes() {
+        setupRightBarButton()
+        tableView.setEditing(false, animated: true)
+        buttonPlus.setImage(UIImage(named: "Image"), for: .normal)
+        indexArr.removeAll()
+        indexPathArray.removeAll()
+    }
+
+    @objc private func deleteNotesMode(_ sender: UIButton) {
+        rightBarButtonOk.title = Constants.titleFinally
+        rightBarButtonOk.target = self
+        rightBarButtonOk.action = #selector(doneDeletingNotes)
+        navigationItem.rightBarButtonItem = rightBarButtonOk
+        tableView.setEditing(true, animated: true)
+        buttonPlus.setImage(UIImage(named: "Vector"), for: .normal)
     }
 
     private func setupNavItem() {
@@ -64,7 +133,7 @@ final class ListViewController: UIViewController {
     }
 
     private func setupPlus() {
-        buttonPlus.backgroundColor = UIColor(red: 0, green: 0.478, blue: 1, alpha: 1)
+        buttonPlus.backgroundColor = Constants.buttonBackgroundColor
         buttonPlus.translatesAutoresizingMaskIntoConstraints = false
         buttonPlus.setImage(UIImage(named: "Image"), for: .normal)
         buttonPlus.titleLabel?.textAlignment = .center
@@ -81,6 +150,7 @@ final class ListViewController: UIViewController {
         tableView.isUserInteractionEnabled = true
         tableView.backgroundColor = Constants.backgroundColor
         tableView.separatorStyle = .none
+        tableView.allowsSelectionDuringEditing = true
         view.addSubview(tableView)
         constraintsTableView()
     }
@@ -132,9 +202,12 @@ final class ListViewController: UIViewController {
 
     private enum Constants {
         static let titleNB = "Заметки"
+        static let titleSelect = "Выбрать"
         static let titleFinally = "Готово"
         static let titleNull = ""
+        static let buttonBackgroundColor = UIColor(red: 0, green: 0.478, blue: 1, alpha: 1)
         static let backgroundColor = UIColor(red: 0.898, green: 0.898, blue: 0.898, alpha: 1)
+        static let backgroundColorCheckBox = UIColor(red: 0, green: 0.478, blue: 1, alpha: 1)
     }
 }
 
@@ -142,12 +215,12 @@ final class ListViewController: UIViewController {
 
 extension ListViewController: NotesDelegate {
     func updateNotes(note: NoteViewModel) {
-        cell = NoteViewCell()
-        cell?.setModel(model: note)
+        cellFirst = NoteViewCell()
+        cellFirst?.setModel(model: note)
 
         saveNote(note: note)
         tableView.reloadData()
-        cells.append(cell!)
+        cells.append(cellFirst!)
     }
 }
 
@@ -165,10 +238,12 @@ extension ListViewController: UITableViewDataSource {
             fatalError("failed to get value cell")
         }
         cell.updateNotes(note: notes[indexPath.row])
+        cell.tintColor = Constants.backgroundColorCheckBox
         return cell
     }
 
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.separatorInset = UIEdgeInsets.zero
         let verticalPadding: CGFloat = 5
         let maskLayer = CALayer()
 
@@ -188,17 +263,168 @@ extension ListViewController: UITableViewDataSource {
 extension ListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let noteViewController = NoteViewController()
-        guard let index = tableView.indexPathForSelectedRow?.row else {
-            return
+        guard let paths = tableView.indexPathsForSelectedRows,
+        let index = tableView.indexPathForSelectedRow?.row
+        else { return }
+        if !tableView.isEditing {
+            tapViewsKeyGo()
+            for (ind, value) in notes.enumerated() where index == ind {
+                noteViewController.updateNotePage(note: value)
+            }
+            noteViewController.closure = { [self] name in
+                cells[index].setModel(model: name)
+                notes[index] = name
+                tableView.reloadData()
+            }
+            navigationController?.pushViewController(noteViewController, animated: true)
+        } else {
+            for path in paths {
+                for (ind, value) in notes.enumerated() where path.row == ind {
+                    indexArr.append(value)
+                    indexPathArray.append(path)
+                }
+            }
         }
-        for (ind, value) in notes.enumerated() where index == ind {
-            noteViewController.updateNotePage(note: value)
+    }
+}
+
+// MARK: - Animations
+extension ListViewController {
+    private func btnAnimateOpen() {
+        UIView.animateKeyframes(
+            withDuration: 0.6,
+            delay: 0,
+            options: [],
+            animations: {
+                self.openKeyFrames()
+            },
+            completion: {_ in
+                self.buttonPlus.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
+                UIView.animate(
+                    withDuration: 1,
+                    delay: 0,
+                    usingSpringWithDamping: 0.3,
+                    initialSpringVelocity: 0.3,
+                    options: .curveEaseOut,
+                    animations: { [self] in
+                        self.buttonPlus.transform = CGAffineTransform(scaleX: 1, y: 1)
+                    }
+                )
+            }
+        )
+    }
+
+    private func openKeyFrames() {
+        UIView.addKeyframe(
+            withRelativeStartTime: 0,
+            relativeDuration: 0
+        ) {
+            self.buttonPlus.layer.position.y += 120
         }
-        noteViewController.closure = { [self] name in
-            cells[index].setModel(model: name)
-            notes[index] = name
-            tableView.reloadData()
+        UIView.addKeyframe(
+            withRelativeStartTime: 0.5,
+            relativeDuration: 0.5
+        ) {
+            self.buttonPlus.isHidden = false
+            self.buttonPlus.layer.position.y -= 120
         }
-        navigationController?.pushViewController(noteViewController, animated: true)
+    }
+
+    private func btnAnimateGo() {
+        UIView.animateKeyframes(
+            withDuration: 0.7,
+            delay: 0,
+            options: [],
+            animations: {
+                self.goKeyFrames()
+            },
+            completion: {_ in
+                UIView.animate(
+                    withDuration: 0.5,
+                    delay: 0,
+                    usingSpringWithDamping: 0.8,
+                    initialSpringVelocity: 0.8,
+                    options: .curveEaseOut,
+                    animations: {
+                        let root = NoteViewController()
+                        self.navigationController?.pushViewController(root, animated: true)
+                        root.delegate = self
+                    },
+                    completion: { _ in
+                        UIView.animate(
+                            withDuration: 0.001,
+                            delay: 0,
+                            options: [],
+                            animations: {
+                                self.buttonPlus.isHidden = true
+                                self.buttonPlus.layer.position.y -= 150
+                            }
+                        )
+                    }
+                )
+            }
+        )
+    }
+
+    private func goKeyFrames() {
+        self.buttonPlus.isHidden = false
+        UIView.addKeyframe(
+            withRelativeStartTime: 0,
+            relativeDuration: 0.5
+        ) {
+            self.buttonPlus.layer.position.y -= 50
+        }
+        UIView.addKeyframe(
+            withRelativeStartTime: 0.5,
+            relativeDuration: 0.5
+        ) {
+            self.buttonPlus.layer.position.y += 200
+        }
+    }
+
+    private func tapViewsKeyGo() {
+        UIView.animateKeyframes(
+            withDuration: 0.7,
+            delay: 0,
+            options: [],
+            animations: {
+                self.tapViewsKey()
+            },
+            completion: {_ in
+                UIView.animate(
+                    withDuration: 0.5,
+                    delay: 0,
+                    usingSpringWithDamping: 0.8,
+                    initialSpringVelocity: 0.8,
+                    options: .curveEaseOut,
+                    animations: {
+                        UIView.animate(
+                            withDuration: 0.001,
+                            delay: 0,
+                            options: [],
+                            animations: {
+                                self.buttonPlus.isHidden = true
+                                self.buttonPlus.layer.position.y -= 150
+                            }
+                        )
+                    }
+                )
+            }
+        )
+    }
+
+    private func tapViewsKey() {
+        UIView.addKeyframe(
+            withRelativeStartTime: 0,
+            relativeDuration: 0.5
+        ) {
+            self.buttonPlus.layer.position.y -= 50
+        }
+        UIView.addKeyframe(
+            withRelativeStartTime: 0.5,
+            relativeDuration: 0.5
+        ) {
+            self.buttonPlus.layer.position.y += 200
+        }
     }
 }
