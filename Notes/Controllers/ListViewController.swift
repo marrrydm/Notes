@@ -236,6 +236,8 @@ extension ListViewController: NotesDelegate {
         saveNote(note: note)
         tableView.reloadData()
         cells.append(cellFirst!)
+        print(cells)
+        print(cells.count)
     }
 }
 

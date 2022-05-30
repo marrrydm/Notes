@@ -13,14 +13,15 @@ final class Worker {
 
 // MARK: - Private Properties
     private let session = URLSession(configuration: .default)
+    private var nvc = NoteViewCell()
     private var workerNotes: [NoteViewModel] = []
 
 // MARK: - Methods
     func getJSON() {
         guard let url = URL(
-            string: "https://firebasestorage.googleapis.com/v0/b/" +
-            "ios-test-ce687.appspot.com/o/Empty"
-            + ".json?alt=media&token=d07f7d4a-141e-4ac5-a2d2-cc936d4e6f18"
+            string: "https://firebasestorage.googleapis.com/" +
+            "v0/b/ios-test-ce687.appspot.com/o/lesson8." +
+            "json?alt=media&token=215055df-172d-4b98-95a0-b353caca1424"
         ) else { return }
         session.dataTask(with: url) { (data, _, error) in
             guard let data = data else {
@@ -33,7 +34,8 @@ final class Worker {
                         NoteViewModel(
                             header: workerNote.header,
                             text: workerNote.text ,
-                            date: workerNote.date
+                            date: workerNote.date,
+                            userShareIcon: workerNote.userShareIcon
                         )
                     )
                 }
