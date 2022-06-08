@@ -12,7 +12,7 @@ struct NoteViewModel: Equatable, Decodable {
     var text: String
     var date: Date
     var id = UUID()
-    var userShareIcon: String?
+    var userShareIcon: URL?
     var isEmpty: Bool {
         return text.isEmpty ? true : false
     }
@@ -26,14 +26,15 @@ struct NoteViewModel: Equatable, Decodable {
 }
 
 final class NoteViewCell: UITableViewCell {
-// MARK: - Private Properties
+// MARK: - Properties
+// не используем weak/unowned, т.к. защита от удаления тех объектов, на которые ссылаются они сами
+    var userShareIconImg = UIImageView()
 
+// MARK: - Private Properties
     private var titleLabel = UILabel()
     private var contentLabel = UILabel()
     private var dateLabel = UILabel()
-    private var userShareIcon = UILabel()
-    private var userShareIconImg = UIImageView()
-    private let dateFormatter = DateFormatter()
+    private var dateFormatter = DateFormatter()
 
 // MARK: - Init
 
@@ -44,26 +45,17 @@ final class NoteViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
         configureUI()
+        print("Инициализация NoteViewCell")
+    }
+
+    deinit {
+        print("Деинициализация NoteViewCell")
     }
 
 // MARK: - Methods
 
     func updateNotes(note: NoteViewModel) {
         setModel(model: note)
-        if note.userShareIcon != nil {
-            setImg(model: note)
-        }
-    }
-
-    func setImg(model: NoteViewModel) {
-        let url = URL(string: model.userShareIcon ?? "!!")
-        let task = URLSession.shared.dataTask(with: url!) { data, _, error in
-            guard let data = data, error == nil else { return }
-            DispatchQueue.main.async {
-                self.userShareIconImg.image = UIImage(data: data)
-            }
-        }
-        task.resume()
     }
 
     func setModel(model: NoteViewModel) {
@@ -94,13 +86,11 @@ final class NoteViewCell: UITableViewCell {
         contentView.addSubview(titleLabel)
         contentView.addSubview(contentLabel)
         contentView.addSubview(dateLabel)
-        addSubview(userShareIcon)
         addSubview(userShareIconImg)
 
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         contentLabel.translatesAutoresizingMaskIntoConstraints = false
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
-        userShareIcon.translatesAutoresizingMaskIntoConstraints = false
         userShareIconImg.translatesAutoresizingMaskIntoConstraints = false
 
         setupLabels()
@@ -128,8 +118,7 @@ final class NoteViewCell: UITableViewCell {
     }
 
     private func setupImage() {
-        userShareIcon.addSubview(userShareIconImg)
-        constraintsImage()
+        addSubview(userShareIconImg)
         constraintsImageView()
     }
 
@@ -148,30 +137,6 @@ final class NoteViewCell: UITableViewCell {
         )
         let heightConstraint = userShareIconImg.heightAnchor.constraint(equalToConstant: 24)
         let widthConstraint = userShareIconImg.widthAnchor.constraint(equalToConstant: 24)
-        NSLayoutConstraint.activate([
-            topConstraint,
-            trailingConstraint,
-            leadingConstraint,
-            heightConstraint,
-            widthConstraint
-        ])
-    }
-
-    private func constraintsImage() {
-        let topConstraint = userShareIcon.topAnchor.constraint(
-            equalTo: self.contentView.topAnchor,
-            constant: 56
-        )
-        let trailingConstraint = userShareIcon.leadingAnchor.constraint(
-            equalTo: self.contentView.leadingAnchor,
-            constant: 318
-        )
-        let leadingConstraint = userShareIcon.trailingAnchor.constraint(
-            equalTo: self.contentView.trailingAnchor,
-            constant: -10
-        )
-        let heightConstraint = userShareIcon.heightAnchor.constraint(equalToConstant: 24)
-        let widthConstraint = userShareIcon.widthAnchor.constraint(equalToConstant: 24)
         NSLayoutConstraint.activate([
             topConstraint,
             trailingConstraint,
@@ -281,17 +246,3 @@ final class NoteViewCell: UITableViewCell {
         static let borderWidth = 0.2
     }
 }
-
-//extension UIImageView {
-//    func load(url: URL) {
-//        DispatchQueue.global().async { [weak self] in //чтобы проще было делать деинит, если будет какая то ссылка
-//            if let data = try? Data(contentsOf: url) {
-//                if let image = UIImage(data: data) {
-////                    DispatchQueue.main.async {
-//                        self?.image = image
-////                    }
-//                }
-//            }
-//        }
-//    }
-//}

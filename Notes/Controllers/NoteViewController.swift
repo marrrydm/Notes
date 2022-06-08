@@ -7,23 +7,38 @@ import UIKit
 final class NoteViewController: UIViewController {
 // MARK: - Properties
 
+    // чтобы предотвратить цикл сильных ссылок
     weak var delegate: NotesDelegate?
     var closure: ((NoteViewModel) -> Void)?
 
 // MARK: - Private Properties
-
+// не используем weak/unowned, т.к. защита от удаления тех объектов, на которые ссылаются они сами
     private var rightBarButton = UIBarButtonItem()
     private var titleTextField = UITextField()
     private var textLabel = UILabel()
     private var textView = UITextView()
     private var dateTextField = UITextField()
     private var dataPicker = UIDatePicker()
-    private let dateFormatter = DateFormatter()
-    private let locale = Locale(identifier: "rus")
+    private var dateFormatter = DateFormatter()
+    private var locale = Locale(identifier: "rus")
     private var notes = NoteViewModel(header: "", text: "", date: .now)
+    private var url: URL?
+
+// MARK: - Init
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        print("Инициализация NoteViewController")
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        print("Деинициализация NoteViewController")
+    }
 
 // MARK: - UI Properties
-
     private func configureUI() {
         setupDateTextField()
         setupTextField()
@@ -160,7 +175,8 @@ final class NoteViewController: UIViewController {
         notes = NoteViewModel(
             header: titleTextField.text ?? Constants.titleUpdate,
             text: textView.text,
-            date: dataPicker.date
+            date: dataPicker.date,
+            userShareIcon: url
         )
         changeDateInList()
         self.delegate?.updateNotes(note: notes)
@@ -174,6 +190,7 @@ final class NoteViewController: UIViewController {
         dateTextField.text = note.date.formatted()
         dateFormatter.dateFormat = Constants.dateFormat
         dateTextField.text = dateFormatter.string(from: dataPicker.date)
+        url = note.userShareIcon
     }
 
 // MARK: - Private Methods
@@ -184,7 +201,8 @@ final class NoteViewController: UIViewController {
             NoteViewModel(
                 header: titleTextField.text ?? Constants.titleUpdate,
                 text: textView.text,
-                date: dataPicker.date
+                date: dataPicker.date,
+                userShareIcon: url
             )
         )
     }
@@ -247,7 +265,7 @@ final class NoteViewController: UIViewController {
     private func showAlert() {
         let alertError = UIAlertController(title: "Ошибка!", message: "Пустое поле заметки!", preferredStyle: .alert)
         alertError.addAction(UIAlertAction(title: "ОК", style: .default))
-        self.present(alertError, animated: true)
+        present(alertError, animated: true)
     }
 
     // MARK: - Constants

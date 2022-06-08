@@ -13,8 +13,15 @@ final class Worker {
 
 // MARK: - Private Properties
     private let session = URLSession(configuration: .default)
-    private var nvc = NoteViewCell()
     private var workerNotes: [NoteViewModel] = []
+
+    init() {
+        print("Инициализация Worker")
+    }
+
+    deinit {
+        print("Деинициализация Worker")
+    }
 
 // MARK: - Methods
     func getJSON() {
@@ -28,6 +35,7 @@ final class Worker {
                 return
             }
             do {
+                // сессия поддерживает сильную ссылку до тех пор, пока запрос не завершится или не завершится ошибкой
                 self.workerNotes = try JSONDecoder().decode([NoteViewModel].self, from: data)
                 for workerNote in self.workerNotes {
                     self.closureNotes?(
