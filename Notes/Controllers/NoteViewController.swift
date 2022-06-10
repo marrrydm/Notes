@@ -23,6 +23,7 @@ final class NoteViewController: UIViewController {
     private var locale = Locale(identifier: "rus")
     private var notes = NoteViewModel(header: "", text: "", date: .now)
     private var url: URL?
+    private var image: UIImage?
 
 // MARK: - Init
     init() {
@@ -176,7 +177,8 @@ final class NoteViewController: UIViewController {
             header: titleTextField.text ?? Constants.titleUpdate,
             text: textView.text,
             date: dataPicker.date,
-            userShareIcon: url
+            userShareIcon: url,
+            img: image
         )
         changeDateInList()
         self.delegate?.updateNotes(note: notes)
@@ -191,6 +193,7 @@ final class NoteViewController: UIViewController {
         dateFormatter.dateFormat = Constants.dateFormat
         dateTextField.text = dateFormatter.string(from: dataPicker.date)
         url = note.userShareIcon
+        image = note.img
     }
 
 // MARK: - Private Methods
@@ -202,7 +205,8 @@ final class NoteViewController: UIViewController {
                 header: titleTextField.text ?? Constants.titleUpdate,
                 text: textView.text,
                 date: dataPicker.date,
-                userShareIcon: url
+                userShareIcon: url,
+                img: image
             )
         )
     }

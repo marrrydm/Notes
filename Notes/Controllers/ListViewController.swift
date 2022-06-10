@@ -32,12 +32,13 @@ final class ListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = Constants.backgroundColor
+        setupUI()
+        tapViews()
+        tableConfig()
         activityIndicatorConfig()
-        loadNotes()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 10) { [self] in
-            setupUI()
-            tapViews()
-            tableConfig()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [self] in
+            loadNotes()
+            activityIndicator.stopAnimating()
         }
     }
 
@@ -65,9 +66,7 @@ final class ListViewController: UIViewController {
         let workNotes = Worker()
         workNotes.getJSON()
         workNotes.closureNotes = { [weak self] name in
-            DispatchQueue.main.async {
-                self?.updateNotes(note: name)
-            }
+            self?.updateNotes(note: name)
         }
     }
 
@@ -106,6 +105,8 @@ final class ListViewController: UIViewController {
                         notes.remove(at: ind)
                         cells.remove(at: ind)
                         indexPathArray.removeAll()
+                        print(notes)
+                        print(cells.count)
                     }
                 }
                 tableView.endUpdates()
@@ -273,17 +274,6 @@ extension ListViewController: UITableViewDataSource {
             fatalError("failed to get value cell")
         }
         cell.updateNotes(note: notes[indexPath.row])
-        for value in notes where notes[indexPath.row].id == value.id {
-            if value.userShareIcon != nil {
-                cell.userShareIconImg.isHidden = false
-                let url = value.userShareIcon, data = try? Data(contentsOf: url!)
-                if data != nil {
-                    cell.userShareIconImg.image = UIImage(data: data!)
-                }
-            } else {
-                cell.userShareIconImg.isHidden = true
-            }
-        }
         cell.tintColor = Constants.backgroundColorCheckBox
         return cell
     }
@@ -320,17 +310,6 @@ extension ListViewController: UITableViewDelegate {
             noteViewController.closure = { [self] name in
                 cells[index].setModel(model: name)
                 notes[index] = name
-                if notes[indexPath.row].id == name.id {
-                    if notes[indexPath.row].userShareIcon != nil {
-                        cells[index].userShareIconImg.isHidden = false
-                        let url = notes[indexPath.row].userShareIcon, data = try? Data(contentsOf: url!)
-                        if data != nil {
-                            cells[index].userShareIconImg.image = UIImage(data: data!)
-                        }
-                    } else {
-                        cells[index].userShareIconImg.isHidden = true
-                    }
-                }
                 tableView.reloadData()
             }
             navigationController?.pushViewController(noteViewController, animated: true)

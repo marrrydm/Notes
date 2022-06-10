@@ -13,6 +13,8 @@ struct NoteViewModel: Equatable, Decodable {
     var date: Date
     var id = UUID()
     var userShareIcon: URL?
+    var imgData: Data?
+    var img: UIImage?
     var isEmpty: Bool {
         return text.isEmpty ? true : false
     }
@@ -63,6 +65,7 @@ final class NoteViewCell: UITableViewCell {
         titleLabel.text = model.header
         contentLabel.text = model.text
         dateLabel.text = dateFormatter.string(from: model.date)
+        userShareIconImg.image = model.img
     }
 
     override func setEditing(_ editing: Bool, animated: Bool) {
