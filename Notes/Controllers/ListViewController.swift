@@ -36,7 +36,7 @@ final class ListViewController: UIViewController {
         tapViews()
         tableConfig()
         activityIndicatorConfig()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 10) { [self] in
             loadNotes()
             activityIndicator.stopAnimating()
         }
@@ -105,8 +105,6 @@ final class ListViewController: UIViewController {
                         notes.remove(at: ind)
                         cells.remove(at: ind)
                         indexPathArray.removeAll()
-                        print(notes)
-                        print(cells.count)
                     }
                 }
                 tableView.endUpdates()
