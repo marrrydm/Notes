@@ -15,8 +15,6 @@ final class Worker {
     private let session = URLSession(configuration: .default)
     private var workerNotes: [NoteViewModel] = []
     private var array: [NoteViewModel] = []
-    private var image: Data?
-    private var photo: UIImage?
 
     init() {
         print("Инициализация Worker")
@@ -47,15 +45,12 @@ final class Worker {
                         if data != nil {
                             note.imgData = data!
                             note.img = UIImage(data: note.imgData!)
-                        } else {
-                            image = nil
-                            photo = nil
                         }
                     }
                     array.append(note)
                 }
-                for note in array {
-                    group.notify(queue: DispatchQueue.main, execute: {
+                group.notify(queue: DispatchQueue.main, execute: {
+                    for note in self.array {
                         self.closureNotes?(
                             NoteViewModel(
                                 header: note.header,
@@ -66,8 +61,8 @@ final class Worker {
                             )
                         )
                     }
-                    )
                 }
+                )
             } catch {
                 print(error)
             }
