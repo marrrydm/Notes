@@ -2,78 +2,186 @@
 //  ListViewController.swift
 //  Notes
 //
-//  Created by Мария Ганеева on 10.04.2022.
+//  Created by Мария Ганеева on 11.06.2022.
 //
 
 import UIKit
 
-// MARK: - NotesDelegate
-
-protocol NotesDelegate: AnyObject {
-    func updateNotes(note: NoteViewModel)
+protocol ListDisplayLogic: AnyObject {
+    func display(data: CleanNoteViewModel)
 }
 
-final class ListViewController: UIViewController {
-// MARK: - Private Properties
+class CleanListViewController: UIViewController {
+    func update(note: CleanNoteViewModel) {
+        let cellFirst = CleanNoteViewCell()
+        cellFirst.setup(data: note)
+        tableView.reloadData()
+    }
+
+    // MARK: Outlet
+    private var tableView = UITableView(frame: .zero, style: .plain)
+    private var activityIndicator = UIActivityIndicatorView(style: .large)
     private var rightBarButtonSelect = UIBarButtonItem()
     private var rightBarButtonOk = UIBarButtonItem()
     private var buttonPlus = UIButton(type: .custom)
-    private var tableView = UITableView(frame: .zero, style: .plain)
-    private var activityIndicator = UIActivityIndicatorView(style: .large)
-    private var notes: [NoteViewModel] = []
+    // MARK: External vars
+    private (set) var router: ListRouterLogic?
+    // MARK: Internal vars
+    private var interactor: ListBusinessLogic?
+    private var notes: [CleanNoteViewModel] = []
     private var cells: [NoteViewCell] = []
-    private var indexArr: [NoteViewModel] = []
+    private var indexArr: [CleanNoteViewModel] = []
     private var indexPathArray: [IndexPath] = []
 
-// MARK: - Inheritance
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        setup()
+    }
 
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setup()
+    }
+
+    private func setup() {
+        let viewController = self
+        let presenter = ListPresenter()
+        let interactor = ListInteractor()
+        let router = ListRouter()
+
+        viewController.interactor = interactor
+        viewController.router = router
+        interactor.presenter = presenter
+        presenter.listViewController = viewController
+        router.noteController = viewController
+        router.dataStore = interactor
+    }
+
+    // MARK: - Init
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = Constants.backgroundColor
         setupUI()
-        tapViews()
         tableConfig()
-        activityIndicatorConfig()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 10) { [self] in
-            loadNotes()
-            activityIndicator.stopAnimating()
-        }
+//        activityIndicatorConfig()
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [self] in
+//            activityIndicator.stopAnimating()
+//        }
+//        interactor?.fetchNotes()
+        print(notes)
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        btnAnimateOpen()
+    // MARK: - Private Methods
+
+    private func setupUI() {
+        setupHeader()
+        setupNavItem()
+        setupRightBarButton()
+        setupPlus()
     }
 
-// MARK: - Init
-    init() {
-        super.init(nibName: nil, bundle: nil)
-        print("Инициализация ListViewController")
+    private func setupNavItem() {
+        navigationItem.title = Constants.titleNB
+        navigationItem.backButtonTitle = Constants.titleNull
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    private func setupPlus() {
+        buttonPlus.backgroundColor = Constants.buttonBackgroundColor
+        buttonPlus.translatesAutoresizingMaskIntoConstraints = false
+        buttonPlus.setImage(UIImage(named: "plusImg"), for: .normal)
+        buttonPlus.titleLabel?.textAlignment = .center
+        buttonPlus.layer.cornerRadius = 25
+        buttonPlus.layer.masksToBounds = true
+        buttonPlus.clipsToBounds = true
+        buttonPlus.addTarget(self, action: #selector(plusTap), for: .touchUpInside)
+        tableView.addSubview(buttonPlus)
+        constraintsButtonPlus()
     }
 
-    deinit {
-        print("Деинициализация ListViewController")
+    private func constraintsButtonPlus() {
+        let topConstraint = buttonPlus.topAnchor.constraint(
+            equalTo: view.safeAreaLayoutGuide.topAnchor,
+            constant: 641
+        )
+        let leadingConstraint = buttonPlus.trailingAnchor.constraint(
+            equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+            constant: -19
+        )
+        let heightConstraint = buttonPlus.heightAnchor.constraint(equalToConstant: 50)
+        let widthConstraint = buttonPlus.heightAnchor.constraint(equalTo: buttonPlus.widthAnchor)
+        NSLayoutConstraint.activate([
+            topConstraint,
+            leadingConstraint,
+            heightConstraint,
+            widthConstraint
+        ])
     }
 
-// MARK: - Private Methods
+    private func setupRightBarButton() {
+        rightBarButtonSelect.title = Constants.titleSelect
+        rightBarButtonSelect.target = self
+        rightBarButtonSelect.action = #selector(deleteNotesMode)
+        navigationItem.rightBarButtonItem = rightBarButtonSelect
+    }
 
-    private func loadNotes() {
-        let workNotes = Worker()
-        workNotes.getJSON()
-        workNotes.closureNotes = { [weak self] name in
-            self?.updateNotes(note: name)
-        }
+    @objc private func doneDeletingNotes() {
+        setupRightBarButton()
+        tableView.setEditing(false, animated: true)
+        buttonPlus.setImage(UIImage(named: "plusImg"), for: .normal)
+        indexArr.removeAll()
+        indexPathArray.removeAll()
+    }
+
+    @objc private func deleteNotesMode(_ sender: UIButton) {
+        rightBarButtonOk.title = Constants.titleFinally
+        rightBarButtonOk.target = self
+        rightBarButtonOk.action = #selector(doneDeletingNotes)
+        navigationItem.rightBarButtonItem = rightBarButtonOk
+        tableView.setEditing(true, animated: true)
+        buttonPlus.setImage(UIImage(named: "deleteImg"), for: .normal)
     }
 
     private func tableConfig() {
+        setupHeader()
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(NoteViewCell.self, forCellReuseIdentifier: NoteViewCell.Constants.id)
+        tableView.register(CleanNoteViewCell.self, forCellReuseIdentifier: CleanNoteViewCell.Constants.id)
         tableView.setEditing(false, animated: true)
         tableView.allowsMultipleSelectionDuringEditing = true
+    }
+
+    private func setupHeader() {
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.isUserInteractionEnabled = true
+        tableView.backgroundColor = Constants.backgroundColor
+        tableView.separatorStyle = .none
+        tableView.allowsSelectionDuringEditing = true
+        view.addSubview(tableView)
+        constraintsTableView()
+    }
+
+    private func constraintsTableView() {
+        let topConstraints = tableView.topAnchor.constraint(
+            equalTo: view.safeAreaLayoutGuide.topAnchor,
+            constant: 20
+        )
+        let trailingConstraints = tableView.leadingAnchor.constraint(
+            equalTo: view.safeAreaLayoutGuide.leadingAnchor,
+            constant: 16
+        )
+        let leadingConstraints = tableView.trailingAnchor.constraint(
+            equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+            constant: -16
+        )
+        let heightConstraints = tableView.heightAnchor.constraint(equalToConstant: 700)
+        let widthConstraints = tableView.widthAnchor.constraint(equalToConstant: 500)
+        NSLayoutConstraint.activate([
+            topConstraints,
+            trailingConstraints,
+            leadingConstraints,
+            heightConstraints,
+            widthConstraints
+        ])
     }
 
     private func activityIndicatorConfig() {
@@ -124,112 +232,6 @@ final class ListViewController: UIViewController {
         present(alertError, animated: true)
     }
 
-    private func saveNote(note: NoteViewModel) {
-        notes.append(note)
-    }
-
-    private func setupUI() {
-        setupHeader()
-        setupNavItem()
-        setupRightBarButton()
-        setupPlus()
-    }
-
-    private func setupRightBarButton() {
-        rightBarButtonSelect.title = Constants.titleSelect
-        rightBarButtonSelect.target = self
-        rightBarButtonSelect.action = #selector(deleteNotesMode)
-        navigationItem.rightBarButtonItem = rightBarButtonSelect
-    }
-
-    @objc private func doneDeletingNotes() {
-        setupRightBarButton()
-        tableView.setEditing(false, animated: true)
-        buttonPlus.setImage(UIImage(named: "plusImg"), for: .normal)
-        indexArr.removeAll()
-        indexPathArray.removeAll()
-    }
-
-    @objc private func deleteNotesMode(_ sender: UIButton) {
-        rightBarButtonOk.title = Constants.titleFinally
-        rightBarButtonOk.target = self
-        rightBarButtonOk.action = #selector(doneDeletingNotes)
-        navigationItem.rightBarButtonItem = rightBarButtonOk
-        tableView.setEditing(true, animated: true)
-        buttonPlus.setImage(UIImage(named: "deleteImg"), for: .normal)
-    }
-
-    private func setupNavItem() {
-        navigationItem.title = Constants.titleNB
-        navigationItem.backButtonTitle = Constants.titleNull
-    }
-
-    private func setupPlus() {
-        buttonPlus.backgroundColor = Constants.buttonBackgroundColor
-        buttonPlus.translatesAutoresizingMaskIntoConstraints = false
-        buttonPlus.setImage(UIImage(named: "plusImg"), for: .normal)
-        buttonPlus.titleLabel?.textAlignment = .center
-        buttonPlus.layer.cornerRadius = 25
-        buttonPlus.layer.masksToBounds = true
-        buttonPlus.clipsToBounds = true
-        buttonPlus.addTarget(self, action: #selector(plusTap), for: .touchUpInside)
-        view.addSubview(buttonPlus)
-        constraintsButtonPlus()
-    }
-
-    private func setupHeader() {
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.isUserInteractionEnabled = true
-        tableView.backgroundColor = Constants.backgroundColor
-        tableView.separatorStyle = .none
-        tableView.allowsSelectionDuringEditing = true
-        view.addSubview(tableView)
-        constraintsTableView()
-    }
-
-    private func constraintsButtonPlus() {
-        let topConstraint = buttonPlus.topAnchor.constraint(
-            equalTo: view.safeAreaLayoutGuide.topAnchor,
-            constant: 641
-        )
-        let leadingConstraint = buttonPlus.trailingAnchor.constraint(
-            equalTo: view.safeAreaLayoutGuide.trailingAnchor,
-            constant: -19
-        )
-        let heightConstraint = buttonPlus.heightAnchor.constraint(equalToConstant: 50)
-        let widthConstraint = buttonPlus.heightAnchor.constraint(equalTo: buttonPlus.widthAnchor)
-        NSLayoutConstraint.activate([
-            topConstraint,
-            leadingConstraint,
-            heightConstraint,
-            widthConstraint
-        ])
-    }
-
-    private func constraintsTableView() {
-        let topConstraints = tableView.topAnchor.constraint(
-            equalTo: view.safeAreaLayoutGuide.topAnchor,
-            constant: 20
-        )
-        let trailingConstraints = tableView.leadingAnchor.constraint(
-            equalTo: view.safeAreaLayoutGuide.leadingAnchor,
-            constant: 16
-        )
-        let leadingConstraints = tableView.trailingAnchor.constraint(
-            equalTo: view.safeAreaLayoutGuide.trailingAnchor,
-            constant: -16
-        )
-        let heightConstraints = tableView.heightAnchor.constraint(equalToConstant: 700)
-        let widthConstraints = tableView.widthAnchor.constraint(equalToConstant: 500)
-        NSLayoutConstraint.activate([
-            topConstraints,
-            trailingConstraints,
-            leadingConstraints,
-            heightConstraints,
-            widthConstraints
-        ])
-    }
-
     // MARK: - Constants
 
     private enum Constants {
@@ -243,33 +245,21 @@ final class ListViewController: UIViewController {
     }
 }
 
-// MARK: - NotesDelegate
-
-extension ListViewController: NotesDelegate {
-    func updateNotes(note: NoteViewModel) {
-        let cellFirst = NoteViewCell()
-        cellFirst.setModel(model: note)
-
-        saveNote(note: note)
-        tableView.reloadData()
-        cells.append(cellFirst)
-    }
-}
-
 // MARK: - UITableViewDataSource
-
-extension ListViewController: UITableViewDataSource {
+extension CleanListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        print(notes)
         return notes.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: NoteViewCell.Constants.id
-        ) as? NoteViewCell else {
+            withIdentifier: CleanNoteViewCell.Constants.id
+        ) as? CleanNoteViewCell else {
             fatalError("failed to get value cell")
         }
-        cell.updateNotes(note: notes[indexPath.row])
+        cell.setup(data: notes[indexPath.row])
+        cell.delegate = self
         cell.tintColor = Constants.backgroundColorCheckBox
         return cell
     }
@@ -290,17 +280,28 @@ extension ListViewController: UITableViewDataSource {
     }
 }
 
-// MARK: - UITableViewDelegate
-
-extension ListViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let paths = tableView.indexPathsForSelectedRows
-//                ,
-//        let index = tableView.indexPathForSelectedRow?.row
-        else { return }
-        if !tableView.isEditing {
-            let noteViewController = NoteViewController()
+extension CleanListViewController: ListCellDelegate {
+    func didCellTap(id: UUID) {
+        for value in notes where value.id == id {
+            router?.navigate(note: value)
             tapViewsKeyGo()
+        }
+    }
+}
+    // MARK: - UITableViewDelegate
+extension CleanListViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if !tableView.isEditing {
+            tableView.deselectRow(at: indexPath, animated: true)
+        }
+
+//        guard let paths = tableView.indexPathsForSelectedRows,
+//        let index = tableView.indexPathForSelectedRow?.row
+//        else { return }
+//        if !tableView.isEditing {
+//            let noteViewController = NoteViewController()
+//            tableView.deselectRow(at: indexPath, animated: true)
+//            tapViewsKeyGo()
 //            for (ind, value) in notes.enumerated() where index == ind {
 //                noteViewController.updateNotePage(note: value)
 //            }
@@ -309,20 +310,30 @@ extension ListViewController: UITableViewDelegate {
 //                notes[index] = name
 //                tableView.reloadData()
 //            }
-            navigationController?.pushViewController(noteViewController, animated: true)
-        } else {
-            for path in paths {
-                for (ind, value) in notes.enumerated() where path.row == ind {
-                    indexArr.append(value)
-                    indexPathArray.append(path)
-                }
-            }
-        }
+//            navigationController?.pushViewController(noteViewController, animated: true)
+//        } else {
+//            for path in paths {
+//                for (ind, value) in notes.enumerated() where path.row == ind {
+//                    indexArr.append(value)
+//                    indexPathArray.append(path)
+//                }
+//            }
+//        }
     }
 }
 
+// MARK: - Display Logic implementation
+extension CleanListViewController: ListDisplayLogic {
+    func display(data: CleanNoteViewModel) {
+//        notes.removeAll()
+        print("HI!!!!!")
+        notes.append(data)
+        print(notes)
+        tableView.reloadData()
+    }
+}
 // MARK: - Animations
-extension ListViewController {
+extension CleanListViewController {
     private func btnAnimateOpen() {
         UIView.animateKeyframes(
             withDuration: 0.6,

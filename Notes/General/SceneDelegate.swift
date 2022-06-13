@@ -13,9 +13,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         willConnectTo session: UISceneSession,
         options connectionOptions: UIScene.ConnectionOptions
     ) {
+//        guard let windowScene = (scene as? UIWindowScene) else { return }
+//        window = UIWindow(frame: windowScene.coordinateSpace.bounds)
+//        window?.windowScene = windowScene
+//        let sceneFactory = CleanListViewController()
+//        let navController = UINavigationController(rootViewController: sceneFactory)
+//        window?.rootViewController = navController
+//        window?.makeKeyAndVisible()
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
-        let listViewController = ListViewController()
+        let listViewController = CleanListViewController()
         let navigation = UINavigationController(rootViewController: listViewController)
         window.rootViewController = navigation
         window.makeKeyAndVisible()

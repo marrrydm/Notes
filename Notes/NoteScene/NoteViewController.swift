@@ -4,12 +4,73 @@
 
 import UIKit
 
+protocol NoteDisplayLogic: AnyObject {
+    func display(data: CleanNoteViewModel)
+}
+
+protocol NoteCellDelegate: AnyObject {
+    func didTap(model: CleanNoteViewModel)
+}
+
 final class NoteViewController: UIViewController {
+    weak var delegate: ListCellDelegate?
+//    func didTap(model: CleanNoteViewModel) {
+//        titleTextField.text = model.header
+//        textView.text = model.text
+//        dateTextField.text = model.date.formatted()
+//        dateFormatter.dateFormat = Constants.dateFormat
+//        dateTextField.text = dateFormatter.string(from: dataPicker.date)
+//        url = model.userShareIcon
+//    }
+
+    // MARK: External vars
+    private (set) var router: (RouterNoteLogic & RouterNoteDataPassingProtocol)?
+    // MARK: Internal vars
+    private var interactor: (InteractorNoteBusinessLogic & InteractorNoteStoreProtocol)?
+
+    private (set) var routerList: (ListRouterLogic & RouterNoteDataProtocol)?
+
+    // MARK: - Init
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        setup()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setup()
+    }
+
+    private func setup() {
+        let viewController = self
+        let interactor = InteractorNote()
+        let router = RouterNote()
+        let presenter = PresenterNote()
+
+        viewController.interactor = interactor
+        viewController.router = router
+        interactor.presenter = presenter
+        presenter.noteViewController = viewController
+//        router.listViewController = viewController
+        router.dataStore = interactor
+
+//        interactor.presenter = presenter
+//        presenter.noteViewController = viewController
+//        viewController.interactor = interactor
+//
+//        viewController.router = router
+//        router.dataStore = interactor
+//
+//        presenter.noteViewController = viewController
+//        interactor.presenter = presenter
+//        router.dataStore = interactor
+//        viewController.interactor = interactor
+//        viewController.router = router
+    }
 // MARK: - Properties
 
     // чтобы предотвратить цикл сильных ссылок
-    weak var delegate: NotesDelegate?
-    var closure: ((NoteViewModel) -> Void)?
+    var closure: ((CleanNoteViewModel) -> Void)?
 
 // MARK: - Private Properties
 // не используем weak/unowned, т.к. защита от удаления тех объектов, на которые ссылаются они сами
@@ -21,23 +82,9 @@ final class NoteViewController: UIViewController {
     private var dataPicker = UIDatePicker()
     private var dateFormatter = DateFormatter()
     private var locale = Locale(identifier: "rus")
-    private var notes = NoteViewModel(header: "", text: "", date: .now)
+    private var notes = CleanNoteViewModel(header: "12345", text: "12345", date: .now)
     private var url: URL?
     private var image: UIImage?
-
-// MARK: - Init
-    init() {
-        super.init(nibName: nil, bundle: nil)
-        print("Инициализация NoteViewController")
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    deinit {
-        print("Деинициализация NoteViewController")
-    }
 
 // MARK: - UI Properties
     private func configureUI() {
@@ -164,6 +211,7 @@ final class NoteViewController: UIViewController {
         view.backgroundColor = UIColor(red: 0.898, green: 0.898, blue: 0.898, alpha: 1)
         configureUI()
         keyboardUp()
+        interactor?.fetchNote()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -173,43 +221,47 @@ final class NoteViewController: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         dateFormatter.dateFormat = Constants.outputDate
-        notes = NoteViewModel(
+        notes = CleanNoteViewModel(
             header: titleTextField.text ?? Constants.titleUpdate,
             text: textView.text,
             date: dataPicker.date,
-            userShareIcon: url,
-            img: image
+            userShareIcon: url
+//            ,
+//            img: image
         )
-        changeDateInList()
-        self.delegate?.updateNotes(note: notes)
+//        changeDateInList()
+        router?.navigateToNote(model: notes)
+//        routerList?.navigate(note: notes)
+//        changeDateInList()
+//        self.delegate?.updateNotes(note: notes)
     }
 
 // MARK: - Methods
 
-    func updateNotePage(note: NoteViewModel) {
-        titleTextField.text = note.header
-        textView.text = note.text
-        dateTextField.text = note.date.formatted()
-        dateFormatter.dateFormat = Constants.dateFormat
-        dateTextField.text = dateFormatter.string(from: dataPicker.date)
-        url = note.userShareIcon
-        image = note.img
-    }
+//    func updateNotePage(note: CleanNoteViewModel) {
+//        titleTextField.text = note.header
+//        textView.text = note.text
+//        dateTextField.text = note.date.formatted()
+//        dateFormatter.dateFormat = Constants.dateFormat
+//        dateTextField.text = dateFormatter.string(from: dataPicker.date)
+//        url = note.userShareIcon
+//        print(note)
+//        image = note.img
+//    }
 
 // MARK: - Private Methods
 
-    private func changeDateInList() {
-        dateFormatter.dateFormat = Constants.outputDate
-        closure?(
-            NoteViewModel(
-                header: titleTextField.text ?? Constants.titleUpdate,
-                text: textView.text,
-                date: dataPicker.date,
-                userShareIcon: url,
-                img: image
-            )
-        )
-    }
+//    func changeDateInList() {
+//        dateFormatter.dateFormat = Constants.outputDate
+//        closure?(
+//            CleanNoteViewModel(
+//                header: titleTextField.text ?? Constants.titleUpdate,
+//                text: textView.text,
+//                date: dataPicker.date,
+//                userShareIcon: url
+//            )
+//        )
+//    }
 
     private func keyboardUp() {
         NotificationCenter.default.addObserver(
@@ -262,7 +314,7 @@ final class NoteViewController: UIViewController {
     @objc private func didRightBarButtonTapped(_ sender: Any) {
         rightBarButton.title = Constants.rightBarButtonTitle
         checkForEmpty()
-        changeDateInList()
+//        changeDateInList()
         view.endEditing(true)
     }
 
@@ -280,6 +332,17 @@ final class NoteViewController: UIViewController {
         static let dateFormat = "dd.MM.yyyy EEEE HH:mm"
         static let titleUpdate = ""
         static let outputDate = "dd.MM.yyyy"
+    }
+}
+
+extension NoteViewController: NoteDisplayLogic {
+    func display(data: CleanNoteViewModel) {
+        titleTextField.text = data.header
+        textView.text = data.text
+        dateTextField.text = data.date.formatted()
+        dateFormatter.dateFormat = Constants.dateFormat
+        dateTextField.text = dateFormatter.string(from: dataPicker.date)
+        url = data.userShareIcon
     }
 }
 

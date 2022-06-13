@@ -15,6 +15,15 @@
 		F8A71F8A2802F15200907C0E /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A71F892802F15200907C0E /* ListViewController.swift */; };
 		F8A71F8C280482E700907C0E /* NoteViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A71F8B280482E700907C0E /* NoteViewCell.swift */; };
 		F8AC7488283F7511000E9AAB /* Worker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8AC7487283F7511000E9AAB /* Worker.swift */; };
+		F8AC748A2854DB80000E9AAB /* Presenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8AC74892854DB80000E9AAB /* Presenter.swift */; };
+		F8AC748C2854DB99000E9AAB /* CleanWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8AC748B2854DB99000E9AAB /* CleanWorker.swift */; };
+		F8AC748E2854DBA3000E9AAB /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8AC748D2854DBA3000E9AAB /* Router.swift */; };
+		F8AC74942854DBFD000E9AAB /* CleanListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8AC74932854DBFD000E9AAB /* CleanListViewController.swift */; };
+		F8AC74962854DC16000E9AAB /* CleanNoteViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8AC74952854DC16000E9AAB /* CleanNoteViewCell.swift */; };
+		F8AC749C2854DDC1000E9AAB /* Interactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8AC749B2854DDC1000E9AAB /* Interactor.swift */; };
+		F8AC74A42855D0AD000E9AAB /* RouterNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8AC74A32855D0AD000E9AAB /* RouterNote.swift */; };
+		F8AC74A82855D0DC000E9AAB /* InteractorNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8AC74A72855D0DC000E9AAB /* InteractorNote.swift */; };
+		F8AC74AE2856661F000E9AAB /* PresenterNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8AC74AD2856661F000E9AAB /* PresenterNote.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +37,15 @@
 		F8A71F892802F15200907C0E /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ListViewController.swift; sourceTree = "<group>"; };
 		F8A71F8B280482E700907C0E /* NoteViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewCell.swift; sourceTree = "<group>"; };
 		F8AC7487283F7511000E9AAB /* Worker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Worker.swift; sourceTree = "<group>"; };
+		F8AC74892854DB80000E9AAB /* Presenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Presenter.swift; sourceTree = "<group>"; };
+		F8AC748B2854DB99000E9AAB /* CleanWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CleanWorker.swift; sourceTree = "<group>"; };
+		F8AC748D2854DBA3000E9AAB /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
+		F8AC74932854DBFD000E9AAB /* CleanListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CleanListViewController.swift; sourceTree = "<group>"; };
+		F8AC74952854DC16000E9AAB /* CleanNoteViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CleanNoteViewCell.swift; sourceTree = "<group>"; };
+		F8AC749B2854DDC1000E9AAB /* Interactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interactor.swift; sourceTree = "<group>"; };
+		F8AC74A32855D0AD000E9AAB /* RouterNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterNote.swift; sourceTree = "<group>"; };
+		F8AC74A72855D0DC000E9AAB /* InteractorNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractorNote.swift; sourceTree = "<group>"; };
+		F8AC74AD2856661F000E9AAB /* PresenterNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresenterNote.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +78,8 @@
 		F83832F127F16C5500B78EB3 /* Notes */ = {
 			isa = PBXGroup;
 			children = (
+				F8AC749E2855D079000E9AAB /* NoteScene */,
+				F8AC749D2854EB0F000E9AAB /* ListScene */,
 				F8AC7486283F74E4000E9AAB /* Worker */,
 				F83CA1A3280885F2008A54DC /* General */,
 				F83CA1A2280885BF008A54DC /* View */,
@@ -75,7 +95,6 @@
 			isa = PBXGroup;
 			children = (
 				F8A71F892802F15200907C0E /* ListViewController.swift */,
-				F83CA19D280882CB008A54DC /* NoteViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -103,6 +122,30 @@
 				F8AC7487283F7511000E9AAB /* Worker.swift */,
 			);
 			path = Worker;
+			sourceTree = "<group>";
+		};
+		F8AC749D2854EB0F000E9AAB /* ListScene */ = {
+			isa = PBXGroup;
+			children = (
+				F8AC74932854DBFD000E9AAB /* CleanListViewController.swift */,
+				F8AC74892854DB80000E9AAB /* Presenter.swift */,
+				F8AC749B2854DDC1000E9AAB /* Interactor.swift */,
+				F8AC748D2854DBA3000E9AAB /* Router.swift */,
+				F8AC74952854DC16000E9AAB /* CleanNoteViewCell.swift */,
+				F8AC748B2854DB99000E9AAB /* CleanWorker.swift */,
+			);
+			path = ListScene;
+			sourceTree = "<group>";
+		};
+		F8AC749E2855D079000E9AAB /* NoteScene */ = {
+			isa = PBXGroup;
+			children = (
+				F8AC74A32855D0AD000E9AAB /* RouterNote.swift */,
+				F83CA19D280882CB008A54DC /* NoteViewController.swift */,
+				F8AC74A72855D0DC000E9AAB /* InteractorNote.swift */,
+				F8AC74AD2856661F000E9AAB /* PresenterNote.swift */,
+			);
+			path = NoteScene;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -198,11 +241,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				F83832F327F16C5500B78EB3 /* AppDelegate.swift in Sources */,
+				F8AC748C2854DB99000E9AAB /* CleanWorker.swift in Sources */,
+				F8AC748A2854DB80000E9AAB /* Presenter.swift in Sources */,
 				F83832F527F16C5500B78EB3 /* SceneDelegate.swift in Sources */,
+				F8AC748E2854DBA3000E9AAB /* Router.swift in Sources */,
+				F8AC74A82855D0DC000E9AAB /* InteractorNote.swift in Sources */,
+				F8AC74942854DBFD000E9AAB /* CleanListViewController.swift in Sources */,
 				F8A71F8A2802F15200907C0E /* ListViewController.swift in Sources */,
 				F8A71F8C280482E700907C0E /* NoteViewCell.swift in Sources */,
 				F83CA19E280882CB008A54DC /* NoteViewController.swift in Sources */,
 				F8AC7488283F7511000E9AAB /* Worker.swift in Sources */,
+				F8AC74AE2856661F000E9AAB /* PresenterNote.swift in Sources */,
+				F8AC749C2854DDC1000E9AAB /* Interactor.swift in Sources */,
+				F8AC74962854DC16000E9AAB /* CleanNoteViewCell.swift in Sources */,
+				F8AC74A42855D0AD000E9AAB /* RouterNote.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
