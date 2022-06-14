@@ -16,20 +16,21 @@ protocol InteractorNoteStoreProtocol: AnyObject {
     var header: String { get set }
     var text: String { get set }
     var date: Date { get set }
+    var img: UIImage { get set }
 }
 
 class InteractorNote: InteractorNoteStoreProtocol {
+    var img: UIImage = .init()
     var header: String = ""
     var text: String = ""
     var date: Date = .now
     var id = UUID()
-    var img: UIImage?
     var presenter: PresentstionLogic?
 }
 
 extension InteractorNote: InteractorNoteBusinessLogic {
     func fetchNote() {
-        let note = CleanNoteViewModel(header: header, text: text, date: date, id: id, img: img)
+        let note = Model.CleanNoteViewModel(header: header, text: text, date: date, id: id, img: img)
         presenter?.present(data: note)
     }
 }

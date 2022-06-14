@@ -8,7 +8,7 @@
 import UIKit
 
 protocol ListRouterLogic {
-    func navigate(note: CleanNoteViewModel)
+    func navigate(note: Model.CleanNoteViewModel)
     func navigateNew()
 }
 
@@ -27,12 +27,15 @@ extension ListRouter: ListRouterLogic {
         noteController?.navigationController?.pushViewController(controller, animated: true)
     }
 
-    func navigate(note: CleanNoteViewModel) {
+    func navigate(note: Model.CleanNoteViewModel) {
         let noteViewController = NoteViewController()
         noteController?.navigationController?.pushViewController(noteViewController, animated: true)
         noteViewController.router?.dataStore?.id = note.id
         noteViewController.router?.dataStore?.header = note.header
         noteViewController.router?.dataStore?.text = note.text
         noteViewController.router?.dataStore?.date = note.date
+        if note.img != nil {
+        noteViewController.router?.dataStore?.img = note.img!
+        }
     }
 }

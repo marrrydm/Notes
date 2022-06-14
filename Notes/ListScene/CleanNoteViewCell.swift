@@ -8,11 +8,6 @@
 import UIKit
 
 final class CleanNoteViewCell: UITableViewCell {
-    // MARK: Internal vars
-    private var id: UUID?
-    private var header: String?
-    private var text: String?
-    private var date: Date?
     // MARK: - Properties
     var userShareIconImg = UIImageView()
 
@@ -33,8 +28,7 @@ final class CleanNoteViewCell: UITableViewCell {
         static let borderWidth = 0.2
     }
 
-    func setup(data: CleanNoteViewModel) {
-        id = data.id
+    func setup(data: Model.CleanNoteViewModel) {
         dateFormatter.dateFormat = Constants.outputDate
         titleLabel.text = data.header
         contentLabel.text = data.text
@@ -44,14 +38,23 @@ final class CleanNoteViewCell: UITableViewCell {
 
     // MARK: - Init
 
-        required init?(coder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
-        override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-            super.init(style: .default, reuseIdentifier: reuseIdentifier)
-            configureUI()
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: .default, reuseIdentifier: reuseIdentifier)
+        configureUI()
+    }
+
+    // MARK: - Methods
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: true)
+        if editing == true {
+            setupUpdate()
+            setupSelected()
         }
+    }
 
     // MARK: - Private Methods
 

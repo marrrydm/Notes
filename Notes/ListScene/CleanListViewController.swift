@@ -8,7 +8,7 @@
 import UIKit
 
 protocol ListDisplayLogic: AnyObject {
-    func display(data: CleanNoteViewModel)
+    func display(data: Model.CleanNoteViewModel)
 }
 
 class CleanListViewController: UIViewController {
@@ -18,8 +18,8 @@ class CleanListViewController: UIViewController {
     private var rightBarButtonSelect = UIBarButtonItem()
     private var rightBarButtonOk = UIBarButtonItem()
     private var buttonPlus = UIButton(type: .custom)
-    private var notes: [CleanNoteViewModel] = []
-    private var indexArr: [CleanNoteViewModel] = []
+    private var notes: [Model.CleanNoteViewModel] = []
+    private var indexArr: [Model.CleanNoteViewModel] = []
     private var indexPathArray: [IndexPath] = []
 // MARK: External vars
     private (set) var router: ListRouterLogic?
@@ -57,22 +57,14 @@ class CleanListViewController: UIViewController {
         setupUI()
         tableConfig()
         activityIndicatorConfig()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [self] in
-            loadNotes()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [self] in
+            interactor?.loadNotes()
             activityIndicator.stopAnimating()
         }
     }
 
     override func viewDidAppear(_ animated: Bool) {
         btnAnimateOpen()
-    }
-
-    private func loadNotes() {
-        let workNotes = CleanWorker()
-        workNotes.getJSON()
-        workNotes.closureNotes = { [weak self] name in
-            self?.interactor?.fetchNotes(model: name)
-        }
     }
 
 // MARK: - UI
@@ -284,6 +276,7 @@ extension CleanListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let paths = tableView.indexPathsForSelectedRows else { return }
         if !tableView.isEditing {
+            tableView.deselectRow(at: indexPath, animated: true)
             for value in notes where value.id == notes[indexPath.row].id {
                 if !tableView.isEditing {
                 tapViewsKeyGo()
@@ -292,9 +285,7 @@ extension CleanListViewController: UITableViewDelegate {
             }
         } else {
             for path in paths {
-                print(path)
                 for (ind, value) in notes.enumerated() where path.row == ind {
-                    print(ind)
                     indexArr.append(value)
                     indexPathArray.append(path)
                 }
@@ -302,35 +293,9 @@ extension CleanListViewController: UITableViewDelegate {
         }
     }
 }
-
-//        guard let paths = tableView.indexPathsForSelectedRows,
-//        let index = tableView.indexPathForSelectedRow?.row
-//        else { return }
-//        if !tableView.isEditing {
-//            let noteViewController = NoteViewController()
-//            tableView.deselectRow(at: indexPath, animated: true)
-//            tapViewsKeyGo()
-//            for (ind, value) in notes.enumerated() where index == ind {
-//                noteViewController.updateNotePage(note: value)
-//            }
-//            noteViewController.closure = { [self] name in
-//                cells[index].setModel(model: name)
-//                notes[index] = name
-//                tableView.reloadData()
-//            }
-//            navigationController?.pushViewController(noteViewController, animated: true)
-//        } else {
-//            for path in paths {
-//                for (ind, value) in notes.enumerated() where path.row == ind {
-//                    indexArr.append(value)
-//                    indexPathArray.append(path)
-//                }
-//            }
-//        }
-
 // MARK: - ListDisplayLogic
 extension CleanListViewController: ListDisplayLogic {
-    func display(data: CleanNoteViewModel) {
+    func display(data: Model.CleanNoteViewModel) {
         let index = notes.firstIndex(where: {
             return $0.id == data.id
         })
@@ -394,22 +359,22 @@ extension CleanListViewController {
             },
             completion: {_ in
                 UIView.animate(
-                    withDuration: 0.5,
+                    withDuration: 0.2,
                     delay: 0,
                     usingSpringWithDamping: 0.8,
                     initialSpringVelocity: 0.8,
                     options: .curveEaseOut,
                     animations: {
-                        self.router?.navigateNew()
+                        self.buttonPlus.isHidden = true
+                        self.buttonPlus.layer.position.y -= 150
                     },
                     completion: { _ in
                         UIView.animate(
-                            withDuration: 0.001,
+                            withDuration: 0.2,
                             delay: 0,
                             options: [],
                             animations: {
-                                self.buttonPlus.isHidden = true
-                                self.buttonPlus.layer.position.y -= 150
+                                self.router?.navigateNew()
                             }
                         )
                     }
@@ -419,7 +384,7 @@ extension CleanListViewController {
     }
 
     private func goKeyFrames() {
-//        self.buttonPlus.isHidden = false
+        self.buttonPlus.isHidden = false
         UIView.addKeyframe(
             withRelativeStartTime: 0,
             relativeDuration: 0.5

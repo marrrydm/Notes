@@ -8,23 +8,33 @@
 import UIKit
 
 protocol ListBusinessLogic {
-    func fetchNotes(model: CleanNoteViewModel)
+    func fetchNotes(model: Model.CleanNoteViewModel)
+    func loadNotes()
 }
 
 final class ListInteractor: InteractorNoteStoreProtocol {
+    var img: UIImage = .init()
     var header: String = ""
     var text: String = ""
     var date: Date = .now
     var id = UUID()
-    var img: UIImage?
 
 // MARK: External vars
     var presenter: ListPresentstionLogic?
+    var worker: CleanWorker?
 }
 
 // MARK: ListBusinessLogic
 extension ListInteractor: ListBusinessLogic {
-    func fetchNotes(model: CleanNoteViewModel) {
+    func loadNotes() {
+        worker = CleanWorker()
+        worker?.getJSON()
+        worker?.closureNotes = { [weak self] name in
+            self?.presenter?.present(data: name)
+        }
+    }
+
+    func fetchNotes(model: Model.CleanNoteViewModel) {
         presenter?.present(data: model)
     }
 }

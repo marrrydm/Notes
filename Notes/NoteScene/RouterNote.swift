@@ -8,7 +8,7 @@
 import UIKit
 
 protocol RouterNoteLogic {
-    func navigateToNote(model: CleanNoteViewModel)
+    func navigateToNote(model: Model.CleanNoteViewModel)
 }
 
 protocol RouterNoteDataPassingProtocol {
@@ -21,7 +21,7 @@ class RouterNote: RouterNoteDataPassingProtocol {
 }
 
 extension RouterNote: RouterNoteLogic {
-    func navigateToNote(model: CleanNoteViewModel) {
+    func navigateToNote(model: Model.CleanNoteViewModel) {
         listViewController?.display(data: model)
     }
 }

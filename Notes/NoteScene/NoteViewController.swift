@@ -5,7 +5,7 @@
 import UIKit
 
 protocol NoteDisplayLogic: AnyObject {
-    func display(data: CleanNoteViewModel)
+    func display(data: Model.CleanNoteViewModel)
 }
 
 final class NoteViewController: UIViewController {
@@ -47,7 +47,7 @@ final class NoteViewController: UIViewController {
     private var dataPicker = UIDatePicker()
     private var dateFormatter = DateFormatter()
     private var locale = Locale(identifier: "rus")
-    private var notes = CleanNoteViewModel(header: "", text: "", date: .now)
+    private var notes = Model.CleanNoteViewModel(header: "", text: "", date: .now)
     private var url: URL?
     private var image: UIImage?
     private var id: UUID?
@@ -186,7 +186,7 @@ final class NoteViewController: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         dateFormatter.dateFormat = Constants.outputDate
-        notes = CleanNoteViewModel(
+        notes = Model.CleanNoteViewModel(
             header: titleTextField.text ?? Constants.titleUpdate,
             text: textView.text,
             date: dataPicker.date,
@@ -270,7 +270,7 @@ final class NoteViewController: UIViewController {
 
 // MARK: - NoteDisplayLogic
 extension NoteViewController: NoteDisplayLogic {
-    func display(data: CleanNoteViewModel) {
+    func display(data: Model.CleanNoteViewModel) {
         titleTextField.text = data.header
         textView.text = data.text
         dateTextField.text = data.date.formatted()
@@ -285,7 +285,7 @@ extension NoteViewController: NoteDisplayLogic {
 // MARK: - CheckForEmptyAlert
 extension NoteViewController {
     private func checkForEmpty() {
-        let note = NoteViewModel(header: Constants.titleUpdate, text: textView.text, date: .now)
+        let note = Model.CheckIsEmpty(text: textView.text)
         if note.isEmpty {
             showAlert()
         }

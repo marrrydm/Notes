@@ -9,12 +9,12 @@ import UIKit
 
 final class CleanWorker {
     // MARK: - Properties
-        var closureNotes: ((CleanNoteViewModel) -> Void)?
+        var closureNotes: ((Model.CleanNoteViewModel) -> Void)?
 
     // MARK: - Private Properties
         private let session = URLSession(configuration: .default)
-        private var workerNotes: [CleanNoteViewModel] = []
-        private var array: [CleanNoteViewModel] = []
+        private var workerNotes: [Model.CleanNoteViewModel] = []
+        private var array: [Model.CleanNoteViewModel] = []
         private var image: Data?
         private var photo: UIImage?
 
@@ -31,26 +31,30 @@ final class CleanWorker {
                 }
                 do {
                     let group = DispatchGroup()
-                    self.workerNotes = try JSONDecoder().decode([CleanNoteViewModel].self, from: data)
+                    self.workerNotes = try JSONDecoder().decode([Model.CleanNoteViewModel].self, from: data)
+                    group.enter()
                     for var note in self.workerNotes {
                         if note.userShareIcon != nil {
+                            group.enter()
                             guard let urlImg = note.userShareIcon, let data = try? Data(contentsOf: urlImg)
                             else { return }
                             if !data.isEmpty {
                                 note.imgData = data
                                 note.img = UIImage(data: note.imgData!)
                             }
+                            group.leave()
                         }
                         array.append(note)
                     }
+                    group.leave()
                     for note in array {
                         group.notify(queue: DispatchQueue.main, execute: {
                             self.closureNotes?(
-                                CleanNoteViewModel(
+                                Model.CleanNoteViewModel(
                                     header: note.header,
                                     text: note.text,
                                     date: note.date,
-                                    userShareIcon: note.userShareIcon,
+                                    id: note.id,
                                     img: note.img
                                 )
                             )

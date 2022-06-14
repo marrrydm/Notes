@@ -8,7 +8,7 @@
 import UIKit
 
 protocol PresentstionLogic {
-    func present(data: CleanNoteViewModel)
+    func present(data: Model.CleanNoteViewModel)
 }
 
 final class PresenterNote {
@@ -18,7 +18,7 @@ final class PresenterNote {
 
 // MARK: ListPresentstionLogic
 extension PresenterNote: PresentstionLogic {
-    func present(data: CleanNoteViewModel) {
+    func present(data: Model.CleanNoteViewModel) {
         noteViewController?.display(data: data)
     }
 }
