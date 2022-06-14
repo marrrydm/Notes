@@ -105,8 +105,6 @@ final class ListViewController: UIViewController {
                         notes.remove(at: ind)
                         cells.remove(at: ind)
                         indexPathArray.removeAll()
-                        print(notes)
-                        print(cells.count)
                     }
                 }
                 tableView.endUpdates()

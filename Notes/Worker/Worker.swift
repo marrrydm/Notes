@@ -39,16 +39,21 @@ final class Worker {
                 // сессия поддерживает сильную ссылку до тех пор, пока запрос не завершится или не завершится ошибкой
                 let group = DispatchGroup()
                 self.workerNotes = try JSONDecoder().decode([NoteViewModel].self, from: data)
+                group.enter()
                 for var note in self.workerNotes {
                     if note.userShareIcon != nil {
-                        let urlImg = note.userShareIcon, data = try? Data(contentsOf: urlImg!)
-                        if data != nil {
-                            note.imgData = data!
+                        group.enter()
+                        guard let urlImg = note.userShareIcon, let data = try? Data(contentsOf: urlImg)
+                        else { return }
+                        if !data.isEmpty {
+                            note.imgData = data
                             note.img = UIImage(data: note.imgData!)
                         }
+                        group.leave()
                     }
                     array.append(note)
                 }
+                group.leave()
                 group.notify(queue: DispatchQueue.main, execute: {
                     for note in self.array {
                         self.closureNotes?(
