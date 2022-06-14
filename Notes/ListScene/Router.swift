@@ -9,6 +9,7 @@ import UIKit
 
 protocol ListRouterLogic {
     func navigate(note: CleanNoteViewModel)
+    func navigateNew()
 }
 
 protocol RouterNoteDataProtocol {
@@ -21,6 +22,11 @@ final class ListRouter: RouterNoteDataProtocol {
 }
 
 extension ListRouter: ListRouterLogic {
+    func navigateNew() {
+        let controller = NoteViewController()
+        noteController?.navigationController?.pushViewController(controller, animated: true)
+    }
+
     func navigate(note: CleanNoteViewModel) {
         let noteViewController = NoteViewController()
         noteController?.navigationController?.pushViewController(noteViewController, animated: true)

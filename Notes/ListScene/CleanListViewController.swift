@@ -12,27 +12,21 @@ protocol ListDisplayLogic: AnyObject {
 }
 
 class CleanListViewController: UIViewController {
-    func update(note: CleanNoteViewModel) {
-        let cellFirst = CleanNoteViewCell()
-        cellFirst.setup(data: note)
-        tableView.reloadData()
-    }
-
-    // MARK: Outlet
+// MARK: Private Properties
     private var tableView = UITableView(frame: .zero, style: .plain)
     private var activityIndicator = UIActivityIndicatorView(style: .large)
     private var rightBarButtonSelect = UIBarButtonItem()
     private var rightBarButtonOk = UIBarButtonItem()
     private var buttonPlus = UIButton(type: .custom)
-    // MARK: External vars
-    private (set) var router: ListRouterLogic?
-    // MARK: Internal vars
-    private var interactor: ListBusinessLogic?
     private var notes: [CleanNoteViewModel] = []
-    private var cells: [NoteViewCell] = []
     private var indexArr: [CleanNoteViewModel] = []
     private var indexPathArray: [IndexPath] = []
+// MARK: External vars
+    private (set) var router: ListRouterLogic?
+// MARK: Internal vars
+    private var interactor: ListBusinessLogic?
 
+// MARK: - Init
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         setup()
@@ -54,25 +48,34 @@ class CleanListViewController: UIViewController {
         interactor.presenter = presenter
         presenter.listViewController = viewController
         router.noteController = viewController
-        router.dataStore = interactor
     }
 
-    // MARK: - Init
+// MARK: - Inheritance
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = Constants.backgroundColor
         setupUI()
         tableConfig()
-//        activityIndicatorConfig()
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [self] in
-//            activityIndicator.stopAnimating()
-//        }
-//        interactor?.fetchNotes()
-        print(notes)
+        activityIndicatorConfig()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [self] in
+            loadNotes()
+            activityIndicator.stopAnimating()
+        }
     }
 
-    // MARK: - Private Methods
+    override func viewDidAppear(_ animated: Bool) {
+        btnAnimateOpen()
+    }
 
+    private func loadNotes() {
+        let workNotes = CleanWorker()
+        workNotes.getJSON()
+        workNotes.closureNotes = { [weak self] name in
+            self?.interactor?.fetchNotes(model: name)
+        }
+    }
+
+// MARK: - UI
     private func setupUI() {
         setupHeader()
         setupNavItem()
@@ -209,7 +212,6 @@ class CleanListViewController: UIViewController {
                     for (ind, value) in notes.enumerated() where val == value {
                         tableView.deleteRows(at: indexPathArray, with: .left)
                         notes.remove(at: ind)
-                        cells.remove(at: ind)
                         indexPathArray.removeAll()
                     }
                 }
@@ -232,8 +234,7 @@ class CleanListViewController: UIViewController {
         present(alertError, animated: true)
     }
 
-    // MARK: - Constants
-
+// MARK: - Constants
     private enum Constants {
         static let titleNB = "Заметки"
         static let titleSelect = "Выбрать"
@@ -248,7 +249,6 @@ class CleanListViewController: UIViewController {
 // MARK: - UITableViewDataSource
 extension CleanListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print(notes)
         return notes.count
     }
 
@@ -259,7 +259,6 @@ extension CleanListViewController: UITableViewDataSource {
             fatalError("failed to get value cell")
         }
         cell.setup(data: notes[indexPath.row])
-        cell.delegate = self
         cell.tintColor = Constants.backgroundColorCheckBox
         return cell
     }
@@ -280,20 +279,29 @@ extension CleanListViewController: UITableViewDataSource {
     }
 }
 
-extension CleanListViewController: ListCellDelegate {
-    func didCellTap(id: UUID) {
-        for value in notes where value.id == id {
-            router?.navigate(note: value)
-            tapViewsKeyGo()
+// MARK: - UITableViewDelegate
+extension CleanListViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let paths = tableView.indexPathsForSelectedRows else { return }
+        if !tableView.isEditing {
+            for value in notes where value.id == notes[indexPath.row].id {
+                if !tableView.isEditing {
+                tapViewsKeyGo()
+                router?.navigate(note: value)
+                }
+            }
+        } else {
+            for path in paths {
+                print(path)
+                for (ind, value) in notes.enumerated() where path.row == ind {
+                    print(ind)
+                    indexArr.append(value)
+                    indexPathArray.append(path)
+                }
+            }
         }
     }
 }
-    // MARK: - UITableViewDelegate
-extension CleanListViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if !tableView.isEditing {
-            tableView.deselectRow(at: indexPath, animated: true)
-        }
 
 //        guard let paths = tableView.indexPathsForSelectedRows,
 //        let index = tableView.indexPathForSelectedRow?.row
@@ -319,16 +327,18 @@ extension CleanListViewController: UITableViewDelegate {
 //                }
 //            }
 //        }
-    }
-}
 
-// MARK: - Display Logic implementation
+// MARK: - ListDisplayLogic
 extension CleanListViewController: ListDisplayLogic {
     func display(data: CleanNoteViewModel) {
-//        notes.removeAll()
-        print("HI!!!!!")
-        notes.append(data)
-        print(notes)
+        let index = notes.firstIndex(where: {
+            return $0.id == data.id
+        })
+        if index == nil {
+            notes.append(data)
+        } else {
+            notes[index!] = data
+        }
         tableView.reloadData()
     }
 }
@@ -390,9 +400,7 @@ extension CleanListViewController {
                     initialSpringVelocity: 0.8,
                     options: .curveEaseOut,
                     animations: {
-                        let root = NoteViewController()
-                        self.navigationController?.pushViewController(root, animated: true)
-//                        root.delegate = self
+                        self.router?.navigateNew()
                     },
                     completion: { _ in
                         UIView.animate(
@@ -411,7 +419,7 @@ extension CleanListViewController {
     }
 
     private func goKeyFrames() {
-        self.buttonPlus.isHidden = false
+//        self.buttonPlus.isHidden = false
         UIView.addKeyframe(
             withRelativeStartTime: 0,
             relativeDuration: 0.5

@@ -8,29 +8,13 @@ protocol NoteDisplayLogic: AnyObject {
     func display(data: CleanNoteViewModel)
 }
 
-protocol NoteCellDelegate: AnyObject {
-    func didTap(model: CleanNoteViewModel)
-}
-
 final class NoteViewController: UIViewController {
-    weak var delegate: ListCellDelegate?
-//    func didTap(model: CleanNoteViewModel) {
-//        titleTextField.text = model.header
-//        textView.text = model.text
-//        dateTextField.text = model.date.formatted()
-//        dateFormatter.dateFormat = Constants.dateFormat
-//        dateTextField.text = dateFormatter.string(from: dataPicker.date)
-//        url = model.userShareIcon
-//    }
-
     // MARK: External vars
     private (set) var router: (RouterNoteLogic & RouterNoteDataPassingProtocol)?
     // MARK: Internal vars
     private var interactor: (InteractorNoteBusinessLogic & InteractorNoteStoreProtocol)?
 
-    private (set) var routerList: (ListRouterLogic & RouterNoteDataProtocol)?
-
-    // MARK: - Init
+// MARK: - Init
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         setup()
@@ -51,29 +35,10 @@ final class NoteViewController: UIViewController {
         viewController.router = router
         interactor.presenter = presenter
         presenter.noteViewController = viewController
-//        router.listViewController = viewController
         router.dataStore = interactor
-
-//        interactor.presenter = presenter
-//        presenter.noteViewController = viewController
-//        viewController.interactor = interactor
-//
-//        viewController.router = router
-//        router.dataStore = interactor
-//
-//        presenter.noteViewController = viewController
-//        interactor.presenter = presenter
-//        router.dataStore = interactor
-//        viewController.interactor = interactor
-//        viewController.router = router
     }
-// MARK: - Properties
-
-    // чтобы предотвратить цикл сильных ссылок
-    var closure: ((CleanNoteViewModel) -> Void)?
 
 // MARK: - Private Properties
-// не используем weak/unowned, т.к. защита от удаления тех объектов, на которые ссылаются они сами
     private var rightBarButton = UIBarButtonItem()
     private var titleTextField = UITextField()
     private var textLabel = UILabel()
@@ -82,11 +47,12 @@ final class NoteViewController: UIViewController {
     private var dataPicker = UIDatePicker()
     private var dateFormatter = DateFormatter()
     private var locale = Locale(identifier: "rus")
-    private var notes = CleanNoteViewModel(header: "12345", text: "12345", date: .now)
+    private var notes = CleanNoteViewModel(header: "", text: "", date: .now)
     private var url: URL?
     private var image: UIImage?
+    private var id: UUID?
 
-// MARK: - UI Properties
+// MARK: - UI
     private func configureUI() {
         setupDateTextField()
         setupTextField()
@@ -205,7 +171,6 @@ final class NoteViewController: UIViewController {
     }
 
 // MARK: - Inheritance
-
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(red: 0.898, green: 0.898, blue: 0.898, alpha: 1)
@@ -225,44 +190,14 @@ final class NoteViewController: UIViewController {
             header: titleTextField.text ?? Constants.titleUpdate,
             text: textView.text,
             date: dataPicker.date,
-            userShareIcon: url
-//            ,
-//            img: image
+            id: id!,
+            userShareIcon: url,
+            img: image
         )
-//        changeDateInList()
         router?.navigateToNote(model: notes)
-//        routerList?.navigate(note: notes)
-//        changeDateInList()
-//        self.delegate?.updateNotes(note: notes)
     }
 
-// MARK: - Methods
-
-//    func updateNotePage(note: CleanNoteViewModel) {
-//        titleTextField.text = note.header
-//        textView.text = note.text
-//        dateTextField.text = note.date.formatted()
-//        dateFormatter.dateFormat = Constants.dateFormat
-//        dateTextField.text = dateFormatter.string(from: dataPicker.date)
-//        url = note.userShareIcon
-//        print(note)
-//        image = note.img
-//    }
-
 // MARK: - Private Methods
-
-//    func changeDateInList() {
-//        dateFormatter.dateFormat = Constants.outputDate
-//        closure?(
-//            CleanNoteViewModel(
-//                header: titleTextField.text ?? Constants.titleUpdate,
-//                text: textView.text,
-//                date: dataPicker.date,
-//                userShareIcon: url
-//            )
-//        )
-//    }
-
     private func keyboardUp() {
         NotificationCenter.default.addObserver(
             self,
@@ -314,7 +249,6 @@ final class NoteViewController: UIViewController {
     @objc private func didRightBarButtonTapped(_ sender: Any) {
         rightBarButton.title = Constants.rightBarButtonTitle
         checkForEmpty()
-//        changeDateInList()
         view.endEditing(true)
     }
 
@@ -324,8 +258,7 @@ final class NoteViewController: UIViewController {
         present(alertError, animated: true)
     }
 
-    // MARK: - Constants
-
+// MARK: - Constants
     private enum Constants {
         static let rightBarButtonTitle = "Готово"
         static let titleTextFieldPlaceholder = "Введите название"
@@ -335,6 +268,7 @@ final class NoteViewController: UIViewController {
     }
 }
 
+// MARK: - NoteDisplayLogic
 extension NoteViewController: NoteDisplayLogic {
     func display(data: CleanNoteViewModel) {
         titleTextField.text = data.header
@@ -343,11 +277,12 @@ extension NoteViewController: NoteDisplayLogic {
         dateFormatter.dateFormat = Constants.dateFormat
         dateTextField.text = dateFormatter.string(from: dataPicker.date)
         url = data.userShareIcon
+        image = data.img
+        id = data.id
     }
 }
 
 // MARK: - CheckForEmptyAlert
-
 extension NoteViewController {
     private func checkForEmpty() {
         let note = NoteViewModel(header: Constants.titleUpdate, text: textView.text, date: .now)

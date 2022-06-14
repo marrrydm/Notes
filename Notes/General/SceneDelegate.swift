@@ -5,6 +5,8 @@
 
 import UIKit
 
+    var listViewController: CleanListViewController?
+
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
 
@@ -13,17 +15,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         willConnectTo session: UISceneSession,
         options connectionOptions: UIScene.ConnectionOptions
     ) {
-//        guard let windowScene = (scene as? UIWindowScene) else { return }
-//        window = UIWindow(frame: windowScene.coordinateSpace.bounds)
-//        window?.windowScene = windowScene
-//        let sceneFactory = CleanListViewController()
-//        let navController = UINavigationController(rootViewController: sceneFactory)
-//        window?.rootViewController = navController
-//        window?.makeKeyAndVisible()
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
-        let listViewController = CleanListViewController()
-        let navigation = UINavigationController(rootViewController: listViewController)
+        listViewController = CleanListViewController()
+        let navigation = UINavigationController(rootViewController: listViewController!)
         window.rootViewController = navigation
         window.makeKeyAndVisible()
         self.window = window

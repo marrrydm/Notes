@@ -11,7 +11,7 @@ protocol InteractorNoteBusinessLogic {
     func fetchNote()
 }
 
-protocol InteractorNoteStoreProtocol: AnyObject { // для передачи данных
+protocol InteractorNoteStoreProtocol: AnyObject {
     var id: UUID { get set }
     var header: String { get set }
     var text: String { get set }
@@ -23,12 +23,13 @@ class InteractorNote: InteractorNoteStoreProtocol {
     var text: String = ""
     var date: Date = .now
     var id = UUID()
+    var img: UIImage?
     var presenter: PresentstionLogic?
 }
 
 extension InteractorNote: InteractorNoteBusinessLogic {
     func fetchNote() {
-        let note = CleanNoteViewModel(header: header, text: text, date: date)
+        let note = CleanNoteViewModel(header: header, text: text, date: date, id: id, img: img)
         presenter?.present(data: note)
     }
 }

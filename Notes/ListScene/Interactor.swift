@@ -16,15 +16,15 @@ final class ListInteractor: InteractorNoteStoreProtocol {
     var text: String = ""
     var date: Date = .now
     var id = UUID()
+    var img: UIImage?
 
 // MARK: External vars
-    var presenter: ListPresentstionLogic? // ссылка на презентер
+    var presenter: ListPresentstionLogic?
 }
 
 // MARK: ListBusinessLogic
 extension ListInteractor: ListBusinessLogic {
     func fetchNotes(model: CleanNoteViewModel) {
-//        let note = CleanNoteViewModel(header: model.header, text: model.text, date: model.date)
-        presenter?.present(data: model) /// вызываем данные у презентера когда мы их получили (отдаем в презентер)
+        presenter?.present(data: model)
     }
 }

@@ -18,12 +18,10 @@ protocol RouterNoteDataPassingProtocol {
 class RouterNote: RouterNoteDataPassingProtocol {
     var dataStore: InteractorNoteStoreProtocol?
     var router: RouterNoteLogic?
-    var controller = CleanListViewController()
 }
 
 extension RouterNote: RouterNoteLogic {
     func navigateToNote(model: CleanNoteViewModel) {
-        controller.display(data: model)
-        print(model)
+        listViewController?.display(data: model)
     }
 }

@@ -7,45 +7,14 @@
 
 import UIKit
 
-struct CleanNoteViewModel: Equatable, Decodable {
-    var header: String
-    var text: String
-    var date: Date
-    var id = UUID()
-    var userShareIcon: URL?
-    var imgData: Data?
-//    var img: UIImage?
-    var isEmpty: Bool {
-        return text.isEmpty ? true : false
-    }
-}
-
-protocol ListCellDelegate: AnyObject {
-    func didCellTap(id: UUID)
-}
-
 final class CleanNoteViewCell: UITableViewCell {
-    // MARK: External vars
-    weak var delegate: ListCellDelegate?
     // MARK: Internal vars
     private var id: UUID?
     private var header: String?
     private var text: String?
     private var date: Date?
     // MARK: - Properties
-    // не используем weak/unowned, т.к. защита от удаления тех объектов, на которые ссылаются они сами
     var userShareIconImg = UIImageView()
-
-    private func tapViews() {
-        let tapCell = UITapGestureRecognizer(target: self, action: #selector(cellTap(sender:)))
-        self.addGestureRecognizer(tapCell)
-    }
-
-    @objc private func cellTap(sender: UITapGestureRecognizer) {
-        guard let noteId = id
-        else { return }
-        delegate?.didCellTap(id: noteId)
-    }
 
     // MARK: - Private Properties
         private var titleLabel = UILabel()
@@ -70,6 +39,7 @@ final class CleanNoteViewCell: UITableViewCell {
         titleLabel.text = data.header
         contentLabel.text = data.text
         dateLabel.text = dateFormatter.string(from: data.date)
+        userShareIconImg.image = data.img
     }
 
     // MARK: - Init
@@ -81,12 +51,6 @@ final class CleanNoteViewCell: UITableViewCell {
         override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
             super.init(style: .default, reuseIdentifier: reuseIdentifier)
             configureUI()
-            tapViews()
-            print("Инициализация NoteViewCell")
-        }
-
-        deinit {
-            print("Деинициализация NoteViewCell")
         }
 
     // MARK: - Private Methods

@@ -43,13 +43,11 @@ final class Worker {
                 self.workerNotes = try JSONDecoder().decode([NoteViewModel].self, from: data)
                 for var note in self.workerNotes {
                     if note.userShareIcon != nil {
-                        let urlImg = note.userShareIcon, data = try? Data(contentsOf: urlImg!)
-                        if data != nil {
-                            note.imgData = data!
+                        guard let urlImg = note.userShareIcon, let data = try? Data(contentsOf: urlImg)
+                        else { return }
+                        if data == data {
+                            note.imgData = data
                             note.img = UIImage(data: note.imgData!)
-                        } else {
-                            image = nil
-                            photo = nil
                         }
                     }
                     array.append(note)
