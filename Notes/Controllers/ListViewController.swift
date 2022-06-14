@@ -15,17 +15,17 @@ protocol NotesDelegate: AnyObject {
 
 final class ListViewController: UIViewController {
 // MARK: - Private Properties
-
+// не используем weak/unowned, т.к. защита от удаления тех объектов, на которые ссылаются они сами
+// используем weak, чтобы проще было делать deinit, если будет какая-то ссылка
     private var rightBarButtonSelect = UIBarButtonItem()
     private var rightBarButtonOk = UIBarButtonItem()
     private var buttonPlus = UIButton(type: .custom)
-    private let tableView = UITableView(frame: .zero, style: .plain)
+    private var tableView = UITableView(frame: .zero, style: .plain)
+    private var activityIndicator = UIActivityIndicatorView(style: .large)
     private var notes: [NoteViewModel] = []
     private var cells: [NoteViewCell] = []
-    private var cellFirst: NoteViewCell?
     private var indexArr: [NoteViewModel] = []
     private var indexPathArray: [IndexPath] = []
-    private let workNotes = Worker()
 
 // MARK: - Inheritance
 
@@ -35,21 +35,38 @@ final class ListViewController: UIViewController {
         setupUI()
         tapViews()
         tableConfig()
-        loadNotes()
+        activityIndicatorConfig()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [self] in
+            loadNotes()
+            activityIndicator.stopAnimating()
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
         btnAnimateOpen()
     }
 
+// MARK: - Init
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        print("Инициализация ListViewController")
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        print("Деинициализация ListViewController")
+    }
+
 // MARK: - Private Methods
 
     private func loadNotes() {
+        let workNotes = Worker()
         workNotes.getJSON()
-        workNotes.closureNotes = { [self] name in
-            DispatchQueue.main.async {
-                self.updateNotes(note: name)
-            }
+        workNotes.closureNotes = { [weak self] name in
+            self?.updateNotes(note: name)
         }
     }
 
@@ -59,6 +76,14 @@ final class ListViewController: UIViewController {
         tableView.register(NoteViewCell.self, forCellReuseIdentifier: NoteViewCell.Constants.id)
         tableView.setEditing(false, animated: true)
         tableView.allowsMultipleSelectionDuringEditing = true
+    }
+
+    private func activityIndicatorConfig() {
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.startAnimating()
+        view.addSubview(activityIndicator)
+        activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
     }
 
     private func tapViews() {
@@ -78,6 +103,7 @@ final class ListViewController: UIViewController {
                     for (ind, value) in notes.enumerated() where val == value {
                         tableView.deleteRows(at: indexPathArray, with: .left)
                         notes.remove(at: ind)
+                        cells.remove(at: ind)
                         indexPathArray.removeAll()
                     }
                 }
@@ -88,13 +114,6 @@ final class ListViewController: UIViewController {
                 buttonPlus.setImage(UIImage(named: "plusImg"), for: .normal)
             }
         }
-    }
-
-    func tableView(
-        _ tableView: UITableView,
-        editingStyleForRowAt indexPath: IndexPath
-    ) -> UITableViewCell.EditingStyle {
-        return .none
     }
 
     private func showAlert() {
@@ -230,12 +249,12 @@ final class ListViewController: UIViewController {
 
 extension ListViewController: NotesDelegate {
     func updateNotes(note: NoteViewModel) {
-        cellFirst = NoteViewCell()
-        cellFirst?.setModel(model: note)
+        let cellFirst = NoteViewCell()
+        cellFirst.setModel(model: note)
 
         saveNote(note: note)
         tableView.reloadData()
-        cells.append(cellFirst!)
+        cells.append(cellFirst)
     }
 }
 
@@ -277,11 +296,11 @@ extension ListViewController: UITableViewDataSource {
 
 extension ListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let noteViewController = NoteViewController()
         guard let paths = tableView.indexPathsForSelectedRows,
         let index = tableView.indexPathForSelectedRow?.row
         else { return }
         if !tableView.isEditing {
+            let noteViewController = NoteViewController()
             tapViewsKeyGo()
             for (ind, value) in notes.enumerated() where index == ind {
                 noteViewController.updateNotePage(note: value)
@@ -321,7 +340,7 @@ extension ListViewController {
                     usingSpringWithDamping: 0.3,
                     initialSpringVelocity: 0.3,
                     options: .curveEaseOut,
-                    animations: { [self] in
+                    animations: {
                         self.buttonPlus.transform = CGAffineTransform(scaleX: 1, y: 1)
                     }
                 )

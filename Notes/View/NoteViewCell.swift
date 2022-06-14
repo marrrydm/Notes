@@ -12,6 +12,9 @@ struct NoteViewModel: Equatable, Decodable {
     var text: String
     var date: Date
     var id = UUID()
+    var userShareIcon: URL?
+    var imgData: Data?
+    var img: UIImage?
     var isEmpty: Bool {
         return text.isEmpty ? true : false
     }
@@ -20,16 +23,20 @@ struct NoteViewModel: Equatable, Decodable {
         case header
         case text
         case date
+        case userShareIcon
     }
 }
 
 final class NoteViewCell: UITableViewCell {
-// MARK: - Private Properties
+// MARK: - Properties
+// не используем weak/unowned, т.к. защита от удаления тех объектов, на которые ссылаются они сами
+    var userShareIconImg = UIImageView()
 
+// MARK: - Private Properties
     private var titleLabel = UILabel()
     private var contentLabel = UILabel()
     private var dateLabel = UILabel()
-    private let dateFormatter = DateFormatter()
+    private var dateFormatter = DateFormatter()
 
 // MARK: - Init
 
@@ -40,6 +47,11 @@ final class NoteViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
         configureUI()
+        print("Инициализация NoteViewCell")
+    }
+
+    deinit {
+        print("Деинициализация NoteViewCell")
     }
 
 // MARK: - Methods
@@ -53,6 +65,7 @@ final class NoteViewCell: UITableViewCell {
         titleLabel.text = model.header
         contentLabel.text = model.text
         dateLabel.text = dateFormatter.string(from: model.date)
+        userShareIconImg.image = model.img
     }
 
     override func setEditing(_ editing: Bool, animated: Bool) {
@@ -76,12 +89,15 @@ final class NoteViewCell: UITableViewCell {
         contentView.addSubview(titleLabel)
         contentView.addSubview(contentLabel)
         contentView.addSubview(dateLabel)
+        addSubview(userShareIconImg)
 
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         contentLabel.translatesAutoresizingMaskIntoConstraints = false
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
+        userShareIconImg.translatesAutoresizingMaskIntoConstraints = false
 
         setupLabels()
+        setupImage()
     }
 
     private func setupUpdate() {
@@ -102,6 +118,35 @@ final class NoteViewCell: UITableViewCell {
         backgroundView.layer.borderColor = UIColor.white.cgColor
         backgroundView.backgroundColor = UIColor.white
         selectedBackgroundView = backgroundView
+    }
+
+    private func setupImage() {
+        addSubview(userShareIconImg)
+        constraintsImageView()
+    }
+
+    private func constraintsImageView() {
+        let topConstraint = userShareIconImg.topAnchor.constraint(
+            equalTo: self.contentView.topAnchor,
+            constant: 56
+        )
+        let trailingConstraint = userShareIconImg.leadingAnchor.constraint(
+            equalTo: self.contentView.leadingAnchor,
+            constant: 318
+        )
+        let leadingConstraint = userShareIconImg.trailingAnchor.constraint(
+            equalTo: self.contentView.trailingAnchor,
+            constant: -10
+        )
+        let heightConstraint = userShareIconImg.heightAnchor.constraint(equalToConstant: 24)
+        let widthConstraint = userShareIconImg.widthAnchor.constraint(equalToConstant: 24)
+        NSLayoutConstraint.activate([
+            topConstraint,
+            trailingConstraint,
+            leadingConstraint,
+            heightConstraint,
+            widthConstraint
+        ])
     }
 
     private func setupLabels() {
