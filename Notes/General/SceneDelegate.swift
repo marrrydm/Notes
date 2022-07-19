@@ -5,7 +5,7 @@
 
 import UIKit
 
-    var listViewController: CleanListViewController?
+    var root = Assembly.build()
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
@@ -17,9 +17,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     ) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
-        listViewController = CleanListViewController()
-        let navigation = UINavigationController(rootViewController: listViewController!)
-        window.rootViewController = navigation
+        let navController = UINavigationController(rootViewController: root)
+        window.rootViewController = navController
         window.makeKeyAndVisible()
         self.window = window
     }

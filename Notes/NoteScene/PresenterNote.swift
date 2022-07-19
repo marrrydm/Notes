@@ -19,6 +19,13 @@ final class PresenterNote {
 // MARK: ListPresentstionLogic
 extension PresenterNote: PresentstionLogic {
     func present(data: Model.CleanNoteViewModel) {
-        noteViewController?.display(data: data)
+        let dataModel = Model.CleanNoteViewModel(
+            header: data.header,
+            text: data.text,
+            date: data.date,
+            id: data.id,
+            img: data.img
+        )
+        noteViewController?.display(data: dataModel)
     }
 }

@@ -9,7 +9,7 @@ import UIKit
 
 final class CleanWorker {
     // MARK: - Properties
-        var closureNotes: ((Model.CleanNoteViewModel) -> Void)?
+    var closureNotes: ((Model.CleanNoteViewModel) -> Void)?
 
     // MARK: - Private Properties
         private let session = URLSession(configuration: .default)

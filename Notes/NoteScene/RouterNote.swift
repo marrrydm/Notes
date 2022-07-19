@@ -18,10 +18,19 @@ protocol RouterNoteDataPassingProtocol {
 class RouterNote: RouterNoteDataPassingProtocol {
     var dataStore: InteractorNoteStoreProtocol?
     var router: RouterNoteLogic?
+    var presenter: ListPresenter?
+    weak var viewController: UIViewController?
 }
 
 extension RouterNote: RouterNoteLogic {
     func navigateToNote(model: Model.CleanNoteViewModel) {
-        listViewController?.display(data: model)
+        let modelNote = Model.CleanNoteViewModel(
+            header: model.header,
+            text: model.text,
+            date: model.date,
+            id: model.id,
+            img: model.img
+        )
+        root.interactor?.fetchNotes(model: modelNote)
     }
 }

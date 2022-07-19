@@ -11,7 +11,7 @@ protocol ListDisplayLogic: AnyObject {
     func display(data: Model.CleanNoteViewModel)
 }
 
-class CleanListViewController: UIViewController {
+final class CleanListViewController: UIViewController {
 // MARK: Private Properties
     private var tableView = UITableView(frame: .zero, style: .plain)
     private var activityIndicator = UIActivityIndicatorView(style: .large)
@@ -22,32 +22,18 @@ class CleanListViewController: UIViewController {
     private var indexArr: [Model.CleanNoteViewModel] = []
     private var indexPathArray: [IndexPath] = []
 // MARK: External vars
-    private (set) var router: ListRouterLogic?
+    var router: ListRouterLogic?
 // MARK: Internal vars
-    private var interactor: ListBusinessLogic?
+    var interactor: ListBusinessLogic?
+    var presenter: ListPresentstionLogic?
 
 // MARK: - Init
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        setup()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        setup()
-    }
-
-    private func setup() {
-        let viewController = self
-        let presenter = ListPresenter()
-        let interactor = ListInteractor()
-        let router = ListRouter()
-
-        viewController.interactor = interactor
-        viewController.router = router
-        interactor.presenter = presenter
-        presenter.listViewController = viewController
-        router.noteController = viewController
     }
 
 // MARK: - Inheritance
@@ -57,7 +43,7 @@ class CleanListViewController: UIViewController {
         setupUI()
         tableConfig()
         activityIndicatorConfig()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self] in
             interactor?.loadNotes()
             activityIndicator.stopAnimating()
         }

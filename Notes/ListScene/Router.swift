@@ -23,12 +23,12 @@ final class ListRouter: RouterNoteDataProtocol {
 
 extension ListRouter: ListRouterLogic {
     func navigateNew() {
-        let controller = NoteViewController()
+        let controller = AssemblyNote.buildNote()
         noteController?.navigationController?.pushViewController(controller, animated: true)
     }
 
     func navigate(note: Model.CleanNoteViewModel) {
-        let noteViewController = NoteViewController()
+        let noteViewController = AssemblyNote.buildNote()
         noteController?.navigationController?.pushViewController(noteViewController, animated: true)
         noteViewController.router?.dataStore?.id = note.id
         noteViewController.router?.dataStore?.header = note.header

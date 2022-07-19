@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F80FDA56285A6F7800EC4967 /* Assembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80FDA55285A6F7800EC4967 /* Assembly.swift */; };
+		F80FDA58285C8F8D00EC4967 /* AssemblyNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80FDA57285C8F8D00EC4967 /* AssemblyNote.swift */; };
 		F83832F327F16C5500B78EB3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F83832F227F16C5500B78EB3 /* AppDelegate.swift */; };
 		F83832F527F16C5500B78EB3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F83832F427F16C5500B78EB3 /* SceneDelegate.swift */; };
 		F83832FC27F16C5500B78EB3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F83832FB27F16C5500B78EB3 /* Assets.xcassets */; };
@@ -25,6 +27,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F80FDA55285A6F7800EC4967 /* Assembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assembly.swift; sourceTree = "<group>"; };
+		F80FDA57285C8F8D00EC4967 /* AssemblyNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssemblyNote.swift; sourceTree = "<group>"; };
 		F83832EF27F16C5500B78EB3 /* Notes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F83832F227F16C5500B78EB3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F83832F427F16C5500B78EB3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -96,6 +100,7 @@
 		F8AC749D2854EB0F000E9AAB /* ListScene */ = {
 			isa = PBXGroup;
 			children = (
+				F80FDA55285A6F7800EC4967 /* Assembly.swift */,
 				F8AC74932854DBFD000E9AAB /* CleanListViewController.swift */,
 				F8AC74892854DB80000E9AAB /* Presenter.swift */,
 				F8AC749B2854DDC1000E9AAB /* Interactor.swift */,
@@ -110,6 +115,7 @@
 		F8AC749E2855D079000E9AAB /* NoteScene */ = {
 			isa = PBXGroup;
 			children = (
+				F80FDA57285C8F8D00EC4967 /* AssemblyNote.swift */,
 				F8AC74A32855D0AD000E9AAB /* RouterNote.swift */,
 				F83CA19D280882CB008A54DC /* NoteViewController.swift */,
 				F8AC74A72855D0DC000E9AAB /* InteractorNote.swift */,
@@ -210,9 +216,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F80FDA58285C8F8D00EC4967 /* AssemblyNote.swift in Sources */,
 				F83832F327F16C5500B78EB3 /* AppDelegate.swift in Sources */,
 				F8AC748C2854DB99000E9AAB /* CleanWorker.swift in Sources */,
 				F8AC748A2854DB80000E9AAB /* Presenter.swift in Sources */,
+				F80FDA56285A6F7800EC4967 /* Assembly.swift in Sources */,
 				F83832F527F16C5500B78EB3 /* SceneDelegate.swift in Sources */,
 				F8AC748E2854DBA3000E9AAB /* Router.swift in Sources */,
 				F8AC74A82855D0DC000E9AAB /* InteractorNote.swift in Sources */,
