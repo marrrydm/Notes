@@ -27,6 +27,9 @@ final class CleanListViewController: UIViewController {
     var interactor: ListBusinessLogic?
     var presenter: ListPresentstionLogic?
 
+    let appDelegate = UIApplication.shared.delegate as? AppDelegate
+    let notificationType = "Вы не выбрали ни одной заметки!"
+
 // MARK: - Init
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -184,6 +187,7 @@ final class CleanListViewController: UIViewController {
         } else {
             if tableView.indexPathsForSelectedRows == nil {
                 showAlert()
+                appDelegate?.sheduleNotifications(notificationType: notificationType)
             } else {
                 tableView.beginUpdates()
                 for val in indexArr {
